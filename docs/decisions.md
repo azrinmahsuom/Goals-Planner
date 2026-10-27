@@ -269,3 +269,45 @@ The owner approved the draft on 2026-10-28 with these changes, all made before a
 - JST series with gaps (missing years) are split into contiguous runs. Growth rates, levels and realised returns never span a gap, and the 30-year burn-in restarts with each run.
 - For pooled JST statistics, the HAC standard error of the bias and the effective number of observations use the cross-country average error per origin year. Errors from different countries in the same year are therefore not treated as independent.
 - B2's rolldown uses FRED December monthly-average GS5 and GS10: rolldown = (GS10 − GS5) / 5 × 9, the one-year roll from 10 to 9 years on a linear 5–10-year curve. It is compared with B1 over the origins where both exist (from 1953).
+
+### 2026-10-28 — Rules for the R² intervals and forward CMAs, fixed before computing them
+**Context:** The validation statistics are computed (`a2171db`). The owner asked for bootstrap intervals on each method's out-of-sample R². The forward CMAs need the implementation details below. All are fixed here before either is computed.
+
+**Bootstrap 95% intervals for out-of-sample R²**
+- **Method:** moving-block bootstrap over origins, 2,000 replications, seed 20261028, 2.5th–97.5th percentile interval.
+- **Block length: 10 origins**, the forecast horizon. Consecutive 10-year windows share up to 9 years, so the errors are dependent at up to 9 lags, and a block of 10 keeps that dependence intact. The n^(1/3) rule used for the scenario standard errors would give blocks of about 5 here, which would cut through that overlap.
+- **JST pooled:** blocks of origin years are resampled, and each drawn year keeps every country's error for that year, so cross-country correlation within a year is preserved.
+- **Resampling unit:** each replication resamples (forecast, realised, historical mean) triples and recomputes R² = 1 − SSE(forecast) / SSE(historical mean).
+
+**Forward CMA inputs**
+- **Inflation:** Dec 1995 to Dec 2025 SingStat CPI All Items, (CPI_Dec2025 / CPI_Dec1995)^(1/30) − 1.
+- **D1 growth (g_div):**
+  - For each JST country, the annualised real dividend growth over its contiguous run of data ending in 2015. Growth never spans a gap.
+  - g_div is the median across the countries with such a run of at least 30 years.
+- **E1 growth (g_EPS):** Shiller real EPS (E / CPI, monthly) from January 1871 to the last month with reported earnings, annualised by elapsed months / 12.
+- **GDP check (reported, not used):** the median across JST countries of annualised real GDP per capita growth (`rgdpmad`), 1870 to 2015.
+- **SGS yield:** the yield at 8.18 years, linearly interpolated between the 5-year and 10-year MAS benchmark yields on 2026-09-30.
+- **Cash:**
+  - Long-run real rate = the mean over 1988–2025 of each year's average month-end 3-month rate (interbank to 2013, then compounded SORA), minus that year's Dec-to-Dec CPI inflation.
+  - Start rate = the 3-month compounded SORA at the end of September 2026, minus the inflation CMA.
+  - CMA = the midpoint of the start and long-run rates, which is the average of a linear 10-year path between them.
+
+**Scenario standard errors (rule (b)):** n^(1/3) blocks as registered, 2,000 replications, seed 20261028.
+- **Equity:** resample each country's annual real dividend growth rates within its run, then recompute the cross-country median. The yield is observed and adds no error.
+- **Inflation:** resample the 30 annual inflation rates.
+- **SGS:** the inflation CMA's standard error (the yield is observed).
+- **Cash:** resample the annual real rates and the inflation series independently, then recompute the midpoint.
+
+**Scenario spread (rule (a)):**
+- **Equity:** half of |E1 − D1|.
+- **SGS:** half of |B2 − B1|. B2 is a registered variant with forward inputs; the adoption rule decides only the central estimate, and B1 stays central because B2 lost on RMSE.
+- **Cash and inflation:** 0 (one method each).
+
+**Comparison:**
+- The SPF 2026 Q1 STOCK10, BOND10 and BILL10, each minus the CPI10 median in the same survey.
+- Damodaran's latest year: implied ERP (FCFE) + T.Bond rate, minus the same CPI10.
+- `Multi-Asset-Allocation`'s per-mix figures: the 0% and 100% equity rows.
+
+**MAS citations:**
+- MAS datasets (rates, SGS yields, the survey workbook) carry MAS's prescribed notice: "Contains information from {dataset} accessed on {date}, which is made available under the terms of the Monetary Authority of Singapore's Terms of Use of Datasets."
+- MAS's terms page (updated 27 August 2026) asks for permission before linking to internal pages. Documents cite MAS sources by title and file name; whether to hyperlink is an owner decision.
