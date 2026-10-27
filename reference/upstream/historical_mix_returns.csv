@@ -1,0 +1,12 @@
+equity_share,expected_real_return,licence,repo,commit,path,locator
+0.0,0.034,CC BY-NC-SA 4.0 (derived from the JST Macrohistory Database),Multi-Asset-Allocation,a92a325,docs/strategy_design.md,"Frontier table, row '0% equity'"
+0.1,0.038,CC BY-NC-SA 4.0 (derived from the JST Macrohistory Database),Multi-Asset-Allocation,a92a325,docs/strategy_design.md,"Frontier table, row '10% equity'"
+0.2,0.042,CC BY-NC-SA 4.0 (derived from the JST Macrohistory Database),Multi-Asset-Allocation,a92a325,docs/strategy_design.md,"Frontier table, row '20% equity'"
+0.3,0.045,CC BY-NC-SA 4.0 (derived from the JST Macrohistory Database),Multi-Asset-Allocation,a92a325,docs/strategy_design.md,"Frontier table, row '30% equity'"
+0.4,0.049,CC BY-NC-SA 4.0 (derived from the JST Macrohistory Database),Multi-Asset-Allocation,a92a325,docs/strategy_design.md,"Frontier table, row '40% equity'"
+0.5,0.052,CC BY-NC-SA 4.0 (derived from the JST Macrohistory Database),Multi-Asset-Allocation,a92a325,docs/strategy_design.md,"Frontier table, row '50% equity'"
+0.6,0.055,CC BY-NC-SA 4.0 (derived from the JST Macrohistory Database),Multi-Asset-Allocation,a92a325,docs/strategy_design.md,"Frontier table, row '60% equity'"
+0.7,0.057,CC BY-NC-SA 4.0 (derived from the JST Macrohistory Database),Multi-Asset-Allocation,a92a325,docs/strategy_design.md,"Frontier table, row '70% equity'"
+0.8,0.059,CC BY-NC-SA 4.0 (derived from the JST Macrohistory Database),Multi-Asset-Allocation,a92a325,docs/strategy_design.md,"Frontier table, row '80% equity'"
+0.9,0.061,CC BY-NC-SA 4.0 (derived from the JST Macrohistory Database),Multi-Asset-Allocation,a92a325,docs/strategy_design.md,"Frontier table, row '90% equity'"
+1.0,0.063,CC BY-NC-SA 4.0 (derived from the JST Macrohistory Database),Multi-Asset-Allocation,a92a325,docs/strategy_design.md,"Frontier table, row '100% equity'"

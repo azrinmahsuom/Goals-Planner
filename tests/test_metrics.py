@@ -15,6 +15,13 @@ def test_annualised_return_one_year_of_monthly():
     assert metrics.annualised_return(rets, periods_per_year=12) == pytest.approx(1.01**12 - 1)
 
 
+def test_annualised_volatility_monthly():
+    # +1%, -1% alternating: sample sd = sqrt(4 * 0.01^2 / 3); annualise by sqrt(12)
+    rets = pd.Series([0.01, -0.01, 0.01, -0.01])
+    expected = (4 * 0.01**2 / 3) ** 0.5 * 12**0.5
+    assert metrics.annualised_volatility(rets, periods_per_year=12) == pytest.approx(expected)
+
+
 def test_max_drawdown():
     # 100 -> 120 -> 90 -> 130: trough 90 from peak 120 = -25%
     rets = pd.Series([0.20, -0.25, 130 / 90 - 1])

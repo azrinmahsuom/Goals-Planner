@@ -1,0 +1,31 @@
+field,ticker,value,unit,status,repo,commit,path,locator
+ter,ISAC.L,0.002,decimal a year,verified,Multi-Asset-Allocation,a92a325,reference/etf_costs.csv,ticker=ISAC.L
+ter,A35.SI,0.0024,decimal a year,verified,Multi-Asset-Allocation,a92a325,reference/etf_costs.csv,ticker=A35.SI
+effective_withholding_rate,ISAC.L,0.1198,decimal of dividends,derived,Multi-Asset-Allocation,a92a325,reports/headline_figures.json,ISAC effective withholding rate
+trailing_dividend_yield,ISAC.L,0.0142,decimal a year,derived,Multi-Asset-Allocation,a92a325,docs/backtest_results.md,Implementation table note: 'trailing dividend yield'
+effective_duration,IGLO,6.27,years,verified,Multi-Asset-Allocation,a92a325,reference/bond_durations.csv,share_class=IGLO (USD Dist; ISIN IE00B3F81K65)
+effective_duration,A35,8.18,years,verified,Multi-Asset-Allocation,a92a325,reference/bond_durations.csv,share_class=A35 (SGD)
+expense_ratio,ACWD (LSE),0.0012,decimal a year,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWD, exchange=LSE"
+withholding_drag,ACWD (LSE),0.0,decimal a year,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWD, exchange=LSE"
+annual_holding_cost,ACWD (LSE),0.0012,decimal a year,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWD, exchange=LSE"
+rank,ACWD (LSE),1.0,rank,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWD, exchange=LSE"
+expense_ratio,ISAC (LSE),0.002,decimal a year,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ISAC, exchange=LSE"
+withholding_drag,ISAC (LSE),0.0,decimal a year,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ISAC, exchange=LSE"
+annual_holding_cost,ISAC (LSE),0.002,decimal a year,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ISAC, exchange=LSE"
+rank,ISAC (LSE),2.0,rank,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ISAC, exchange=LSE"
+expense_ratio,ACWIA (SIX),0.0021,decimal a year,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWIA, exchange=SIX"
+withholding_drag,ACWIA (SIX),0.0,decimal a year,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWIA, exchange=SIX"
+annual_holding_cost,ACWIA (SIX),0.0021,decimal a year,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWIA, exchange=SIX"
+rank,ACWIA (SIX),3.0,rank,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWIA, exchange=SIX"
+expense_ratio,ACWU (LSE),0.0045,decimal a year,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWU, exchange=LSE"
+withholding_drag,ACWU (LSE),0.0,decimal a year,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWU, exchange=LSE"
+annual_holding_cost,ACWU (LSE),0.0045,decimal a year,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWU, exchange=LSE"
+rank,ACWU (LSE),4.0,rank,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWU, exchange=LSE"
+expense_ratio,ACWI (Euronext Paris),0.0045,decimal a year,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWI, exchange=Euronext Paris"
+withholding_drag,ACWI (Euronext Paris),0.0,decimal a year,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWI, exchange=Euronext Paris"
+annual_holding_cost,ACWI (Euronext Paris),0.0045,decimal a year,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWI, exchange=Euronext Paris"
+rank,ACWI (Euronext Paris),4.0,rank,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWI, exchange=Euronext Paris"
+expense_ratio,ACWI (NASDAQ),0.0032,decimal a year,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWI, exchange=NASDAQ"
+withholding_drag,ACWI (NASDAQ),0.0042952805,decimal a year,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWI, exchange=NASDAQ"
+annual_holding_cost,ACWI (NASDAQ),0.0074952805,decimal a year,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWI, exchange=NASDAQ"
+rank,ACWI (NASDAQ),6.0,rank,verified,ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,"sleeve=equity, ticker=ACWI, exchange=NASDAQ"

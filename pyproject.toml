@@ -1,7 +1,7 @@
 [project]
 name = "analysis"
 version = "0.1.0"
-description = "{{One-line project description}}"
+description = "Goals-based planning tool for an SGD investor, driven by forward-looking capital market assumptions tested out of sample"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -9,6 +9,11 @@ dependencies = [
     "numpy>=2.0",
     "matplotlib>=3.9",
     "python-dotenv>=1.0",
+    "pyyaml>=6.0.3",
+    "requests>=2.34.2",
+    "openpyxl>=3.1.5",
+    "xlrd>=2.0.2",
+    "scipy>=1.18.1",
 ]
 
 [dependency-groups]

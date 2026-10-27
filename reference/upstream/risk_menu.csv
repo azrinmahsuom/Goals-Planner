@@ -1,0 +1,13 @@
+horizon,drawdown_limit,equity_share,feasible,repo,commit,path,locator
+long,-0.2,,False,Multi-Asset-Allocation,a92a325,reports/headline_figures.json,menu long -20%: equity share
+long,-0.3,,False,Multi-Asset-Allocation,a92a325,reports/headline_figures.json,menu long -30%: equity share
+long,-0.4,,False,Multi-Asset-Allocation,a92a325,reports/headline_figures.json,menu long -40%: equity share
+long,-0.5,0.59,True,Multi-Asset-Allocation,a92a325,reports/headline_figures.json,menu long -50%: equity share
+medium,-0.2,,False,Multi-Asset-Allocation,a92a325,reports/headline_figures.json,menu medium -20%: equity share
+medium,-0.3,,False,Multi-Asset-Allocation,a92a325,reports/headline_figures.json,menu medium -30%: equity share
+medium,-0.4,,False,Multi-Asset-Allocation,a92a325,reports/headline_figures.json,menu medium -40%: equity share
+medium,-0.5,0.59,True,Multi-Asset-Allocation,a92a325,reports/headline_figures.json,menu medium -50%: equity share
+short,-0.2,,False,Multi-Asset-Allocation,a92a325,reports/headline_figures.json,menu short -20%: equity share
+short,-0.3,,False,Multi-Asset-Allocation,a92a325,reports/headline_figures.json,menu short -30%: equity share
+short,-0.4,,False,Multi-Asset-Allocation,a92a325,reports/headline_figures.json,menu short -40%: equity share
+short,-0.5,0.59,True,Multi-Asset-Allocation,a92a325,reports/headline_figures.json,menu short -50%: equity share

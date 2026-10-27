@@ -1,0 +1,3 @@
+# Provenance of every file in data/raw. Written by analysis.sources; don't edit by hand.
+# Raw files are not committed; verify with: make verify
+files: {}

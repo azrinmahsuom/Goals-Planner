@@ -1,0 +1,5 @@
+mix,basis,equity_share,ter_bps,wht_drag_bps,trading_bps,all_in_annual_bps,one_off_purchase_bps,repo,commit,path,locator
+Menu: 59% equity (drawdown -50%),binding menu,0.59,21.64,10.06,1.28,32.98,12.04,Multi-Asset-Allocation,a92a325,docs/backtest_results.md,"Implementation table, row 'Menu: 59% equity (drawdown -50%)'"
+SGD-era sensitivity: 49% equity (drawdown -30%),SGD-era sensitivity,0.49,22.04,8.36,1.3,31.7,13.4,Multi-Asset-Allocation,a92a325,docs/backtest_results.md,"Implementation table, row 'SGD-era sensitivity: 49% equity (drawdown -30%)'"
+SGD-era sensitivity: 67% equity (drawdown -40%),SGD-era sensitivity,0.67,21.32,11.43,1.22,33.97,10.95,Multi-Asset-Allocation,a92a325,docs/backtest_results.md,"Implementation table, row 'SGD-era sensitivity: 67% equity (drawdown -40%)'"
+SGD-era sensitivity: 88% equity (drawdown -50%),SGD-era sensitivity,0.88,20.48,15.01,0.88,36.38,8.1,Multi-Asset-Allocation,a92a325,docs/backtest_results.md,"Implementation table, row 'SGD-era sensitivity: 88% equity (drawdown -50%)'"

@@ -1,77 +1,74 @@
-<!-- START HERE (removed by /new-project)
-New project from the template? Clone the repo, open the folder in VS Code, then start a *new* Claude Code session in it before running /new-project.
-(Project skills don't load in a session started before the folder existed.)
-It interviews you, writes docs/brief.md and fills in this README. Delete this block once done. -->
+# Goals Planner (SGD)
 
-# {{Project Title}}
+> **One line:** an educational tool that estimates how likely a Singapore-dollar investor is to reach a savings goal, using forward-looking return assumptions that are tested against history before they are used.
 
-> **One-line thesis:** {{e.g. "Singapore REITs with sub-35% gearing outperformed the index on a risk-adjusted basis, 2015–2025."}}
-
-![CI](https://github.com/azrinmahsuom/{{repo-name}}/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/azrinmahsuom/Goals-Planner/actions/workflows/ci.yml/badge.svg)
 
 ## Summary
 
 | | |
 |---|---|
-| **Question** | {{What are you trying to find out?}} |
-| **Universe / period** | {{e.g. SGX-listed REITs, Jan 2015 – Dec 2025, monthly}} |
-| **Method** | {{e.g. factor screen + backtest, DCF, regression}} |
-| **Headline result** | {{One number with context, e.g. "Sharpe 0.82 vs 0.51 benchmark, net of 20 bps costs"}} |
-| **Status** | {{In progress / Complete}} |
+| **Question** | If I invest S$X now and S$Y a month in a given mix of global shares and Singapore government bonds, how likely am I to reach S$G (in today's money) by year T? How much would I need to save each month for a given likelihood? |
+| **What it does** | Builds return assumptions from their parts (yields, growth, valuation), checks how well each method would have forecast the past, then simulates thousands of possible futures in real SGD |
+| **Assets** | Global equities held in SGD (unhedged), Singapore Government Securities, SGD cash; inflation as Singapore CPI |
+| **Status** | In progress: setup done; return assumptions next |
 
 ## Key findings
 
-1. {{Finding, with the chart that shows it}}
-2. {{Finding}}
-3. {{What surprised you, or what didn't work}}
-
-![Headline chart](reports/figures/headline.png)
+TBD. The validation results for each return-assumption method will be reported here as found, including where a method fails.
 
 ## Limitations
 
-Be specific.
+See [docs/limitations.md](docs/limitations.md). The main ones so far:
 
-- {{e.g. Survivorship bias: universe is today's constituents}}
-- {{e.g. No transaction costs below monthly rebalancing}}
-- {{e.g. Small sample: 11 years, one rate cycle}}
+- The equity methods are tested mainly on US history but applied to global inputs.
+- Some cost inputs reused from the earlier projects are stand-ins until measured.
 
 ## Before you start
 
 - [uv](https://docs.astral.sh/uv/), which installs Python for you: `curl -LsSf https://astral.sh/uv/install.sh | sh`
-- The GitHub CLI [`gh`](https://cli.github.com/), signed in with `gh auth login` (needed to clone a private repo)
-- git, with `user.name` and `user.email` set (`git config --global user.name "Your Name"`)
+- git, and the GitHub CLI [`gh`](https://cli.github.com/) if you want to re-vendor the figures from the earlier projects (`make upstream`)
 
 ## Reproduce it
 
 ```bash
-git clone https://github.com/azrinmahsuom/{{repo-name}}.git
-cd {{repo-name}}
-uv sync                  # create the environment
-cp .env.example .env     # add any API keys (never committed)
-uv run pytest            # check everything works
-uv run python -m analysis.pipeline   # run the analysis end to end
+git clone https://github.com/azrinmahsuom/Goals-Planner.git
+cd Goals-Planner
+uv sync          # create the environment from the pinned lockfile
+make all         # download sources, verify them, rebuild every output, run the tests
 ```
+
+Sources that have been updated since the recorded snapshot are listed in `data/processed/drift_report.md`; the run continues. Only a missing file stops it.
 
 On macOS, keep the project outside iCloud-synced folders (e.g. `~/Developer`). If it must live in `~/Documents`, put the environment in a folder iCloud skips: `uv venv .venv.nosync && ln -s .venv.nosync .venv && uv sync`.
 
 ## Repository layout
 
 ```
-├── data/              Downloaded, processed and personal data (git-ignored, created by the code)
-├── docs/              Project brief and methodology decision log
-├── notebooks/         Exploration only; anything reusable moves to src/
-├── reference/         Hand-researched inputs, each row with source and date checked (committed)
-├── reports/           Final write-up and figures (committed)
-├── src/analysis/      Reusable code: loading, cleaning, metrics, pipeline
+├── app/               Interactive planner (Phase 3)
+├── data/              MANIFEST.yaml (committed): URL, date, licence and hash of every source; the data itself is git-ignored
+├── docs/              Brief, decision log, limitations; return assumptions and simulation method as they are built
+├── reference/         Hand-researched inputs; upstream/ holds figures reused from the earlier projects, with commit
+├── reports/           Generated figures and the numbers behind every document
+├── src/analysis/      Code: sources, manifest, return assumptions, simulation, pipeline
 └── tests/             Tests for the code in src/
 ```
 
+## Earlier projects reused
+
+Fund costs, withholding-tax drag, the risk-menu mixes and historical per-mix returns come from two earlier projects, read at fixed commits and stored in `reference/upstream/` with their source on every row:
+
+- `ETF-vehicle-selection` @ `4103576`
+- `Multi-Asset-Allocation` @ `a92a325`
+
 ## Data sources
 
-| Source | What | Licence / terms |
-|---|---|---|
-| {{e.g. Yahoo Finance via yfinance}} | {{Daily prices}} | {{Personal, non-commercial use}} |
+Every source is checked against its primary page before use, and recorded in `data/MANIFEST.yaml`. The planned list and the licence of each is in [docs/brief.md](docs/brief.md) §8.
+
+## Built with Claude Code
+
+This project was built with Claude Code, an AI coding assistant, working under the rules in [docs/decisions.md](docs/decisions.md): every method fixed before its results, every number generated by code or cited. The research questions, judgements and final decisions are the author's.
 
 ## Disclaimer
 
-This is a personal research project built on publicly available data. It is not investment advice, not a recommendation to buy or sell any security, and does not represent the views of any employer.
+This is an educational research project built on publicly available data. It is not investment advice, not a recommendation to buy or sell any security or to follow any savings plan, and does not represent the views of any employer. Projections are uncertain and the past is an imperfect guide to the future.
