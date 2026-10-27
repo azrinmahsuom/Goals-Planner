@@ -140,3 +140,108 @@ Both are Evidence: pending until verified against the publications in Phase 1.
 **Context:** The repo lives in `~/Documents`, which iCloud may sync. Syncing a virtual environment can corrupt it.
 **Rule:** The environment is created in `.venv.nosync` (which iCloud skips) and symlinked to `.venv`.
 **Evidence:** Template README guidance; owner's decision.
+
+### 2026-10-28 — Phase 1 source and citation checks (before any rule below)
+**Context:** Plan step 1: every source and citation is checked against its primary page before code depends on it.
+**Findings:**
+- **Source checks:** `reference/source_checks.csv`, one row per source.
+- **Citations:** `reference/citations.csv`. Eight are verified against Crossref. Grinold & Kroner (2002) is confirmed only by secondary sources and stays `to_verify`, so the building-block form rests on Ibbotson & Chen (2003).
+- **ACWD figures:** `reference/fund_documents.csv`, with page references.
+- **JST R6 has no earnings variable.** By the owner's rule (2026-10-28), E1–E3 are validated on Shiller US only, and D1 on Shiller US and all 18 JST countries.
+- **ACWD's factsheet** (30 September 2026) publishes the TER (0.12%, confirming the upstream ranking), the index dividend yield and a *forward* P/E (FY1, analyst estimates). It publishes no trailing P/E or CAPE, so no forward input exists for E2 or E3.
+- **ACWD's fund-level withholding** is computed from the audited FY2026 annual report (page 799; dividend income gross of non-recoverable withholding tax, note 1(j)). It replaces the ISAC stand-in.
+- **Licence terms:** SingStat's and the Philadelphia Fed's terms pages gave no usable text, so both are treated as not redistributable. The app shows only figures derived from them, with citation.
+
+### 2026-10-28 — Phase 1 pre-registration: CMA methods, validation and forward inputs (FINAL)
+**Context:** Plan step 2. These rules are fixed and committed before any CMA or validation result is computed. Any later change is labelled post-hoc.
+
+The owner approved the draft on 2026-10-28 with these changes, all made before any result was computed:
+- (a) The equity central is D1, and E1 is the US-growth variant.
+- (b) The forward earnings yield is reported as a sanity check only.
+- (c) The MAS Survey of Professional Forecasters is added as a near-term inflation cross-check.
+- (d) A public or retail ACWD factsheet was searched for; none was found (see "Forward inputs").
+
+**General**
+- **Units.** All CMAs are annualised geometric (compound) *real* returns over 10 years, at index level before fund costs. Fund costs are deducted in the simulation (Phase 2).
+- **As-of date: 2026-09-30.** This is the month-end of the latest ACWD factsheet. Every forward input is taken at or before this date.
+- **Validation layout.**
+  - Origins are annual. For Shiller, the origin is the December value; JST is annual.
+  - Each forecast is compared with the realised annualised real return over the next 10 years. The windows overlap.
+  - Every parameter a method estimates (growth rates, CAPE anchor, historical mean) uses only data dated at or before the origin, on an expanding window.
+  - The first forecast is made after 30 years of data (burn-in).
+- **Publication lag (Shiller).** At a December origin, the forecast uses that December's price and the dividends, earnings and CPI as of the previous September (a 3-month lag). Evidence: pending. Shiller interpolates quarterly S&P figures, and the latest months of the file carry no D or E (`reference/source_checks.csv`), so the true lag is at least one quarter.
+
+**Equity methods.** Here *y* is the trailing dividend yield, *g* is real growth, and CAPE is Shiller's P/E10.
+- **E1 = y + g_EPS.** g_EPS is the annualised real EPS growth over the expanding window.
+- **E2 = E1 + (CAPE_anchor / CAPE_t)^(1/10) − 1.** CAPE_anchor is the expanding-window median CAPE.
+- **E3 = 1 / CAPE_t.**
+- **D1 = y + g_div.** g_div is the annualised real dividend growth over the expanding window.
+  - For JST, the dividend index is built from `eq_dp` × the price index cumulated from `eq_capgain`. Real figures deflate by `cpi`.
+  - Validation uses local-currency real returns per country.
+- **Where each is validated.** E1–E3 on Shiller US. D1 on Shiller US and on each JST country, also pooled.
+- **Forward estimate.**
+  - E2 and E3 have no forward input and are **validation-only**: ACWD publishes a forward P/E, which isn't comparable to the CAPE history. Their results are still reported.
+  - D1 forward = ACWD index dividend yield + forward g_div.
+  - E1 forward = ACWD index dividend yield + forward g_EPS. This is labelled the **US-growth variant**.
+  - The equity **central** CMA = **D1 forward**.
+  - E1 forward contributes only to the scenario spread: spread (a) = half of |E1 − D1|.
+  - **Why E1 isn't central:** its growth term is US EPS growth. Applying US growth to a global index's yield biases the estimate upward, because US real earnings growth is one market's history; the cross-country dividend-growth median isn't tied to any one market.
+  - **Sanity check, not used:** the forward earnings yield = 1 / ACWD's P/E FY1 (23.84 at 30 September 2026). It is reported next to the CMA, labelled as based on analyst estimates of next year's earnings. It sets no figure and no range.
+- **Forward inputs: factsheet edition.** The cited ACWD factsheet is SSGA's EMEA English edition, marked for professional clients. A public or retail edition was searched for on 2026-10-28 and none was found:
+  - The SSGA UK "individual" route redirects to a general investor page.
+  - SSGA Singapore lists the fund only on its institutional pages.
+  - Guessed retail file names returned HTTP 404.
+
+  The professional edition is cited by figure and page only, never reproduced. If a retail edition appears, it replaces this citation, and the figures are checked to match.
+- **Forward real growth term (fixed source and window).**
+  - g_EPS = annualised real EPS growth on Shiller US, from the first full year (1871) to the last year with reported earnings before the as-of date.
+  - g_div = the median, across the 18 JST countries, of each country's annualised real dividend growth over its full sample (to 2020).
+  - Alternative not chosen: real GDP-per-capita growth. It is reported alongside as a check, not used.
+
+**Bond methods (SGS)**
+- **B1 forward.** The SGS yield at A35's duration, 8.18 years (vendored), linearly interpolated between the MAS benchmark tenors on the as-of date, minus the inflation CMA.
+- **B1 validation.**
+  - US: Shiller GS10 at the origin vs the realised 10-year real total bond return (Shiller's bond-return column).
+  - JST: `ltrate` at the origin vs the realised annualised `bond_tr`, both deflated by `cpi`.
+- **B2 = B1 + rolldown.**
+  - Rolldown = (yield at duration − yield at duration − 1 year) × (duration − 1), with the curve from FRED constant-maturity yields (US validation, from 1953 where GS5/GS10 exist).
+  - B2 is adopted for the forward SGS CMA only if its US out-of-sample RMSE is lower than B1's over the same origins. Otherwise B1 is used and B2 is reported.
+
+**Cash (SGD)**
+- **Start.** The 3-month compounded SORA (MAS) on the as-of date, minus the inflation CMA.
+- **Long run.** The average real SGD 3-month interbank rate (MAS, from 1988) over 1988 to the last full year, deflated by SingStat CPI.
+- **CMA.** The average of a linear path from the start rate to the long-run rate over 10 years.
+
+**Inflation (Singapore CPI)**
+- The annualised SingStat CPI (All Items) inflation over the 30 full calendar years before the as-of date (1996–2025).
+- Alternative not chosen: no primary Singapore source publishes a 10-year inflation forecast that could be found. The Philadelphia Fed SPF's CPI10 is US-only and is reported for context only.
+- **Near-term cross-check, not the assumption:** the median CPI-All Items forecasts for the current and next calendar year from the latest MAS Survey of Professional Forecasters. MAS publishes them quarterly as an `.xlsx` (the September 2026 file is `sep26q3.xlsx`, linked from https://www.mas.gov.sg/monetary-policy/mas-survey-of-professional-forecasters).
+  - MAS returns a web page instead of the file to scripted requests, so it is a **manual download**: the owner saves it from a browser, and `make fetch` records it in the manifest with its hash.
+  - The figures are shown next to the inflation CMA with the survey date, and set nothing.
+
+**FX (global equity held in SGD, unhedged)**
+- The expected real change in SGD against the fund's currency mix is zero (relative PPP).
+- Evidence: pending, with Rogoff (1996, *Journal of Economic Literature*) on the slow mean reversion of real exchange rates to be verified before it is cited.
+
+**Validation statistics** (each method, sample and country):
+- Bias (mean of forecast − realised), MAE, RMSE, and correlation.
+- Out-of-sample R² = 1 − Σ(realised − forecast)² / Σ(realised − historical mean)² (Campbell & Thompson 2008). The historical mean at each origin uses only 10-year windows completed by that origin.
+- The 10th and 90th percentiles of errors.
+- The HAC (Newey-West, 9 lags) standard error of the bias, and the effective number of independent observations = number of origins / 10.
+- Weak, zero or negative results are reported as found (Goyal & Welch 2008). No method is dropped or re-tuned after its results are seen without a post-hoc label.
+
+**Comparison (descriptive only):**
+- the forward CMAs
+- `Multi-Asset-Allocation`'s historical per-mix real returns (vendored)
+- the SPF 2026 Q1 STOCK10, BOND10 and BILL10, made real with the matching CPI10
+- Damodaran's latest implied ERP plus the US 10-year yield, made real the same way
+
+**Evidence:** `reference/citations.csv` and `reference/source_checks.csv`. Evidence: pending for:
+- the Shiller lag
+- Rogoff (1996), which has no DOI in Crossref and needs checking against the journal
+- the cash glide-path shape (linear, chosen for simplicity)
+
+**What would change my mind:**
+- A primary-source 10-year Singapore inflation forecast.
+- A public source of global index earnings history, which would let E1–E3 be validated beyond the US.
+- A retail ACWD factsheet whose figures differ from the professional edition.
