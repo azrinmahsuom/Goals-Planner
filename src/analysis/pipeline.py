@@ -13,6 +13,7 @@ import argparse
 
 from analysis import manifest, sources, upstream
 from analysis.config import FIGURES, ROOT
+from analysis.sources import documents
 
 
 def fetch(refresh: bool = False) -> None:
@@ -45,6 +46,8 @@ def verify() -> None:
     for name in ("fund_facts", "mix_costs", "risk_menu", "historical_mix_returns"):
         upstream.load(name)
     print("Found the vendored upstream tables in reference/upstream/.")
+    checks = documents.verify_reference()
+    print(f"Confirmed {checks} quoted figures on their cited document pages.")
 
 
 def main() -> None:

@@ -1,3 +1,236 @@
 # Provenance of every file in data/raw. Written by analysis.sources; don't edit by hand.
 # Raw files are not committed; verify with: make verify
-files: {}
+files:
+  damodaran/histimpl.xls:
+    source: Aswath Damodaran, implied equity risk premiums (S&P 500)
+    url: https://pages.stern.nyu.edu/~adamodar/pc/datasets/histimpl.xls
+    landing_page: https://pages.stern.nyu.edu/~adamodar/New_Home_Page/data.html
+    series: 'histimpl.xls: implied ERP (FCFE), T.Bond rate, dividends + buybacks,
+      by year'
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: No licence stated by the source; free download. Treated as not redistributable.
+    redistributable: false
+    rows: 66
+    start: '1960'
+    end: '2025'
+    units: Annual, by year as labelled in the source; US, nominal, decimals.
+    sha256: bb4d8da0a371a00af06172ec41dcef35a9ae30d6ab9c03d58ab5d2187e1e406f
+  documents/ACWD_factsheet.pdf:
+    source: State Street SPDR MSCI All Country World UCITS ETF (Acc), factsheet
+    url: https://www.ssga.com/library-content/products/factsheets/etfs/emea/factsheet-emea-en_gb-spyy-gy.pdf
+    landing_page: https://www.ssga.com/uk/en_gb/intermediary/etfs/state-street-spdr-msci-all-country-world-ucits-etf-acc-spyy-gy
+    series: 'Fund document (PDF): monthly factsheet (TER, index dividend yield, P/E
+      FY1)'
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: Issuer document; downloaded for citation only. Not redistributable. Marked
+      for professional clients; figures cited by page.
+    redistributable: false
+    rows: 3
+    start: n/a
+    end: n/a
+    units: PDF; figures checked against reference/fund_documents.csv.
+    sha256: 12e13c9b516bdfebe5c358dce4e03c04c28d0505ddd2bd25bc38809ca959c2c3
+  documents/SPDR_I_annual_report.pdf:
+    source: SSGA SPDR ETFs Europe I plc, annual report and audited financial statements
+    url: https://www.ssga.com/library-content/products/fund-docs/etfs/emea/1-GENERIC-EN-AR-IRISH-SPDR-I.pdf
+    landing_page: https://www.ssga.com/uk/en_gb/intermediary/etfs/state-street-spdr-msci-all-country-world-ucits-etf-acc-spyy-gy
+    series: 'Fund document (PDF): annual report, financial year ended 31 March 2026'
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: Issuer document; downloaded for citation only. Not redistributable.
+    redistributable: false
+    rows: 1552
+    start: n/a
+    end: n/a
+    units: PDF; figures checked against reference/fund_documents.csv.
+    sha256: f08894e920ac9f919d4e69e376fa400b10c470a91fe728acf5772ff582687291
+  fred/EXSIUS.csv:
+    source: 'FRED: Singapore dollars to one US dollar'
+    url: https://fred.stlouisfed.org/graph/fredgraph.csv?id=EXSIUS
+    landing_page: https://fred.stlouisfed.org/series/EXSIUS
+    series: EXSIUS
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: Public domain, citation requested (FRED series page).
+    redistributable: true
+    rows: 549
+    start: 1981-01
+    end: 2026-09
+    units: Monthly average, SGD per USD
+    sha256: 44b4fdc90203de43b6911b3ba4119ece7ff1ce0f098f555d07c129cf77680a58
+  fred/GS10.csv:
+    source: 'FRED: 10-year Treasury constant maturity yield'
+    url: https://fred.stlouisfed.org/graph/fredgraph.csv?id=GS10
+    landing_page: https://fred.stlouisfed.org/series/GS10
+    series: GS10
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: Public domain, citation requested (FRED series page).
+    redistributable: true
+    rows: 882
+    start: 1953-04
+    end: 2026-09
+    units: Monthly average, % p.a.
+    sha256: 40323f225e613a19a4eec7eef20523dec10764de21c70cd1416a7379fb7f13b6
+  fred/GS5.csv:
+    source: 'FRED: 5-year Treasury constant maturity yield'
+    url: https://fred.stlouisfed.org/graph/fredgraph.csv?id=GS5
+    landing_page: https://fred.stlouisfed.org/series/GS5
+    series: GS5
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: Public domain, citation requested (FRED series page).
+    redistributable: true
+    rows: 882
+    start: 1953-04
+    end: 2026-09
+    units: Monthly average, % p.a.
+    sha256: f768d61bbd7e297d5c11c52e2a50e5338bf6fe704e3f2c5f135dbbca160ae5d9
+  jst/JSTdatasetR6.xlsx:
+    source: Jordà-Schularick-Taylor Macrohistory Database
+    url: https://www.macrohistory.net/app/download/9834512569/JSTdatasetR6.xlsx?t=1763503850
+    landing_page: https://www.macrohistory.net/database/
+    series: JSTdatasetR6.xlsx (country-year panel)
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: CC BY-NC-SA 4.0 (macrohistory.net/database/licence-terms/). Non-commercial
+      use, citation required (Jordà et al. 2019, QJE), share-alike.
+    redistributable: true
+    rows: 2718
+    start: '1870'
+    end: '2020'
+    units: 'Annual, local currency. eq_tr, eq_capgain, bond_tr: nominal returns (decimal);
+      eq_dp: dividend-price ratio; ltrate: long-term government bond yield (% p.a.);
+      cpi: consumer price index.'
+    sha256: c1bb91fe56ea50d4f27af5c0fc897d481e89ae38ce41eaecab62134c9354981d
+  mas/domestic_interest_rates.csv:
+    source: Monetary Authority of Singapore, Domestic Interest Rates
+    url: https://eservices.mas.gov.sg/statistics/dir/DomesticInterestRates.aspx
+    landing_page: https://eservices.mas.gov.sg/statistics/dir/DomesticInterestRates.aspx
+    series: Interbank Overnight, Interbank 3-month, SORA, SORA Index, 3-month Compounded
+      SORA (daily)
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: 'MAS Terms of Use of Datasets (mas.gov.sg/terms-of-use): royalty-free
+      licence to use and distribute, with a notice acknowledging MAS as the source.'
+    redistributable: true
+    rows: 16178
+    start: '1987-07-01'
+    end: '2026-10-26'
+    units: Daily, % p.a., SGD. Interbank rates Jul 1987 to Dec 2013 (discontinued
+      by MAS from 1 Jan 2014). SORA and 3-month compounded SORA (backward-looking)
+      from 2005.
+    sha256: ca97faeb278b2137c45105f66de8c2fcdf5054e124d9f7976bd8680caa8b512a
+  mas/sgs_benchmark_yields.csv:
+    source: Monetary Authority of Singapore, SGS benchmark prices and yields
+    url: https://eservices.mas.gov.sg/statistics/fdanet/BenchmarkPricesAndYields.aspx
+    landing_page: https://eservices.mas.gov.sg/statistics/fdanet/BenchmarkPricesAndYields.aspx
+    series: SGS benchmark yields, 2/5/7/10/15/20/30-year (daily)
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: 'MAS Terms of Use of Datasets (mas.gov.sg/terms-of-use): royalty-free
+      licence to use and distribute, with a notice acknowledging MAS as the source.'
+    redistributable: true
+    rows: 7234
+    start: '1998-01-02'
+    end: '2026-10-27'
+    units: Daily, % p.a., SGD. The 7-year benchmark was discontinued on 1 February
+      2011.
+    sha256: e5d1f5eccce7937036f7c94c5756798245d6fec5594c3f176b96316b7c78fc2b
+  shiller/ie_data.xls:
+    source: Robert Shiller online data
+    url: https://img1.wsimg.com/blobby/go/e5e77e0b-59d1-44d9-ab25-4763ac982e53/downloads/1449043e-a1ed-4e2e-8e9c-7b9a2a064493/ie_data.xls?ver=1791297298731
+    landing_page: https://shillerdata.com/
+    series: ie_data.xls, sheet Data
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: No licence stated by the source; free download. Treated as not redistributable.
+    redistributable: false
+    rows: 1870
+    start: 1871-01
+    end: 2026-10
+    units: 'Monthly. P: S&P Composite price (monthly average of daily closes); D,
+      E: dividends and earnings per share, annualised, USD; CPI: US CPI-U index; Rate
+      GS10: 10-year Treasury yield, % p.a.; total bond returns (gross, monthly).'
+    sha256: 98a54927942e842ec07ffe73000998e793953708c345b6b27bb363e9ada8366a
+  singstat/M213751_cpi_monthly.json:
+    source: Singapore Department of Statistics, CPI (2024 = 100), monthly
+    url: https://tablebuilder.singstat.gov.sg/api/table/tabledata/M213751
+    landing_page: https://tablebuilder.singstat.gov.sg/table/TS/M213751
+    series: M213751, All Items index (and sub-indices), not seasonally adjusted
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: Terms not confirmed (singstat.gov.sg/terms-of-use returned no text on
+      2026-10-28). Treated as not redistributable; only derived figures are shown,
+      with citation.
+    redistributable: false
+    rows: 789
+    start: 1961-01
+    end: 2026-09
+    units: Monthly index, 2024 = 100, NSA.
+    sha256: d0d772f678d698e4fab13e6b7cfaf2eed119f718f9257704156bb525605edce4
+  spf/Median_BILL10_Level.xlsx:
+    source: 'Philadelphia Fed SPF, median BILL10: 10-year average 3-month Treasury
+      bill return'
+    url: https://www.philadelphiafed.org/-/media/FRBP/Assets/Surveys-And-Data/survey-of-professional-forecasters/data-files/files/Median_BILL10_Level.xlsx?sc_lang=en&hash=7DF0924BEBD289F347B6C375C0DF37C9
+    landing_page: https://www.philadelphiafed.org/surveys-and-data/bill10
+    series: BILL10
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: Terms page not found on 2026-10-28; treated as not redistributable. Figures
+      cited with source only.
+    redistributable: false
+    rows: 35
+    start: 1992Q1
+    end: 2026Q1
+    units: '% a year, US, nominal; median across forecasters; survey quarter in YEAR/QUARTER.'
+    sha256: 590901f3a6efec33f02d90c79159cc764ae1484e3916e06c4dbdb11585e456a2
+  spf/Median_BOND10_Level.xlsx:
+    source: 'Philadelphia Fed SPF, median BOND10: 10-year average 10-year Treasury
+      yield'
+    url: https://www.philadelphiafed.org/-/media/FRBP/Assets/Surveys-And-Data/survey-of-professional-forecasters/data-files/files/Median_BOND10_Level.xlsx?sc_lang=en&hash=5D5D44C4A1D625C1B2E6D7161E74388B
+    landing_page: https://www.philadelphiafed.org/surveys-and-data/bond10
+    series: BOND10
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: Terms page not found on 2026-10-28; treated as not redistributable. Figures
+      cited with source only.
+    redistributable: false
+    rows: 35
+    start: 1992Q1
+    end: 2026Q1
+    units: '% a year, US, nominal; median across forecasters; survey quarter in YEAR/QUARTER.'
+    sha256: 36eff8cbc47e9d1482facc35234c268abe4be495f9e7e3fed33b4803e1cabf49
+  spf/Median_CPI10_Level.xlsx:
+    source: 'Philadelphia Fed SPF, median CPI10: 10-year average annual CPI inflation'
+    url: https://www.philadelphiafed.org/-/media/FRBP/Assets/Surveys-And-Data/survey-of-professional-forecasters/data-files/files/Median_CPI10_Level.xlsx?sc_lang=en&hash=3F830AB88105AE096E50D861D6B9319D
+    landing_page: https://www.philadelphiafed.org/surveys-and-data/cpi10
+    series: CPI10
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: Terms page not found on 2026-10-28; treated as not redistributable. Figures
+      cited with source only.
+    redistributable: false
+    rows: 140
+    start: 1991Q4
+    end: 2026Q3
+    units: '% a year, US, nominal; median across forecasters; survey quarter in YEAR/QUARTER.'
+    sha256: 3ac863ade49dde7eebb55d662e23a6e9c8180a6e0fd9a5b68bd4d03005b1f267
+  spf/Median_STOCK10_Level.xlsx:
+    source: 'Philadelphia Fed SPF, median STOCK10: 10-year average annual S&P 500
+      return'
+    url: https://www.philadelphiafed.org/-/media/FRBP/Assets/Surveys-And-Data/survey-of-professional-forecasters/data-files/files/Median_STOCK10_Level.xlsx?sc_lang=en&hash=EEC75E7A73165524B284B5A9D90663D7
+    landing_page: https://www.philadelphiafed.org/surveys-and-data/stock10
+    series: STOCK10
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: Terms page not found on 2026-10-28; treated as not redistributable. Figures
+      cited with source only.
+    redistributable: false
+    rows: 35
+    start: 1992Q1
+    end: 2026Q1
+    units: '% a year, US, nominal; median across forecasters; survey quarter in YEAR/QUARTER.'
+    sha256: 3dd0f6966e10f4b1ba33615053ed5d08b745c4da0ee75eeb4799076cc7711ef8

@@ -245,3 +245,27 @@ The owner approved the draft on 2026-10-28 with these changes, all made before a
 - A primary-source 10-year Singapore inflation forecast.
 - A public source of global index earnings history, which would let E1–E3 be validated beyond the US.
 - A retail ACWD factsheet whose figures differ from the professional edition.
+
+### 2026-10-28 — Amendments to the Phase 1 pre-registration, made before any result (owner-approved)
+**Context:** These issues were found while building the loaders, after the pre-registration was committed (`b0485c6`) and before any CMA or validation result was computed. Each was decided by the owner before validation ran on real data.
+
+**1. JST sample ends in 2015 for every country.**
+- **Rule:** JST data after 2015 is excluded from validation and from the forward g_div median.
+- **Evidence:** JST's US equity total returns match Shiller's December-to-December returns to within about 0.2 percentage points in every year to 2015. They then diverge in 2016–2020 (2016 −8.1 pp, 2018 +16.0 pp, 2019 −18.0 pp, 2020 −6.0 pp). 2015 is the end of the sample in Jordà et al. (2019).
+- **Alternatives:** Using data to 2020 as registered (rejected: known divergence). Dropping only the US extension (rejected: no second source to check the other countries' extension years).
+
+**2. Long-run real cash rate: interbank, then compounded SORA.**
+- **Rule:** MAS discontinued the 3-month interbank series on 1 January 2014. The long-run window (1988 to the last full year) uses the month-end 3-month interbank rate for 1988–2013 and the MAS 3-month compounded SORA for 2014 onward, deflated by SingStat CPI.
+- **Disclosed difference:** compounded SORA is backward-looking (realised overnight rates over the past 3 months), while the interbank rate was a forward-looking quote.
+- **Alternative:** Interbank only, 1988–2013 (rejected: leaves out a full rate cycle).
+
+**3. Bond methods are validated in nominal terms.**
+- **Rule:** B1 = the starting yield and B2 = B1 + rolldown, each compared with the realised *nominal* annualised 10-year bond total return. This tests the yield method alone.
+- **Forward SGS CMA:** this is unchanged and stays real: the yield minus the inflation CMA.
+- **Why:** The registered text compared with real returns but set no inflation forecast at past origins. Adding one would test two assumptions at once.
+- **Alternative:** Yield minus trailing 10-year inflation against real returns (rejected for the reason above).
+
+**Implementation notes (fixed before results):**
+- JST series with gaps (missing years) are split into contiguous runs. Growth rates, levels and realised returns never span a gap, and the 30-year burn-in restarts with each run.
+- For pooled JST statistics, the HAC standard error of the bias and the effective number of observations use the cross-country average error per origin year. Errors from different countries in the same year are therefore not treated as independent.
+- B2's rolldown uses FRED December monthly-average GS5 and GS10: rolldown = (GS10 − GS5) / 5 × 9, the one-year roll from 10 to 9 years on a linear 5–10-year curve. It is compared with B1 over the origins where both exist (from 1953).

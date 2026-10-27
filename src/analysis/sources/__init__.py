@@ -1,7 +1,8 @@
 """Download public data sources to data/raw/<source>/ and record each file in the manifest.
 
-Each source module (shiller, jst, fred, mas, ...) contributes RawFile entries to REGISTRY once
-its URL, series ID and licence have been checked against the primary page (Phase 1).
+Each source module (shiller, jst, fred, ...) lists its RawFile entries in FILES and parses its
+raw files into tidy tables. Every URL, series ID and licence was checked against the primary
+page on 2026-10-28 (reference/source_checks.csv).
 
 A file already on disk is not re-downloaded. If a fresh download differs from the hash in the
 committed manifest, it is kept and reported as changed since snapshot; accept the new version
@@ -9,77 +10,23 @@ only via fetch_all(refresh=True). Adapted from Multi-Asset-Allocation (commit a9
 src/analysis/sources.py).
 """
 
-import re
-from collections.abc import Callable
-from dataclasses import dataclass
-from pathlib import Path
-
 import pandas as pd
-import requests
 
 from analysis import manifest
 from analysis.config import DATA_RAW
+from analysis.sources import damodaran, documents, fred, jst, mas, shiller, singstat, spf
+from analysis.sources.base import RawFile
 
-TIMEOUT = 120
-HEADERS = {"User-Agent": "Goals-Planner research (github.com/azrinmahsuom)"}
-
-
-@dataclass(frozen=True)
-class RawFile:
-    """One file to download, with the provenance written to the manifest."""
-
-    source: str  # folder under data/raw
-    filename: str
-    name: str
-    landing_page: str
-    series: str
-    licence: str
-    redistributable: bool
-    units: str
-    resolve_url: Callable[[], str]
-    describe: Callable[[Path], tuple[int, str, str]]  # (rows, start, end)
-    download: Callable[[str], bytes] = lambda url: get(url).content
-    manual: bool = False  # owner downloads it in a browser; fetch only records it
-
-    @property
-    def path(self) -> Path:
-        return DATA_RAW / self.source / self.filename
-
-
-def get(url: str) -> requests.Response:
-    """GET with the project's user agent, failing on any HTTP error."""
-    response = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
-    response.raise_for_status()
-    return response
-
-
-def link_on_page(page: str, pattern: str) -> Callable[[], str]:
-    """Resolver that finds the first href matching pattern on a landing page."""
-
-    def resolve() -> str:
-        html = get(page).text
-        match = re.search(rf'href="([^"]*{pattern}[^"]*)"', html)
-        if not match:
-            raise RuntimeError(
-                f"No link matching {pattern!r} on {page}. The source may have moved."
-            )
-        href = match.group(1)
-        if href.startswith("//"):
-            return "https:" + href
-        if href.startswith("/"):
-            return re.match(r"https?://[^/]+", page).group(0) + href
-        return href
-
-    return resolve
-
-
-def fixed(url: str) -> Callable[[], str]:
-    """Resolver for a URL that doesn't change."""
-    return lambda: url
-
-
-# Filled in Phase 1 as each source is verified.
-REGISTRY: list[RawFile] = []
+REGISTRY: list[RawFile] = [
+    *shiller.FILES,
+    *jst.FILES,
+    *fred.FILES,
+    *mas.FILES,
+    *singstat.FILES,
+    *spf.FILES,
+    *damodaran.FILES,
+    *documents.FILES,
+]
 
 
 def fetch(raw: RawFile, refresh: bool = False) -> str:
