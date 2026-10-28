@@ -111,8 +111,8 @@ def test_changed_document_is_drift_not_failure(monkeypatch):
     from analysis import manifest
 
     real = manifest.load()
-    if "documents/ACWD_factsheet.pdf" not in real:
-        pytest.skip("documents not fetched")
+    if not all(doc.exists() for doc, *_ in documents.CHECKS):
+        pytest.skip("documents not fetched (e.g. CI, where raw data isn't committed)")
     altered = {k: dict(v) for k, v in real.items()}
     altered["documents/ACWD_factsheet.pdf"]["sha256"] = "0" * 64
     monkeypatch.setattr(manifest, "load", lambda *a, **k: altered)
