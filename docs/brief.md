@@ -28,8 +28,8 @@ Not applicable (Tool). The CMA validation in Phase 1 is still run as a test with
   - SGD cash
   - Singapore CPI inflation
 - Period:
-  - Validation history: Shiller US data (from 1871) and the Jordà-Schularick-Taylor (JST) Macrohistory Database (from 1870), as far as each series goes.
-  - Forward CMAs: dated at a pinned as-of date, recorded in `src/analysis/config.py` when Phase 1 sets it.
+  - Validation history: Shiller US data (from 1871), and the Jordà-Schularick-Taylor (JST) Macrohistory Database from 1870 to 2015. JST years after 2015 are excluded (`docs/decisions.md`, amendment 1).
+  - Forward CMAs: as of 2026-09-30 (`src/analysis/cma/__init__.py`).
   - Projection horizons: user-chosen.
 - Frequency: monthly simulation; annual and monthly history for validation.
 - Currency: real SGD (after Singapore CPI) · Returns: total (income reinvested), after all-in fund costs.
@@ -43,18 +43,18 @@ The CMAs are compared against:
 Each CMA method is validated against the historical-mean forecast (out-of-sample R²). No asset manager's, robo-advisor's or wealth platform's CMAs or materials are referenced.
 
 ## 8. Data and sources
-One source per line, with whether results derived from it can be published. Every URL, series ID and licence is confirmed against the primary page in Phase 1 before code depends on it; until then "Pulled on" is blank.
+One source per line, with whether results derived from it can be published. Every URL, series ID and licence was checked against the primary page on 2026-10-28 (`reference/source_checks.csv`). The MAS Survey of Professional Forecasters workbook (near-term inflation cross-check) is a manual browser download.
 
 | Data | Source | Script | Pulled on | Publishable? |
 |---|---|---|---|---|
-| US prices, dividends, earnings, CPI, CAPE (validation) | Robert Shiller, online data | `analysis.sources.shiller` | | To confirm in Phase 1; app ships derived parameters only |
-| Multi-country returns, yields, CPI (validation) | JST Macrohistory Database R6 | `analysis.sources.jst` | | Derived parameters, CC BY-NC-SA 4.0 with citation |
-| USD/SGD, US CPI, US 10-year yield | FRED | `analysis.sources.fred` | | Public-domain series yes (checked per series) |
-| SGS benchmark yields, SORA | MAS | `analysis.sources.mas` | | To confirm in Phase 1 |
-| Singapore CPI | SingStat | `analysis.sources.singstat` | | Licence to confirm (open question) |
-| 10-year stock, bond and bill expectations | Philadelphia Fed SPF | `analysis.sources.spf` | | To confirm in Phase 1 |
-| Implied equity risk premium | Damodaran (NYU) | `analysis.sources.damodaran` | | No licence stated; treat as not redistributable |
-| Equity fund dividend yield, P/E (forward inputs) | Fund factsheet (dated, hashed) | `analysis.sources.factsheet` | | Cite figures only |
+| US prices, dividends, earnings, CPI, CAPE (validation) | Robert Shiller, online data | `analysis.sources.shiller` | 2026-10-28 | To confirm in Phase 1; app ships derived parameters only |
+| Multi-country returns, yields, CPI (validation) | JST Macrohistory Database R6 | `analysis.sources.jst` | 2026-10-28 | Derived parameters, CC BY-NC-SA 4.0 with citation |
+| USD/SGD, US CPI, US 10-year yield | FRED | `analysis.sources.fred` | 2026-10-28 | Public-domain series yes (checked per series) |
+| SGS benchmark yields, SORA | MAS | `analysis.sources.mas` | 2026-10-28 | To confirm in Phase 1 |
+| Singapore CPI | SingStat | `analysis.sources.singstat` | 2026-10-28 | Licence to confirm (open question) |
+| 10-year stock, bond and bill expectations | Philadelphia Fed SPF | `analysis.sources.spf` | 2026-10-28 | To confirm in Phase 1 |
+| Implied equity risk premium | Damodaran (NYU) | `analysis.sources.damodaran` | 2026-10-28 | No licence stated; treat as not redistributable |
+| Equity fund dividend yield, P/E (forward inputs) | Fund factsheet (dated, hashed) | `analysis.sources.documents` | 2026-10-28 | Cite figures only |
 | SRS caps, relief, withdrawal tax (Phase 2) | IRAS, MOF, CPF Board pages | `analysis.sources` (saved pages) | | Cite rules only |
 | Fund costs, withholding, risk menu, historical mix returns | `Multi-Asset-Allocation` @ a92a325, `ETF-vehicle-selection` @ 4103576 | `analysis.upstream` | 2026-10-28 | Yes (derived, committed upstream); JST-derived rows CC BY-NC-SA 4.0 |
 
@@ -99,12 +99,14 @@ Each threshold or default cites its evidence, or says `Evidence: pending` (and i
 - Every number in `docs/cma.md` appears in `reports/cma_figures.json`.
 
 ## 14. What would show the hypothesis is wrong
-For each CMA method: out-of-sample R² at or below zero against the historical mean, or forecast errors with a bias larger than their spread. Such results are reported as found and carried into the scenario width; methods are not quietly dropped.
+For each CMA method: out-of-sample R² at or below zero against the historical mean, or forecast errors with a bias larger than their spread. Such results are reported as found and methods are not quietly dropped. They do not widen the scenarios: the low/central/high ranges cover uncertainty in the expected return only (method spread or estimation error, `docs/decisions.md`), and the spread of realised outcomes comes from the simulation.
 
 ## 15. Open questions
 - **Prior repos are private.** The owner will make `ETF-vehicle-selection` and `Multi-Asset-Allocation` public; until then `analysis.upstream` reads them through the signed-in GitHub CLI.
-- **SingStat licence:** if it doesn't allow redistribution, the app ships only the derived inflation assumption.
-- **Fund factsheet:** if the chosen fund doesn't publish a dividend yield or P/E, E1/E2 have no forward global inputs; to be decided at the Phase 1 checkpoint, with no silent substitution.
-- **ACWD's fund-level withholding rate** isn't committed upstream (only ISAC's, 11.98%); measure it from ACWD's annual report in Phase 1.
+- **MAS Survey of Professional Forecasters workbook:** the owner saves it by hand. Its CPI medians are then added to `docs/cma.md` as a cross-check.
+- **Linking to MAS pages:** MAS's terms (updated 27 August 2026) ask for permission before hyperlinking to internal pages. Documents cite MAS sources by title for now.
+- **SingStat and Philadelphia Fed licence terms:** not confirmed; only derived or cited figures are shown.
+- **Evidence still pending:** the Shiller 3-month publication lag; Rogoff (1996); Grinold & Kroner (2002) primary source; the linear cash glide path.
+- **Multi-Asset-Allocation's Shiller bond-return timing** probably has the same one-month offset corrected here (`docs/decisions.md`, 2026-10-28); to raise in that repo.
 - **Hedging:** the equity sleeve is unhedged in SGD. A hedged variant is out of scope unless requested.
 - **App host** (Streamlit Community Cloud vs a static GitHub Pages site): Phase 3.

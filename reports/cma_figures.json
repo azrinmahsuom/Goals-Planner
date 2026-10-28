@@ -1,0 +1,339 @@
+{
+  "as_of": "2026-09-30",
+  "jst_end_year": 2015,
+  "validation": [
+    {
+      "method": "E1",
+      "sample": "Shiller US",
+      "basis": "real",
+      "first_origin": 1901,
+      "last_origin": 2015,
+      "origins": 115,
+      "effective_n": 11.5,
+      "bias": -0.011265,
+      "bias_hac_se": 0.012471,
+      "mae": 0.0472,
+      "rmse": 0.055062,
+      "correlation": 0.230617,
+      "oos_r2": 0.124249,
+      "error_p10": -0.083186,
+      "error_p90": 0.063994,
+      "r2_low": -0.105844,
+      "r2_high": 0.34404,
+      "countries": null
+    },
+    {
+      "method": "E2",
+      "sample": "Shiller US",
+      "basis": "real",
+      "first_origin": 1901,
+      "last_origin": 2015,
+      "origins": 115,
+      "effective_n": 11.5,
+      "bias": -0.009595,
+      "bias_hac_se": 0.015523,
+      "mae": 0.051592,
+      "rmse": 0.061837,
+      "correlation": 0.413034,
+      "oos_r2": -0.104529,
+      "error_p10": -0.085037,
+      "error_p90": 0.069076,
+      "r2_low": -0.589892,
+      "r2_high": 0.395968,
+      "countries": null
+    },
+    {
+      "method": "E3",
+      "sample": "Shiller US",
+      "basis": "real",
+      "first_origin": 1901,
+      "last_origin": 2015,
+      "origins": 115,
+      "effective_n": 11.5,
+      "bias": 0.004914,
+      "bias_hac_se": 0.011559,
+      "mae": 0.040586,
+      "rmse": 0.048853,
+      "correlation": 0.485515,
+      "oos_r2": 0.310605,
+      "error_p10": -0.063396,
+      "error_p90": 0.072223,
+      "r2_low": 0.178733,
+      "r2_high": 0.468697,
+      "countries": null
+    },
+    {
+      "method": "D1",
+      "sample": "Shiller US",
+      "basis": "real",
+      "first_origin": 1901,
+      "last_origin": 2015,
+      "origins": 115,
+      "effective_n": 11.5,
+      "bias": -0.01284,
+      "bias_hac_se": 0.012645,
+      "mae": 0.048414,
+      "rmse": 0.056147,
+      "correlation": 0.193936,
+      "oos_r2": 0.08939,
+      "error_p10": -0.085229,
+      "error_p90": 0.063472,
+      "r2_low": -0.168268,
+      "r2_high": 0.331147,
+      "countries": null
+    },
+    {
+      "method": "B1",
+      "sample": "Shiller US",
+      "basis": "nominal",
+      "first_origin": 1901,
+      "last_origin": 2015,
+      "origins": 115,
+      "effective_n": 11.5,
+      "bias": -0.001562,
+      "bias_hac_se": 0.001971,
+      "mae": 0.007141,
+      "rmse": 0.009882,
+      "correlation": 0.956627,
+      "oos_r2": 0.907752,
+      "error_p10": -0.013943,
+      "error_p90": 0.008445,
+      "r2_low": 0.725202,
+      "r2_high": 0.948836,
+      "countries": null
+    },
+    {
+      "method": "B1",
+      "sample": "Shiller US, B2 origins",
+      "basis": "nominal",
+      "first_origin": 1953,
+      "last_origin": 2015,
+      "origins": 63,
+      "effective_n": 6.3,
+      "bias": -0.002487,
+      "bias_hac_se": 0.003269,
+      "mae": 0.01011,
+      "rmse": 0.012702,
+      "correlation": 0.946962,
+      "oos_r2": 0.909696,
+      "error_p10": -0.016885,
+      "error_p90": 0.013043,
+      "r2_low": 0.690421,
+      "r2_high": 0.953553,
+      "countries": null
+    },
+    {
+      "method": "B2",
+      "sample": "Shiller US, B2 origins",
+      "basis": "nominal",
+      "first_origin": 1953,
+      "last_origin": 2015,
+      "origins": 63,
+      "effective_n": 6.3,
+      "bias": 0.00335,
+      "bias_hac_se": 0.003625,
+      "mae": 0.010588,
+      "rmse": 0.014058,
+      "correlation": 0.940693,
+      "oos_r2": 0.889397,
+      "error_p10": -0.015332,
+      "error_p90": 0.019323,
+      "r2_low": 0.60131,
+      "r2_high": 0.96361,
+      "countries": null
+    },
+    {
+      "method": "D1",
+      "sample": "JST pooled",
+      "basis": "real",
+      "first_origin": 1900,
+      "last_origin": 2005,
+      "origins": 1341,
+      "effective_n": 10.6,
+      "bias": -0.008119,
+      "bias_hac_se": 0.013437,
+      "mae": 0.05826,
+      "rmse": 0.077325,
+      "correlation": 0.151927,
+      "oos_r2": 0.004155,
+      "error_p10": -0.093705,
+      "error_p90": 0.085476,
+      "r2_low": -0.159903,
+      "r2_high": 0.144377,
+      "countries": 16.0
+    },
+    {
+      "method": "B1",
+      "sample": "JST pooled",
+      "basis": "nominal",
+      "first_origin": 1900,
+      "last_origin": 2005,
+      "origins": 1290,
+      "effective_n": 10.6,
+      "bias": 0.000979,
+      "bias_hac_se": 0.003278,
+      "mae": 0.015627,
+      "rmse": 0.020913,
+      "correlation": 0.859072,
+      "oos_r2": 0.775509,
+      "error_p10": -0.023594,
+      "error_p90": 0.026964,
+      "r2_low": 0.477597,
+      "r2_high": 0.879846,
+      "countries": 16.0
+    }
+  ],
+  "validation_by_country": {
+    "B1": {
+      "countries": 16,
+      "positive_r2": 16,
+      "median_r2": 0.788872,
+      "best": [
+        "Australia",
+        0.925413
+      ],
+      "worst": [
+        "Japan",
+        0.163526
+      ]
+    },
+    "D1": {
+      "countries": 16,
+      "positive_r2": 9,
+      "median_r2": 0.12238,
+      "best": [
+        "Australia",
+        0.333846
+      ],
+      "worst": [
+        "Denmark",
+        -0.736913
+      ]
+    }
+  },
+  "inflation": {
+    "cma": 0.017113,
+    "window": "1996-2025"
+  },
+  "equity": {
+    "dividend_yield": 0.0157,
+    "g_div": 0.008313,
+    "g_div_by_country": {
+      "France": -0.030964,
+      "Italy": -0.019773,
+      "Belgium": -0.008929,
+      "Germany": -0.008214,
+      "Norway": -0.004585,
+      "Spain": -0.001909,
+      "Finland": 0.00158,
+      "UK": 0.008313,
+      "Denmark": 0.01154,
+      "USA": 0.014757,
+      "Sweden": 0.015044,
+      "Netherlands": 0.017804,
+      "Australia": 0.018652,
+      "Switzerland": 0.039166,
+      "Japan": 0.053571
+    },
+    "g_eps": 0.021568,
+    "g_eps_window": "1871-01 to 2026-06",
+    "D1": 0.024013,
+    "E1": 0.037268,
+    "pe_fy1": 23.84,
+    "forward_earnings_yield": 0.041946,
+    "gdp_per_capita_growth_median": 0.017735,
+    "gdp_countries": 18,
+    "real_fx_change": 0.0,
+    "real_fx_evidence": {
+      "1981-2025": -0.000809,
+      "1995-2025": -0.004867,
+      "2005-2025": 0.009338
+    },
+    "countries_excluded": {
+      "Portugal": "no contiguous run of 30+ years ending in 2015 with positive dividends at both ends",
+      "Canada": "no equity data in JST R6",
+      "Ireland": "no equity data in JST R6"
+    }
+  },
+  "post_hoc": {
+    "P1_g_div_longest_run": 0.004946,
+    "P1_countries": 16,
+    "P1_added": [
+      "Portugal"
+    ],
+    "P1_D1": 0.020646,
+    "P2_d1_jst_bias": -0.008119,
+    "P2_bias_corrected_D1": 0.032132,
+    "us_gross_buyback_yield": 0.017598
+  },
+  "sgs": {
+    "curve_date": "2026-09-30",
+    "yield_5y": 0.0224,
+    "yield_10y": 0.0247,
+    "duration": 8.18,
+    "B1_nominal": 0.023863,
+    "B2_nominal": 0.027166,
+    "rolldown": 0.003303,
+    "B1_real": 0.00675,
+    "B2_real": 0.010052
+  },
+  "cash": {
+    "start_nominal": 0.012336,
+    "start_real": -0.004777,
+    "long_run_real": 0.002544,
+    "long_run_window": "1988-2025",
+    "cma": -0.001117
+  },
+  "scenarios": {
+    "global_equity_sgd": {
+      "low": 0.01366,
+      "central": 0.024013,
+      "high": 0.034365,
+      "spread_a": 0.006628,
+      "bootstrap_se_b": 0.010352,
+      "width_set_by": "(b) bootstrap standard error"
+    },
+    "sgs": {
+      "low": 0.001791,
+      "central": 0.00675,
+      "high": 0.011708,
+      "spread_a": 0.001651,
+      "bootstrap_se_b": 0.004958,
+      "width_set_by": "(b) bootstrap standard error"
+    },
+    "sgd_cash": {
+      "low": -0.004857,
+      "central": -0.001117,
+      "high": 0.002624,
+      "spread_a": 0.0,
+      "bootstrap_se_b": 0.003741,
+      "width_set_by": "(b) bootstrap standard error"
+    },
+    "sg_inflation": {
+      "low": 0.012155,
+      "central": 0.017113,
+      "high": 0.022072,
+      "spread_a": 0.0,
+      "bootstrap_se_b": 0.004958,
+      "width_set_by": "(b) bootstrap standard error"
+    }
+  },
+  "comparison": {
+    "spf_survey": "2026Q1",
+    "spf_stock10_real": 0.047,
+    "spf_bond10_real": 0.017,
+    "spf_bill10_real": 0.007,
+    "spf_cpi10": 0.023,
+    "damodaran_year": 2025,
+    "damodaran_implied_erp": 0.0423,
+    "damodaran_tbond": 0.0418,
+    "damodaran_expected_real": 0.0611,
+    "maa_100_equity": 0.063,
+    "maa_0_equity": 0.034,
+    "jst_median_dividend_yield": 0.04102,
+    "payout_year": 2025,
+    "us_dividend_yield": 0.011469,
+    "us_total_payout_yield": 0.029067
+  },
+  "mas_spf_file_saved": false
+}

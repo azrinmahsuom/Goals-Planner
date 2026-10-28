@@ -113,3 +113,23 @@ def test_every_number_in_cma_doc_is_generated_or_cited():
     }
     # Method constants stated in decisions.md: replications, seed, HAC lags, horizon.
     assert unexplained <= {"2000", "20261028"}, unexplained
+
+
+def test_zero_dividend_inside_a_run_does_not_exclude_the_country():
+    """Only the endpoints need positive dividends (correction, docs/decisions.md 2026-10-28)."""
+    panel = jst_panel(range(1870, 2016))
+    panel.loc[("Testland", 1923), "eq_dp"] = 0.0
+    growth, annual = forward.dividend_growth_by_country(panel, 2015)
+    assert "Testland" in growth.index
+    assert np.isfinite(annual["Testland"]).all()
+
+
+def test_joint_bootstrap_resamples_years_shared_across_countries():
+    years = range(1900, 1960)
+    rng = np.random.default_rng(3)
+    common = pd.Series(rng.normal(0.02, 0.05, len(years)), index=years)
+    together = {"A": common, "B": common.copy()}
+    draws = scenarios.dividend_growth_draws(together, reps=200, seed=1)
+    # Identical countries draw identical years, so the median equals each country's growth.
+    single = scenarios.dividend_growth_draws({"A": common}, reps=200, seed=1)
+    assert draws == pytest.approx(single)

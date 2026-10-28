@@ -11,18 +11,24 @@
 | **Question** | If I invest S$X now and S$Y a month in a given mix of global shares and Singapore government bonds, how likely am I to reach S$G (in today's money) by year T? How much would I need to save each month for a given likelihood? |
 | **What it does** | Builds return assumptions from their parts (yields, growth, valuation), checks how well each method would have forecast the past, then simulates thousands of possible futures in real SGD |
 | **Assets** | Global equities held in SGD (unhedged), Singapore Government Securities, SGD cash; inflation as Singapore CPI |
-| **Status** | In progress: setup done; return assumptions next |
+| **Status** | In progress: return assumptions built and under review; simulation and app next |
 
 ## Key findings
 
-TBD. The validation results for each return-assumption method will be reported here as found, including where a method fails.
+From the return-assumption work ([docs/cma.md](docs/cma.md), as of 30 September 2026; real, annualised over 10 years, before fund costs):
+
+1. **Starting bond yields predicted the next 10 years' bond returns closely** (out-of-sample R² 0.91 in the US, 0.78 across 16 countries). This is mostly arithmetic rather than skill: a bond held for about its duration earns close to its starting yield.
+2. **The equity methods did little better than the long-run average.** Across 16 countries, dividend yield plus dividend growth had an out-of-sample R² of 0.004. The best US method (1/CAPE) can't be applied going forward with free data.
+3. **Central assumptions: global equities 2.4% (range 1.4–3.4%), Singapore government bonds 0.7%, SGD cash −0.1%, inflation 1.7%.** The equity figure is well below the 6.3% historical average because today's dividend yield (1.57%) is far below its long-run median (4.10%). It leaves out buybacks, so it is probably too low.
+
+These ranges describe uncertainty about the expected return, not the range of outcomes; the simulation (next phase) will show that.
 
 ## Limitations
 
 See [docs/limitations.md](docs/limitations.md). The main ones so far:
 
+- The equity methods show little forecasting power, and the equity estimate leaves out buybacks.
 - The equity methods are tested mainly on US history but applied to global inputs.
-- Some cost inputs reused from the earlier projects are stand-ins until measured.
 
 ## Before you start
 
