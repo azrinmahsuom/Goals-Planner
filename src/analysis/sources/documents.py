@@ -64,7 +64,7 @@ FILES = [
     ),
     RawFile(
         source="documents",
-        filename="MAS_SPF_sep26q3.xlsx",
+        filename="Sep26Q3.xlsx",  # the owner's browser download, saved under MAS's file name
         name="MAS Survey of Professional Forecasters, September 2026 (near-term cross-check)",
         landing_page=MAS_SPF_PAGE,
         series="Quarterly survey results workbook (CPI-All Items medians)",
@@ -185,3 +185,18 @@ def withholding_rate(fund: str = "ACWD", year: str = "fy2026") -> float:
     """Effective fund-level withholding rate: withholding tax / gross dividend income."""
     ref = fund_documents().query("fund == @fund").set_index("field")["value"]
     return float(ref[f"withholding_tax_{year}"]) / float(ref[f"dividend_income_{year}"])
+
+
+def mas_spf_cpi_medians(path: Path | None = None, sheet: str = "Sep26Q3") -> dict[str, float]:
+    """Median CPI-All Items forecasts (full-year % change) across the survey's forecasters, for
+    the current and next calendar year, from the MAS Survey of Professional Forecasters."""
+    df = pd.read_excel(path or FILES[2].path, sheet_name=sheet, header=None)
+    start = next(c for c in df.columns if str(df.iloc[0, c]).strip() == "CPI All-Items inflation")
+    respondents = df[pd.to_numeric(df[0].astype(str).str.rstrip("#"), errors="coerce").notna()]
+    out = {"forecasters": int(len(respondents))}
+    for c in range(start, start + 12):
+        label = str(df.iloc[2, c]).strip()
+        if label.endswith("Full Year"):
+            values = pd.to_numeric(respondents[c], errors="coerce").dropna()
+            out[label.split()[0]] = float(values.median()) / 100
+    return out

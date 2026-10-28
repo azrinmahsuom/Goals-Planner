@@ -114,7 +114,7 @@ Equity rows are real returns; bond rows are nominal (amendment 3). JST data ends
 
 **Why the forward equity figure is below the historical one:** most of the gap is the starting yield. The index dividend yield today is 1.57%; the median JST dividend yield over 1870–2015 was 4.10%. A building-block estimate passes today's low yield straight through; a historical average assumes the past's higher yields recur. The US survey and implied-premium figures are for US assets in USD and are shown for context only.
 
-**Near-term inflation cross-check (MAS Survey of Professional Forecasters):** Pending: the workbook must be saved by hand (MAS returns a web page, not the file, to scripted requests), so no figure is shown yet. Source: MAS, *Survey of Professional Forecasters*, September 2026 results workbook (`sep26q3.xlsx`), available from mas.gov.sg. Contains information from the MAS Survey of Professional Forecasters, which is made available under the terms of the Monetary Authority of Singapore's Terms of Use of Datasets.
+**Near-term inflation cross-check (MAS Survey of Professional Forecasters):** The median forecast across 21 forecasters is 2.1% CPI-All Items inflation for 2026 and 2.0% for 2027, against the 10-year assumption of 1.71%. This is a near-term cross-check only; it sets nothing (the assumption is the 30-year historical rate, pre-registered). Source: MAS, *Survey of Professional Forecasters*, September 2026 results workbook (`Sep26Q3.xlsx`, sheet Sep26Q3, individual responses), available from mas.gov.sg. Contains information from the MAS Survey of Professional Forecasters, which is made available under the terms of the Monetary Authority of Singapore's Terms of Use of Datasets.
 
 ## Sources and licences
 

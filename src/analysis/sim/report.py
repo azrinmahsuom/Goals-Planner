@@ -82,6 +82,7 @@ ENGINES = {  # name: (history, engine, mean block)
 }
 MAIN = next(iter(ENGINES))
 SHOWN_SETS = ("central", "P2", "hist_eq_yield", "historical")
+PLAUSIBLE_SETS = SHOWN_SETS[:3]  # historical global is a reference, not a plausible forward set
 SET_LABELS = {
     "low": "Low",
     "central": "Central",
@@ -451,8 +452,9 @@ def render(out: dict) -> str:
     hist_gap = out["historical_sgs_gap"]
     sp = out["headline_spread"]
     spread_sentence = (
-        f"Assumption choice moves the result far more than the engine or market randomness: across the four sets the chance differs by {sp['set_min']:.0f}–{sp['set_max']:.0f} percentage points depending on the example, "
-        f"against {sp['engine_min']:.0f}–{sp['engine_max']:.0f} points across the five engines (central assumptions) and at most ±{sp['noise_max']:.1f} points of simulation sampling noise (one standard error with {out['paths']:,} paths)."
+        f"Assumption choice moves the result far more than the engine or market randomness: across the three plausible sets (central, bias-corrected equity, historical equity + yield-based bonds) the chance differs by {sp['set_min']:.0f}–{sp['set_max']:.0f} percentage points depending on the example, "
+        f"against {sp['engine_min']:.0f}–{sp['engine_max']:.0f} points across the five engines (central assumptions) and at most ±{sp['noise_max']:.1f} points of simulation sampling noise (one standard error with {out['paths']:,} paths). "
+        f"Including the historical global reference set, the spread is larger: {sp['reference_min']:.0f}–{sp['reference_max']:.0f} points."
     )
     return f"""# Simulation results (Phase 2)
 
@@ -541,16 +543,20 @@ Simplifications: the {sgd(out["srs_assumptions"]["relief_cap"])} overall relief 
 def headline_spread(out: dict) -> dict[str, float]:
     """Percentage-point spread of P(goal) across assumption sets and across engines, and the
     largest Monte Carlo standard error, for the headline sentence."""
-    sets, engines, noise = [], [], []
+    sets, with_reference, engines, noise = [], [], [], []
     for k in out["examples"]:
-        p = [out["grid"][k][MAIN][s]["p_goal"] for s in SHOWN_SETS]
+        p = [out["grid"][k][MAIN][s]["p_goal"] for s in PLAUSIBLE_SETS]
+        r = [out["grid"][k][MAIN][s]["p_goal"] for s in SHOWN_SETS]
         e = [out["grid"][k][name]["central"]["p_goal"] for name in ENGINES]
         sets.append((max(p) - min(p)) * 100)
+        with_reference.append((max(r) - min(r)) * 100)
         engines.append((max(e) - min(e)) * 100)
-        noise += [np.sqrt(x * (1 - x) / out["paths"]) * 100 for x in p]
+        noise += [np.sqrt(x * (1 - x) / out["paths"]) * 100 for x in r]
     return {
         "set_min": min(sets),
         "set_max": max(sets),
+        "reference_min": min(with_reference),
+        "reference_max": max(with_reference),
         "engine_min": min(engines),
         "engine_max": max(engines),
         "noise_max": max(noise),

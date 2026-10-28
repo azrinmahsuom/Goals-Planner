@@ -335,5 +335,10 @@
     "us_dividend_yield": 0.011469,
     "us_total_payout_yield": 0.029067
   },
-  "mas_spf_file_saved": false
+  "mas_spf_file_saved": true,
+  "mas_spf_cpi": {
+    "forecasters": 21,
+    "2026": 0.021,
+    "2027": 0.02
+  }
 }

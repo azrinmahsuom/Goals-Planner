@@ -199,6 +199,7 @@ def compute() -> dict:
                 **payout,
             },
             "mas_spf_file_saved": mas_spf.exists(),
+            "mas_spf_cpi": documents.mas_spf_cpi_medians() if mas_spf.exists() else None,
         }
     )
 
@@ -344,10 +345,13 @@ def render(fig: dict) -> str:
     dc, bc = fig["validation_by_country"]["D1"], fig["validation_by_country"]["B1"]
     by_country = "\n".join(f"| {c} | {pct(g, 2)} |" for c, g in eq["g_div_by_country"].items())
     eq_s, sgs_s = fig["scenarios"]["global_equity_sgd"], fig["scenarios"]["sgs"]
+    spf_cpi = fig.get("mas_spf_cpi")
     mas_spf = (
-        "The owner's browser download of the September 2026 workbook is recorded in "
-        "`data/MANIFEST.yaml`; its CPI medians are to be read and shown here."
-        if fig["mas_spf_file_saved"]
+        f"The median forecast across {spf_cpi['forecasters']} forecasters is {pct(spf_cpi['2026'])} "
+        f"CPI-All Items inflation for 2026 and {pct(spf_cpi['2027'])} for 2027, against the "
+        f"10-year assumption of {pct(fig['inflation']['cma'], 2)}. This is a near-term cross-check only; it sets "
+        "nothing (the assumption is the 30-year historical rate, pre-registered)."
+        if spf_cpi
         else "Pending: the workbook must be saved by hand (MAS returns a web page, not the file, "
         "to scripted requests), so no figure is shown yet."
     )
@@ -438,7 +442,7 @@ Equity rows are real returns; bond rows are nominal (amendment 3). JST data ends
 
 **Why the forward equity figure is below the historical one:** most of the gap is the starting yield. The index dividend yield today is {pct(eq["dividend_yield"], 2)}; the median JST dividend yield over 1870–{fig["jst_end_year"]} was {pct(cmp_["jst_median_dividend_yield"], 2)}. A building-block estimate passes today's low yield straight through; a historical average assumes the past's higher yields recur. The US survey and implied-premium figures are for US assets in USD and are shown for context only.
 
-**Near-term inflation cross-check (MAS Survey of Professional Forecasters):** {mas_spf} Source: MAS, *Survey of Professional Forecasters*, September 2026 results workbook (`sep26q3.xlsx`), available from mas.gov.sg. Contains information from the MAS Survey of Professional Forecasters, which is made available under the terms of the Monetary Authority of Singapore's Terms of Use of Datasets.
+**Near-term inflation cross-check (MAS Survey of Professional Forecasters):** {mas_spf} Source: MAS, *Survey of Professional Forecasters*, September 2026 results workbook (`Sep26Q3.xlsx`, sheet Sep26Q3, individual responses), available from mas.gov.sg. Contains information from the MAS Survey of Professional Forecasters, which is made available under the terms of the Monetary Authority of Singapore's Terms of Use of Datasets.
 
 ## Sources and licences
 

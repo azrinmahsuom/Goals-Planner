@@ -88,6 +88,21 @@ files:
     end: n/a
     units: PDF; figures checked against reference/fund_documents.csv.
     sha256: f08894e920ac9f919d4e69e376fa400b10c470a91fe728acf5772ff582687291
+  documents/Sep26Q3.xlsx:
+    source: MAS Survey of Professional Forecasters, September 2026 (near-term cross-check)
+    url: https://www.mas.gov.sg/-/media/mas-media-library/monetary-policy/mas-survey-of-professional-forecasters/2026/sep26q3.xlsx
+    landing_page: https://www.mas.gov.sg/monetary-policy/mas-survey-of-professional-forecasters
+    series: Quarterly survey results workbook (CPI-All Items medians)
+    retrieved: '2026-10-28'
+    manual_download: true
+    licence: MAS Terms of Use (to confirm for this publication); figures cited with
+      source.
+    redistributable: false
+    rows: 3
+    start: n/a
+    end: n/a
+    units: xlsx as published by MAS.
+    sha256: 060649b55a37e115695fc7c91b3d7f10eec32536d3cc175895c998c20e17e00c
   fred/DEXSIUS.csv:
     source: 'FRED: Singapore dollars to one US dollar, noon buying rate'
     url: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXSIUS

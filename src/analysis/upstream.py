@@ -25,6 +25,9 @@ COMMITS = {
     EVS: "4103576234dadb1b17aa0cec863124c3c24332cd",
 }
 PROVENANCE = ["repo", "commit", "path", "locator"]
+# Later commits checked: every vendored field re-extracted and found identical, so the tables
+# keep their original commit (docs/decisions.md, 2026-10-28).
+CHECKED = {MAA: [("5fbf585eee0d26ce9e8299d610d25331f43e5855", "2026-10-28", "identical")]}
 
 
 def read_file(repo: str, path: str) -> str:

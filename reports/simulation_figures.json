@@ -1575,8 +1575,10 @@
   "sgs_duration": 8.18,
   "historical_sgs_gap": 0.02725,
   "headline_spread": {
-    "set_min": 44.09,
-    "set_max": 52.73,
+    "set_min": 28.35,
+    "set_max": 43.54,
+    "reference_min": 44.09,
+    "reference_max": 52.73,
     "engine_min": 3.06,
     "engine_max": 8.96,
     "noise_max": 0.499959

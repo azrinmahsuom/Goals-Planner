@@ -496,3 +496,8 @@ The equity shares are `Multi-Asset-Allocation`'s risk-menu mixes: 59% is the bin
 - A sentence states that assumption choice moves the result far more than the engine or market randomness. It is generated from the measured spreads: across assumption sets, across engines, and the Monte Carlo standard error.
 
 **SRS:** the comparison states that it doesn't value the loss of access to SRS money before the statutory retirement age.
+
+### 2026-10-28 — Upstream re-check, headline wording, MAS survey cross-check
+- **`Multi-Asset-Allocation` @ `5fbf585`** (main, after merging PR #1, the Shiller bond-timing fix) was checked against the vendored tables. Every field in `reference/upstream/{fund_facts,mix_costs,risk_menu,historical_mix_returns,fee_schedule}.csv` was re-extracted at `5fbf585` and is identical, apart from the commit column (69 rows). The tables are not re-vendored and keep `a92a325` as their source. The check is recorded in `analysis.upstream.CHECKED`.
+- **Headline sentence (owner):** generated from the three plausible sets (central, bias-corrected equity, historical equity + yield-based bonds). The historical global reference set's larger spread is stated separately.
+- **MAS Survey of Professional Forecasters:** the owner saved the September 2026 workbook as `data/raw/documents/Sep26Q3.xlsx`, and the manual-download entry uses that name. The cross-check is the median of the individual forecasters' full-year CPI-All Items forecasts (sheet Sep26Q3), shown next to the inflation CMA. It sets nothing.
