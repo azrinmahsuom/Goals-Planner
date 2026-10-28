@@ -501,3 +501,9 @@ The equity shares are `Multi-Asset-Allocation`'s risk-menu mixes: 59% is the bin
 - **`Multi-Asset-Allocation` @ `5fbf585`** (main, after merging PR #1, the Shiller bond-timing fix) was checked against the vendored tables. Every field in `reference/upstream/{fund_facts,mix_costs,risk_menu,historical_mix_returns,fee_schedule}.csv` was re-extracted at `5fbf585` and is identical, apart from the commit column (69 rows). The tables are not re-vendored and keep `a92a325` as their source. The check is recorded in `analysis.upstream.CHECKED`.
 - **Headline sentence (owner):** generated from the three plausible sets (central, bias-corrected equity, historical equity + yield-based bonds). The historical global reference set's larger spread is stated separately.
 - **MAS Survey of Professional Forecasters:** the owner saved the September 2026 workbook as `data/raw/documents/Sep26Q3.xlsx`, and the manual-download entry uses that name. The cross-check is the median of the individual forecasters' full-year CPI-All Items forecasts (sheet Sep26Q3), shown next to the inflation CMA. It sets nothing.
+
+### 2026-10-28 — Fresh-clone rebuild: pass
+`make all` was run on a fresh clone of `81d0744` (`uv sync --locked`, the owner's manually saved MAS survey workbook added as the one documented manual step).
+- **Sources:** 19 of 21 downloads were byte-identical to the snapshot. The MAS survey workbook is the manual download. One live source changed and was reported in the drift report: MAS domestic interest rates, which gained days after the 2026-09-30 as-of date.
+- **Outputs:** every regenerated file (`reports/cma_figures.json`, `reports/simulation_figures.json`, `docs/cma.md`, `docs/simulation.md`, the figures) was byte-identical to the committed version.
+- **Result:** headline CMA movement 0 bps, against the 10 bps tolerance. All 63 tests passed.
