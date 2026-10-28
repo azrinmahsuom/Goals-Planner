@@ -50,7 +50,11 @@ def verify() -> None:
         upstream.load(name)
     print("Found the vendored upstream tables in reference/upstream/.")
     checks = documents.verify_reference()
-    print(f"Confirmed {checks} quoted figures on their cited document pages.")
+    print(f"Confirmed {len(checks['checked'])} quoted figures on their cited document pages.")
+    for key in checks["drifted"]:
+        print(f"  document changed since snapshot (pinned figures kept): {key}")
+    for key in status["optional_missing"]:
+        print(f"  optional manual download not saved (cross-check skipped): {key}")
 
 
 def main() -> None:

@@ -49,6 +49,7 @@ class RawFile:
     describe: Callable[[Path], tuple[int, str, str]]  # (rows, start, end)
     download: Callable[[str], bytes] = default_download
     manual: bool = False  # owner downloads it in a browser; fetch only records it
+    optional: bool = False  # a cross-check; a missing file is skipped, not an error
 
     @property
     def path(self) -> Path:

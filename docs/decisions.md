@@ -579,3 +579,59 @@ JST-derived figures carry "CC BY-NC-SA 4.0" and the citation. No monthly series,
 | Fund costs and fee schedule | `Multi-Asset-Allocation` and `ETF-vehicle-selection` reference rows (issuer and broker pages); the ACWD annual report | Cited figures | Rates and minimums with sources |
 | SRS rules and tax bands | IRAS pages | Cited figures | Rules and bands with page titles |
 | MAS survey CPI medians (cross-check) | MAS SPF workbook | MAS dataset licence, notice | Two medians with the notice |
+
+### 2026-10-28 — Phase 4: independent review and how each finding is handled
+**Context:** A fresh agent that had not seen the build reviewed the repository at `450d837` against the original brief: 17 findings and a definition-of-done table. The owner chose on #2 and #5; the rest are handled as below. All fixes are made on branch `phase4-review-fixes` and merged by pull request.
+
+**Brief amendment (owner, #5).** The brief excludes asset managers' materials. Amended: documents published by the issuer of a fund the plan holds may be cited for that fund's own figures (TER, index dividend yield, P/E, audited withholding tax), by figure and page.
+- Nothing may imitate an issuer's portfolios, branding, views or forecasts, and no issuer's capital market assumptions are used (the 2026-10-28 rule on external CMAs stands).
+- **Reason:** no free, non-issuer source of a global index dividend yield was found. The factsheet is never redistributed.
+- Broker names are cost data only. The app's `params.js` no longer carries provider names, which the engine doesn't use.
+
+**SRS (owner, #2; and #8, #17).**
+- **Cap applied year by year:** each year, saving up to the cap goes into SRS, and the excess, which previously disappeared, is invested in the same mix outside SRS. Previously, one year over the cap flattened growth for every year, and the Python check had an off-by-one.
+- **Relief:** reinvested outside SRS, one year after the contribution, since relief is a tax saving, not an SRS contribution. The final year's relief is counted at the goal date instead of being dropped.
+- **Lump sums:** any initial amount is invested outside SRS.
+- **Early withdrawal:** taxed progressively at IRAS resident rates on the full SRS balance plus other income, plus the 5% penalty, instead of a flat marginal rate.
+- **Headline:** the chance counts SRS plus outside balances at the goal date, and the cards say SRS is included.
+
+**Rebuild robustness (#1, #4, #7).**
+- **Documents:** if a document's hash differs from the snapshot (e.g. a newer monthly factsheet), it is reported as drift and the pinned `reference/` figures are used. The quote check runs only when the hash matches. The factsheet isn't archived publicly, because its terms forbid redistribution.
+- **As-of cut:** every history (H-SGD, H-US, Shiller validation inputs, g_EPS) is cut at the as-of month, 2026-09, so new data can't move results. The current histories already end on or before it, so no figure changes.
+- **Simulation drift check (new rule, post-hoc, Phase 4):** a rebuild that moves any main-engine headline chance by more than **1 percentage point** (about twice the Monte Carlo standard error) is listed in the drift report and stops the run, like the 10 bp CMA check.
+- **MAS survey workbook:** an optional manual download. A fresh clone without it skips the cross-check instead of stopping.
+
+**Post-hoc labels (#3).**
+- The fourth assumption set is labelled "added after Phase 2 results" wherever it appears.
+- The headers of `cma.md` and `simulation.md` now say most rules were fixed before results and later changes are labelled post-hoc, instead of "fixed before any result".
+- **First-build figures, superseded and never committed:**
+  - real dividend growth 1.15% over 13 countries
+  - equity central 2.72%, range 2.1–3.3%, bootstrap s.e. 0.60%
+  - US bond R² 0.90 (before the bond-timing correction) and B2 RMSE 1.45% vs B1 1.31%
+
+  The corrected figures are 0.83% over 15 countries; 2.40%, range 1.4–3.4%, s.e. 1.04%; and 0.91, with 1.41% vs 1.27%.
+
+**Deliberate departure, logged (#13).** The brief says a changed download reports drift instead of failing. The owner-approved tolerance rules (10 bp for CMAs; 1 point for simulation chances) stop the run when a headline moves beyond tolerance. Smaller drift is reported and the run continues.
+
+**Smaller items:**
+- Disclose survivorship in the 6.3% historical equity figure (#9).
+- Disclose that the forward D1 uses the cross-country median growth, not each country's own expanding growth as in validation (#10).
+- Match example D with SRS on and show its full-engine SRS result (#11).
+- Correct the cost-range sentence to minimum–maximum (#12).
+- Fix the malformed CSV quote (#14).
+- Delete the unused flat-fee fallback (#15).
+- **#16:**
+  - Log `params.js` instead of `params.json`, so the page opens from disk without a server.
+  - Record the Phase 3 hosting options.
+  - Hash the MOM page.
+  - Read the risk-menu mixes and statutory-age options from reference tables.
+
+**Phase 3 hosting options, for the record:**
+
+| Option | What it ships |
+|---|---|
+| Static page with in-browser Student-t (chosen) | Parameters and results |
+| Streamlit fetching sources at runtime | Code only; downloads at start-up; cold starts and possible MAS blocking |
+| Static presets-only page | Results only; no free inputs |
+
+**Licences (#6):** a data-licence section in LICENSE and README. JST-derived figures are CC BY-NC-SA 4.0; other derived figures follow their sources' terms; the code stays MIT. MAS's *Terms of Use of Datasets* were read on 2026-10-28 (Singapore Open Data Licence v1.0, attribution notice), so the MAS rows are marked verified.

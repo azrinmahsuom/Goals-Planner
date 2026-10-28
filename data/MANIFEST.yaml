@@ -74,6 +74,20 @@ files:
     end: n/a
     units: HTML; quoted rules checked by verify_reference().
     sha256: 95dbfebb4fd626a40cb46eaadf258c455d4d7077f08ad6d39eba42dcab056e1a
+  documents/MOM_retirement.html:
+    source: 'MOM: Retirement'
+    url: https://www.mom.gov.sg/employment-practices/retirement
+    landing_page: https://www.mom.gov.sg/employment-practices/retirement
+    series: Web page (HTML), saved for citation (minimum retirement age)
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: MOM website content; cited by title. Not redistributed.
+    redistributable: false
+    rows: 46557
+    start: n/a
+    end: n/a
+    units: HTML; quoted rule checked by verify_reference().
+    sha256: 7fa71195c49fa6e11c3ec30db052bac7fb6b4407eba7fc4be290b06a0fe443d3
   documents/SPDR_I_annual_report.pdf:
     source: SSGA SPDR ETFs Europe I plc, annual report and audited financial statements
     url: https://www.ssga.com/library-content/products/fund-docs/etfs/emea/1-GENERIC-EN-AR-IRISH-SPDR-I.pdf
@@ -102,6 +116,7 @@ files:
     start: n/a
     end: n/a
     units: xlsx as published by MAS.
+    optional: true
     sha256: 060649b55a37e115695fc7c91b3d7f10eec32536d3cc175895c998c20e17e00c
   fred/DEXSIUS.csv:
     source: 'FRED: Singapore dollars to one US dollar, noon buying rate'

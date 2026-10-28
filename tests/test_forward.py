@@ -7,7 +7,7 @@ import pytest
 from test_methods import jst_panel
 
 from analysis.cma import forward, report, scenarios
-from analysis.config import DOCS, REFERENCE, REPORTS
+from analysis.config import DOCS, REFERENCE, REPORTS, ROOT
 
 
 def monthly_cpi(start="1990-01", end="2026-09", annual=0.02) -> pd.Series:
@@ -156,3 +156,21 @@ def _unexplained(doc: str, figures_json: str) -> set[str]:
 def test_every_number_in_simulation_doc_is_generated_or_cited():
     # Method constants stated in decisions.md: paths are in the JSON; seed and replications.
     assert _unexplained("simulation.md", "simulation_figures.json") <= {"20261028"}
+
+
+@pytest.mark.skipif(not (REPORTS / "simulation_figures.json").exists(), reason="not built")
+def test_every_number_in_readme_is_generated_or_cited():
+    """README numbers come from the CMA or simulation figures, reference CSVs or are dates."""
+    allowed = _numbers(json.loads((REPORTS / "cma_figures.json").read_text()))
+    allowed |= _numbers(json.loads((REPORTS / "simulation_figures.json").read_text()))
+    for csv in REFERENCE.rglob("*.csv"):
+        raw = re.findall(r"\d+(?:\.\d+)?", csv.read_text())
+        allowed |= set(raw) | _numbers([float(x) for x in raw])
+    text = re.sub(r"(?<=\d),(?=\d{3})", "", (ROOT / "README.md").read_text())
+    found = set(re.findall(r"(?<![\w.])\d+(?:\.\d+)?", text))
+    unexplained = {
+        n
+        for n in found
+        if n not in allowed and not (n.isdigit() and (int(n) <= 30 or 1800 <= int(n) <= 2100))
+    }
+    assert unexplained <= {"4103576"}, unexplained  # a commit hash

@@ -1,12 +1,14 @@
 """Monthly real return histories that give the simulation its shape (not its level).
 
 H-SGD (primary): developed-market equities converted to SGD and a constant-duration SGS bond,
-both deflated by Singapore CPI, from February 1998. H-US (sensitivity): Shiller US equities
-and a constant-duration bond priced from GS10, deflated by US CPI, from 1871.
+both deflated by Singapore CPI, from July 1998. H-US (sensitivity): Shiller US equities and a
+constant-duration bond priced from GS10, deflated by US CPI, from 1871. Both end at the as-of
+month at the latest.
 """
 
 import pandas as pd
 
+from analysis.cma import AS_OF
 from analysis.sim import SGS_DURATION
 from analysis.sources import fred, french, mas, shiller, singstat
 
@@ -45,13 +47,13 @@ def h_sgd() -> pd.DataFrame:
     df = pd.DataFrame(
         {"equity": _real(equity_sgd, inflation), "sgs": _real(sgs, inflation)}
     ).dropna()
-    return df
+    return df.loc[: pd.Period(AS_OF, freq="M")]  # cut at the as-of month (Phase 4)
 
 
 def h_us() -> pd.DataFrame:
     """Monthly real USD returns of US equities (Shiller) and a GS10-priced bond at A35's duration,
     to the last month with a reported dividend."""
-    m = shiller.monthly()
+    m = shiller.monthly().loc[: pd.Period(AS_OF, freq="M")]  # cut at the as-of month (Phase 4)
     m = m.loc[: m["dividend"].last_valid_index()]
     equity = (m["price"] + m["dividend"] / 12) / m["price"].shift(1) - 1
     bond = par_bond_return(m["gs10"].shift(1), m["gs10"], SGS_DURATION)

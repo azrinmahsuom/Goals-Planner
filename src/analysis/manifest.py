@@ -60,13 +60,14 @@ def record(
 
 
 def data_status(manifest_path: Path = MANIFEST, raw_root: Path = DATA_RAW) -> dict[str, list]:
-    """Each manifest entry's state: 'ok', 'missing' or 'changed' (the file's hash differs from
-    the snapshot recorded in the manifest, e.g. a live source updated since it was taken)."""
-    status: dict[str, list] = {"ok": [], "missing": [], "changed": []}
+    """Each manifest entry's state: 'ok', 'missing', 'changed' (the file's hash differs from the
+    snapshot recorded in the manifest, e.g. a live source updated since it was taken) or
+    'optional_missing' (an optional manual download not saved; nothing depends on it)."""
+    status: dict[str, list] = {"ok": [], "missing": [], "changed": [], "optional_missing": []}
     for key, entry in load(manifest_path).items():
         path = raw_root / key
         if not path.exists():
-            status["missing"].append(key)
+            status["optional_missing" if entry.get("optional") else "missing"].append(key)
         elif sha256(path) != entry["sha256"]:
             status["changed"].append(key)
         else:

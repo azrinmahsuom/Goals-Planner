@@ -51,3 +51,16 @@ def test_drift_report_when_nothing_changed(snapshot, tmp_path):
     status = manifest.verify_data(path, raw)
     report = manifest.write_drift_report(status, path, tmp_path / "drift.md")
     assert "No raw file differs" in report.read_text()
+
+
+def test_missing_optional_file_is_not_an_error(tmp_path):
+    raw = tmp_path / "raw"
+    (raw / "src").mkdir(parents=True)
+    path = tmp_path / "MANIFEST.yaml"
+    f = raw / "src" / "x.xlsx"
+    f.write_text("x")
+    manifest.record(f, {"source": "x", "optional": True}, path, raw)
+    f.unlink()
+    status = manifest.verify_data(path, raw)  # does not raise
+    assert status["optional_missing"] == ["src/x.xlsx"]
+    assert status["missing"] == []

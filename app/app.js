@@ -62,13 +62,18 @@
     }
   }
 
+  // A preset matches only with its own settings; example D includes SRS with its defaults.
   function matchingPreset(plan, srs) {
     for (const [k, ex] of Object.entries(P.presets)) {
-      const same =
+      const samePlan =
         plan.initial === ex.initial && plan.monthly === ex.monthly && Math.abs(plan.growth - ex.growth) < 1e-9 &&
         plan.years === ex.years && plan.goal === ex.goal && Math.abs(plan.equity - ex.equity) < 1e-9 &&
-        plan.batching === "monthly" && Boolean(srs) === false;
-      if (same) return k;
+        plan.batching === "monthly";
+      const sameSrs = ex.srs
+        ? Boolean(srs) && srs.age === ex.age && srs.citizenOrPr && Math.abs(srs.marginalRate - 0.115) < 1e-9 &&
+          srs.otherIncome === 0 && srs.statutoryAge === P.srs.statutory_retirement_age_default
+        : !srs;
+      if (samePlan && sameSrs) return k;
     }
     return null;
   }
@@ -165,9 +170,11 @@
     $("headline").innerHTML = SHOWN.map((k) => {
       const s = P.sets[k];
       const range = k === "central" ? `<p class="sub">Low–high assumptions: ${pct(r.low.p)}–${pct(r.high.p)}</p>` : "";
-      const full = preset
-        ? `<p class="sub">Full engine: ${pct(preset.full_engine[k])} (simplified engine ${pts(Math.abs(preset.gap[k]))} points ${preset.gap[k] < 0 ? "lower" : "higher"})</p>`
-        : "";
+      const full = !preset
+        ? ""
+        : preset.srs
+          ? `<p class="sub">Full engine, with SRS: ${pct(preset.full_engine_srs[k])} (engine gap not measured with SRS)</p>`
+          : `<p class="sub">Full engine: ${pct(preset.full_engine[k])} (simplified engine ${pts(Math.abs(preset.gap[k]))} points ${preset.gap[k] < 0 ? "lower" : "higher"})</p>`;
       return `<div class="card${s.plausible ? "" : " reference"}" style="--accent:${ACCENT[k]}">
         <p class="label">${esc(s.label)}${s.plausible ? "" : " (reference)"}</p>
         <p class="value">${pct(r[k].p)}</p>${range}${full}
@@ -184,6 +191,10 @@
       `${P.engine_spread.min.toFixed(0)}–${P.engine_spread.max.toFixed(0)} points across ${P.engine_spread.engines} simulation engines in the project's tests ` +
       `and about ±${pts(noise)} points of sampling noise. The reference set (long-run global history for bonds too) gives ${pct(r.historical.p)}.`;
     const g = P.engine_gap;
+    if (state.srs) {
+      const cap = state.srs.citizenOrPr ? P.srs.contribution_cap_citizen_pr : P.srs.contribution_cap_foreigner;
+      $("spread").innerHTML += ` <strong>Includes SRS:</strong> up to ${sgd(cap)} a year goes into SRS; any saving above that, and the tax relief, is invested in the same mix outside SRS. The chance counts both balances at the goal date, before withdrawal tax.`;
+    }
     $("engine-note").textContent = preset
       ? `These results use a simplified engine (Student-t, each month drawn independently). Example ${state.preset} matches a project example, so the full engine's result (resampled history) is shown on each card with the measured gap.`
       : `Simplified engine (Student-t, each month drawn independently). For the project's four examples, its chances were between ${pts(g.min)} and +${pts(g.max)} points of the full engine's (lower in ${g.lower_count} of ${g.count} cases).`;

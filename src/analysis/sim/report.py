@@ -12,7 +12,13 @@ import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 
 from analysis.cma.report import FIGURES_JSON as CMA_JSON  # noqa: E402
-from analysis.config import DOCS, FIGURES, REPORTS  # noqa: E402
+from analysis.config import (  # noqa: E402
+    DOCS,
+    DRIFT_REPORT,
+    FIGURES,
+    REPORTS,
+    SIM_DRIFT_TOLERANCE_PP,
+)
 from analysis.sim import MEAN_BLOCK, PATHS, SEED, SGS_DURATION, costs, engine, srs  # noqa: E402
 from analysis.sim.history import HISTORIES  # noqa: E402
 
@@ -88,7 +94,7 @@ SET_LABELS = {
     "central": "Central",
     "high": "High",
     "P2": "Bias-corrected equity (P2, post-hoc)",
-    "hist_eq_yield": "Historical equity + yield-based bonds",
+    "hist_eq_yield": "Historical equity + yield-based bonds (added after Phase 2 results)",
     "historical": "Historical global (JST, real USD, 1871–2020)",
 }
 
@@ -150,36 +156,42 @@ def _brief(summary: dict) -> dict:
 
 
 def srs_outcome(draws: np.ndarray, ex: dict, cma: dict) -> dict:
-    """Example D with and without SRS, identical draws, contributions and withdrawal schedule."""
+    """Example D with and without SRS: identical draws, saving and withdrawal schedule. With SRS,
+    saving above the cap and the tax relief are invested outside SRS (Phase 4)."""
     plan = plan_for(ex)
     w = ex["equity"]
     c = costs.annual_cost(w)
-    capped = srs.capped_plan(plan, D_SRS)
-    relief = srs.relief_schedule(capped, D_SRS)
-    with_srs = engine.simulate(draws, capped, c, costs.order_cost, _cash_monthly(cma), extra=relief)
-    without = engine.simulate(draws, capped, c, costs.order_cost, _cash_monthly(cma))
+    cash = _cash_monthly(cma)
+    flows = srs.split(plan, D_SRS)
+    empty = engine.Plan(0.0, 0.0, 0.0, plan.months, w, plan.batching)
+    outside_plan = engine.Plan(plan.initial, 0.0, 0.0, plan.months, w, plan.batching)
+    in_srs = engine.simulate(draws, empty, c, costs.order_cost, cash, extra=flows.into_srs)
+    outside = engine.simulate(draws, outside_plan, c, costs.order_cost, cash, extra=flows.outside)
+    plain = engine.simulate(draws, plan, c, costs.order_cost, cash)
+    srs_balance = in_srs.wealth[:, -1]
+    outside_balance = outside.wealth[:, -1] + flows.final_relief
     later = draws[:, plan.months : plan.months + WITHDRAWAL_MONTHS, :] @ np.array([w, 1 - w])
     net = (1 + later) * (1 - c) ** (1 / 12)
     annual = net.reshape(net.shape[0], -1, 12).prod(axis=2) - 1
     premature = srs.premature(D_SRS, plan.months)
+    outside_w = srs.withdraw(outside_balance, annual, D_SRS, taxed=False)["after_tax_withdrawals"]
+    plain_net = srs.withdraw(plain.wealth[:, -1], annual, D_SRS, taxed=False)[
+        "after_tax_withdrawals"
+    ]
     if premature:
-        srs_net = srs.premature_net(with_srs.wealth[:, -1], D_SRS)
-        plain_net = without.wealth[:, -1]
-        tax = with_srs.wealth[:, -1] - srs_net
+        srs_part = srs.premature_net(srs_balance, D_SRS)
+        tax = srs_balance - srs_part
     else:
-        srs_w = srs.withdraw(with_srs.wealth[:, -1], annual, D_SRS, taxed=True)
-        plain_w = srs.withdraw(without.wealth[:, -1], annual, D_SRS, taxed=False)
-        srs_net, plain_net, tax = (
-            srs_w["after_tax_withdrawals"],
-            plain_w["after_tax_withdrawals"],
-            srs_w["tax_paid"],
-        )
+        srs_w = srs.withdraw(srs_balance, annual, D_SRS, taxed=True)
+        srs_part, tax = srs_w["after_tax_withdrawals"], srs_w["tax_paid"]
+    srs_net = srs_part + outside_w
     return {
         "premature": premature,
-        "relief_total": float(relief.sum()),
-        "balance_at_goal_median_srs": float(np.median(with_srs.wealth[:, -1])),
-        "balance_at_goal_median_plain": float(np.median(without.wealth[:, -1])),
-        "p_goal_srs": float((with_srs.wealth[:, -1] >= ex["goal"]).mean()),
+        "relief_total": flows.relief_total,
+        "into_srs_total": float(flows.into_srs.sum()),
+        "balance_at_goal_median_srs": float(np.median(srs_balance + outside_balance)),
+        "balance_at_goal_median_plain": float(np.median(plain.wealth[:, -1])),
+        "p_goal_srs": float((srs_balance + outside_balance >= ex["goal"]).mean()),
         "after_tax_withdrawals_median_srs": float(np.median(srs_net)),
         "withdrawals_median_plain": float(np.median(plain_net)),
         "tax_median": float(np.median(tax)),
@@ -412,7 +424,7 @@ def render(out: dict) -> str:
         m = g[k][MAIN]
         rows.append(
             f"| {k} | {ex['age']} | {sgd(ex['initial'])} + {sgd(ex['monthly'])}/month"
-            f"{' (+' + pct(ex['growth']) + ' a year)' if ex['growth'] else ''} | {ex['years']} | {sgd(ex['goal'])} | {pct(ex['equity'])} | "
+            f"{' (+' + pct(ex['growth']) + ' a year)' if ex['growth'] else ''}{' (shown without SRS; with SRS below)' if ex.get('srs') else ''} | {ex['years']} | {sgd(ex['goal'])} | {pct(ex['equity'])} | "
             f"**{pct(m['central']['p_goal'])}** ({pct(m['low']['p_goal'])}–{pct(m['high']['p_goal'])}) | **{pct(m['P2']['p_goal'])}** | **{pct(m['hist_eq_yield']['p_goal'])}** | {pct(m['historical']['p_goal'])} |"
         )
     req = []
@@ -458,13 +470,13 @@ def render(out: dict) -> str:
     )
     return f"""# Simulation results (Phase 2)
 
-Generated by `make all` from `reports/simulation_figures.json`; do not edit by hand. Rules: `docs/decisions.md` (2026-10-28, Phase 2 pre-registration), fixed before any simulation. **Hypothetical examples for education, not advice.** All amounts are in today's Singapore dollars (real), after fund costs and trading costs.
+Generated by `make all` from `reports/simulation_figures.json`; do not edit by hand. Rules: `docs/decisions.md` (2026-10-28, Phase 2 pre-registration). Most rules were fixed before any simulation; later changes are labelled post-hoc, including the historical equity + yield-based bonds set, added after the Phase 2 results. **Hypothetical examples for education, not advice.** All amounts are in today's Singapore dollars (real), after fund costs and trading costs.
 
 ## How it works
 
 - {out["paths"]:,} simulated monthly paths per case, seed {out["seed"]}. Monthly real returns are resampled from history in random-length blocks (stationary bootstrap, Politis & Romano 1994; mean block 24 months), then shifted so each asset's long-run compound return equals the assumption being tested.
 - **Main history:** SGD-era returns, {h["H-SGD"]["start"]} to {h["H-SGD"]["end"]} ({h["H-SGD"]["months"]} months): developed-market equities converted to SGD, and a constant {out["sgs_duration"]}-year SGS bond, both after Singapore inflation. This supplies the ups and downs (volatility, crashes, how shares and bonds move together), not the average return.
-- The portfolio is rebalanced monthly. Costs: an all-in holding cost of {pct(out["annual_cost"]["B"], 2)} to {pct(out["annual_cost"]["A"], 2)} a year depending on the mix (fund fees, withholding tax inside the equity fund, rebalancing), plus each purchase's actual broker, exchange, currency and spread costs, including minimum fees.
+- The portfolio is rebalanced monthly. Costs: an all-in holding cost of {pct(min(out["annual_cost"].values()), 2)} to {pct(max(out["annual_cost"].values()), 2)} a year depending on the mix (fund fees, withholding tax inside the equity fund, rebalancing), plus each purchase's actual broker, exchange, currency and spread costs, including minimum fees.
 - The examples' share mixes are `Multi-Asset-Allocation`'s risk-menu mixes (59% the binding menu mix; 49%, 67% and 88% its SGD-era sensitivity mixes). **They are not age-based advice.**
 
 ## Chance of reaching the goal
@@ -519,7 +531,7 @@ Minimum broker fees make small purchases expensive; batching three months into o
 
 ## SRS (example D, simplified)
 
-Example D contributes the citizen cap through SRS. Tax relief at a {pct(out["srs_assumptions"]["marginal_rate"], 1)} marginal rate is reinvested a year later. From the goal date (age {out["srs_assumptions"]["statutory_retirement_age"]:.0f}, the statutory retirement age for a first contribution from 1 July 2026) the balance stays invested and is withdrawn over 10 years, half of each withdrawal taxed at IRAS resident rates with no other income. The comparison invests the same amounts outside SRS (no relief, no withdrawal tax) and withdraws on the same schedule.
+Example D saves the citizen cap through SRS. Any saving above the cap would be invested in the same mix outside SRS. Tax relief at a {pct(out["srs_assumptions"]["marginal_rate"], 1)} marginal rate is a tax saving, not an SRS contribution, so it is invested outside SRS a year after each contribution (the final year's relief counts at the goal date). From the goal date (age {out["srs_assumptions"]["statutory_retirement_age"]:.0f}, the statutory retirement age for a first contribution from 1 July 2026) both balances stay invested and are withdrawn over 10 years; half of each SRS withdrawal is taxed at IRAS resident rates with no other income. The comparison invests the same saving outside SRS (no relief, no withdrawal tax) and withdraws on the same schedule.
 
 | Assumptions | Total relief reinvested | After-tax withdrawals, SRS (median) | Withdrawals without SRS (median) | Tax paid (median) | Paths where SRS comes out ahead |
 |---|---|---|---|---|---|
@@ -527,11 +539,12 @@ Example D contributes the citizen cap through SRS. Tax relief at a {pct(out["srs
 
 **The comparison doesn't value the loss of access:** money in SRS can't be withdrawn before the statutory retirement age without full tax and a 5% penalty, while money outside SRS can be used at any time. That flexibility has value the table leaves out.
 
-Simplifications: the {sgd(out["srs_assumptions"]["relief_cap"])} overall relief cap is assumed not to bind; tax brackets and fee minimums are held constant in today's money; withdrawing before the statutory retirement age is taxed in full plus a 5% penalty (the app will warn when the goal date is earlier).
+Simplifications: the {sgd(out["srs_assumptions"]["relief_cap"])} overall relief cap is assumed not to bind; tax brackets and fee minimums are held constant in today's money; withdrawing before the statutory retirement age taxes the whole SRS balance as income at IRAS resident rates on top of other income, plus a 5% penalty (the app will warn when the goal date is earlier).
 
 ## Limits
 
 - The equity central leaves out buybacks and is probably too low (`docs/cma.md`); P2 shows a bias-corrected alternative.
+- The historical equity figure (6.3%) comes from developed markets that came through their crises (a survivor sample), so the two historical sets probably overstate what a random market would have returned.
 - The SGD-era history is short ({h["H-SGD"]["months"]} months) and starts in {h["H-SGD"]["start"]} because MAS's 10-year SGS benchmark begins in June 1998; developed markets only (no emerging markets).
 - The ACWD spread is a default (0.10%), not measured; the fee schedules are one broker pair's published rates, used as cost data, not a recommendation.
 - Taxes outside SRS, behaviour (stopping contributions after a fall) and changes in circumstances are not modelled.
@@ -563,8 +576,39 @@ def headline_spread(out: dict) -> dict[str, float]:
     }
 
 
+def check_drift(new: dict) -> list[str]:
+    """Main-engine headline chances that moved by more than the tolerance from the committed
+    reports/simulation_figures.json."""
+    if not SIM_JSON.exists():
+        return []
+    old = json.loads(SIM_JSON.read_text())
+    moved = []
+    for k in EXAMPLES:
+        for s in (*SHOWN_SETS, "low", "high"):
+            before = old.get("grid", {}).get(k, {}).get(MAIN, {}).get(s, {}).get("p_goal")
+            if before is None:
+                continue
+            after = new["grid"][k][MAIN][s]["p_goal"]
+            if abs(after - before) * 100 > SIM_DRIFT_TOLERANCE_PP:
+                moved.append(f"example {k}, {s}: {before:.4f} -> {after:.4f}")
+    return moved
+
+
 def run() -> dict:
     out, charts = compute()
+    moved = check_drift(out)
+    if moved:
+        DRIFT_REPORT.parent.mkdir(parents=True, exist_ok=True)
+        with DRIFT_REPORT.open("a") as f:
+            f.write(
+                f"\n## Headline chances moved by more than {SIM_DRIFT_TOLERANCE_PP} points\n\n"
+                + "\n".join(f"- {m}" for m in moved)
+                + "\n"
+            )
+        raise SystemExit(
+            "Headline chances moved beyond the tolerance; see data/processed/drift_report.md. "
+            "Review, then delete reports/simulation_figures.json to accept."
+        )
     FIGURES.mkdir(parents=True, exist_ok=True)
     fan_chart(*charts["fan"], EXAMPLES["A"])
     goal_chart(out)

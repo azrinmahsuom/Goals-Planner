@@ -136,21 +136,18 @@
     return srs.citizenOrPr ? rules.contribution_cap_citizen_pr : rules.contribution_cap_foreigner;
   }
 
-  // Contribution per month, by year, after the SRS cap and with relief reinvested a year later.
+  // Monthly saving by year, split into accounts (Phase 4): up to the cap goes into SRS, the
+  // excess is invested outside SRS, and relief (a tax saving) is invested outside SRS a year
+  // after each contribution; the final year's relief counts at the goal date.
   function yearlyAmounts(plan, srs, rules) {
-    let monthly = plan.monthly, growth = plan.growth;
-    if (srs) {
-      const capMonthly = srsCap(srs, rules) / 12;
-      if (monthly * Math.pow(1 + growth, plan.years) > capMonthly) growth = 0;
-      monthly = Math.min(monthly, capMonthly);
-    }
-    const base = [], amounts = [];
-    for (let y = 0; y < plan.years; y++) base.push(monthly * Math.pow(1 + growth, y));
-    for (let y = 0; y < plan.years; y++) {
-      const relief = srs && y > 0 ? Math.min(base[y - 1], srsCap(srs, rules) / 12) * srs.marginalRate : 0;
-      amounts.push(base[y] + relief);
-    }
-    return { amounts, base };
+    const planned = [];
+    for (let y = 0; y < plan.years; y++) planned.push(plan.monthly * Math.pow(1 + plan.growth, y));
+    if (!srs) return { all: planned, intoSrs: null, outside: null, finalRelief: 0 };
+    const capMonthly = srsCap(srs, rules) / 12;
+    const intoSrs = planned.map((m) => Math.min(m, capMonthly));
+    const outside = planned.map((m, y) => m - intoSrs[y] + (y > 0 ? intoSrs[y - 1] * srs.marginalRate : 0));
+    const finalRelief = plan.years > 0 ? intoSrs[plan.years - 1] * 12 * srs.marginalRate : 0;
+    return { all: planned, intoSrs, outside, finalRelief };
   }
 
   // --- the random pass ---
@@ -208,8 +205,8 @@
   function cashMonthly(P, key) { return Math.pow(1 + P.sets[key].cash, 1 / 12) - 1; }
 
   // Investable amount per year after trading costs, and the matching yearly sums.
-  function yearlyInvested(P, key, plan, srs) {
-    const { amounts } = yearlyAmounts(plan, srs, P.srs);
+  // Investable amount per year after trading costs, for one account's monthly amounts.
+  function yearlyInvested(P, key, plan, amounts) {
     const quarterly = plan.batching === "quarterly";
     const c = cashMonthly(P, key), qf = (1 + c) * (1 + c) + (1 + c) + 1;
     return amounts.map((a) => {
@@ -218,11 +215,9 @@
     });
   }
 
-  // D is the result of drawPaths (all sets); key picks the assumption set.
-  function wealthAtYear(D, P, key, plan, srs, Y) {
-    const d = D[key];
-    const invested = yearlyInvested(P, key, plan, srs);
-    const w0 = plan.initial - (plan.initial > 0 ? orderCost(plan.initial, plan.equity, P.costs) : 0);
+  function accountWealth(d, P, key, plan, initial, amounts, Y) {
+    const invested = yearlyInvested(P, key, plan, amounts);
+    const w0 = initial - (initial > 0 ? orderCost(initial, plan.equity, P.costs) : 0);
     const sums = plan.batching === "quarterly" ? d.rq : d.r;
     const out = new Float64Array(d.paths);
     for (let p = 0; p < d.paths; p++) {
@@ -231,6 +226,20 @@
       out[p] = d.ye[p * (d.totalYears + 1) + Y] * acc;
     }
     return out;
+  }
+
+  // D is the result of drawPaths (all sets); key picks the assumption set. account: "total"
+  // (default), "srs" or "outside". Without SRS, everything is one outside account.
+  function wealthAtYear(D, P, key, plan, srs, Y, account) {
+    const d = D[key], a = yearlyAmounts(plan, srs, P.srs);
+    if (!srs) return accountWealth(d, P, key, plan, plan.initial, a.all, Y);
+    const inSrs = accountWealth(d, P, key, plan, 0, a.intoSrs, Y);
+    if (account === "srs") return inSrs;
+    const outside = accountWealth(d, P, key, plan, plan.initial, a.outside, Y);
+    if (Y === plan.years) for (let p = 0; p < outside.length; p++) outside[p] += a.finalRelief;
+    if (account === "outside") return outside;
+    for (let p = 0; p < outside.length; p++) outside[p] += inSrs[p];
+    return outside;
   }
 
   function terminal(D, P, key, plan, srs) { return wealthAtYear(D, P, key, plan, srs, plan.years); }
@@ -320,27 +329,41 @@
     return { afterTax: out, tax };
   }
 
+  // Early withdrawal: the whole SRS balance is income, taxed progressively on top of other
+  // income, plus the penalty (Phase 4).
+  function prematureNet(balance, srs, rules) {
+    const other = srs.otherIncome;
+    return balance.map((b) => {
+      const tax = residentTax(rules.taxable_share_premature * b + other, rules.tax_bands) - residentTax(other, rules.tax_bands);
+      return b - tax - rules.premature_penalty * b;
+    });
+  }
+
   function srsOutcome(D, P, key, plan, srs) {
-    const rules = P.srs, cappedPlan = Object.assign({}, plan);
-    const withSrs = terminal(D, P, key, cappedPlan, srs);
-    const noRelief = Object.assign({}, srs, { marginalRate: 0 });
-    const without = terminal(D, P, key, cappedPlan, noRelief);
-    let srsNet, plainNet, tax;
+    const rules = P.srs;
+    const inSrs = wealthAtYear(D, P, key, plan, srs, plan.years, "srs");
+    const outside = wealthAtYear(D, P, key, plan, srs, plan.years, "outside");
+    const plain = terminal(D, P, key, plan, null);
+    const outsideNet = withdraw(D[key], outside, srs, rules, false, plan.years).afterTax;
+    const plainNet = withdraw(D[key], plain, srs, rules, false, plan.years).afterTax;
+    let srsPart, tax;
     if (srsPremature(srs, plan.years)) {
-      const keep = 1 - rules.taxable_share_premature * srs.marginalRate - rules.premature_penalty;
-      srsNet = withSrs.map((x) => x * keep);
-      plainNet = without;
-      tax = withSrs.map((x, i) => x - srsNet[i]);
+      srsPart = prematureNet(inSrs, srs, rules);
+      tax = inSrs.map((x, i) => x - srsPart[i]);
     } else {
-      const a = withdraw(D[key], withSrs, srs, rules, true, plan.years);
-      const b = withdraw(D[key], without, srs, rules, false, plan.years);
-      srsNet = a.afterTax; plainNet = b.afterTax; tax = a.tax;
+      const a = withdraw(D[key], inSrs, srs, rules, true, plan.years);
+      srsPart = a.afterTax; tax = a.tax;
     }
+    const total = inSrs.map((x, i) => x + outside[i]);
+    const srsNet = srsPart.map((x, i) => x + outsideNet[i]);
     let ahead = 0;
     for (let i = 0; i < srsNet.length; i++) if (srsNet[i] > plainNet[i]) ahead++;
+    const a = yearlyAmounts(plan, srs, rules);
     return {
       premature: srsPremature(srs, plan.years),
-      pGoal: pGoal(withSrs, plan.goal),
+      pGoal: pGoal(total, plan.goal),
+      intoSrsYearly: a.intoSrs.map((m) => m * 12),
+      outsideYearly: a.all.map((m, y) => (m - a.intoSrs[y]) * 12),
       medianSrs: percentile(sortedCopy(srsNet), 50),
       medianPlain: percentile(sortedCopy(plainNet), 50),
       medianTax: percentile(sortedCopy(tax), 50),
@@ -351,6 +374,6 @@
   root.GoalsEngine = {
     xoshiro128ss, makeNormal, gamma, nearestMix, annualCost, orderCost, residentTax,
     yearlyAmounts, drawPaths, terminal, wealthAtYear, pGoal, percentile, sortedCopy,
-    requiredMonthly, fan, worstDecileMedian, cashPath, srsPremature, withdraw, srsOutcome,
+    requiredMonthly, fan, worstDecileMedian, cashPath, srsPremature, withdraw, prematureNet, srsOutcome,
   };
 })(typeof window !== "undefined" ? window : globalThis);

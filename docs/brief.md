@@ -50,13 +50,15 @@ One source per line, with whether results derived from it can be published. Ever
 | US prices, dividends, earnings, CPI, CAPE (validation) | Robert Shiller, online data | `analysis.sources.shiller` | 2026-10-28 | To confirm in Phase 1; app ships derived parameters only |
 | Multi-country returns, yields, CPI (validation) | JST Macrohistory Database R6 | `analysis.sources.jst` | 2026-10-28 | Derived parameters, CC BY-NC-SA 4.0 with citation |
 | USD/SGD, US CPI, US 10-year yield | FRED | `analysis.sources.fred` | 2026-10-28 | Public-domain series yes (checked per series) |
-| SGS benchmark yields, SORA | MAS | `analysis.sources.mas` | 2026-10-28 | To confirm in Phase 1 |
-| Singapore CPI | SingStat | `analysis.sources.singstat` | 2026-10-28 | Licence to confirm (open question) |
-| 10-year stock, bond and bill expectations | Philadelphia Fed SPF | `analysis.sources.spf` | 2026-10-28 | To confirm in Phase 1 |
+| SGS benchmark yields, SORA | MAS | `analysis.sources.mas` | 2026-10-28 | Yes, under MAS's Terms of Use of Datasets with the prescribed notice |
+| Singapore CPI | SingStat | `analysis.sources.singstat` | 2026-10-28 | Derived figures only (terms unconfirmed) |
+| 10-year stock, bond and bill expectations | Philadelphia Fed SPF | `analysis.sources.spf` | 2026-10-28 | Cited figures only (terms page not found) |
 | Implied equity risk premium | Damodaran (NYU) | `analysis.sources.damodaran` | 2026-10-28 | No licence stated; treat as not redistributable |
 | Equity fund dividend yield, P/E (forward inputs) | Fund factsheet (dated, hashed) | `analysis.sources.documents` | 2026-10-28 | Cite figures only |
-| SRS caps, relief, withdrawal tax (Phase 2) | IRAS, MOF, CPF Board pages | `analysis.sources` (saved pages) | | Cite rules only |
-| Fund costs, withholding, risk menu, historical mix returns | `Multi-Asset-Allocation` @ a92a325, `ETF-vehicle-selection` @ 4103576 | `analysis.upstream` | 2026-10-28 | Yes (derived, committed upstream); JST-derived rows CC BY-NC-SA 4.0 |
+| SRS caps, relief, withdrawal tax; statutory retirement age | IRAS pages; MOM *Retirement* | `analysis.sources.documents` (saved, hashed) | 2026-10-28 | Cite rules only |
+| Near-term inflation cross-check (optional manual download) | MAS Survey of Professional Forecasters | `analysis.sources.documents` | 2026-10-28 | Yes, under MAS's Terms of Use of Datasets with the notice |
+| Developed-market equity returns (simulation history) | Kenneth French data library | `analysis.sources.french` | 2026-10-28 | Derived statistics only (no licence stated) |
+| Fund costs, withholding, fee schedule, risk menu, historical mix returns | `Multi-Asset-Allocation` @ a92a325 (checked identical at 5fbf585), `ETF-vehicle-selection` @ 4103576 | `analysis.upstream` | 2026-10-28 | Yes (derived, committed upstream); JST-derived rows CC BY-NC-SA 4.0 |
 
 ## 9. Processing steps
 1. `make fetch`: download every source into `data/raw/`, recording each in `data/MANIFEST.yaml`.
@@ -102,11 +104,13 @@ Each threshold or default cites its evidence, or says `Evidence: pending` (and i
 For each CMA method: out-of-sample R² at or below zero against the historical mean, or forecast errors with a bias larger than their spread. Such results are reported as found and methods are not quietly dropped. They do not widen the scenarios: the low/central/high ranges cover uncertainty in the expected return only (method spread or estimation error, `docs/decisions.md`), and the spread of realised outcomes comes from the simulation.
 
 ## 15. Open questions
-- **Prior repos are private.** The owner will make `ETF-vehicle-selection` and `Multi-Asset-Allocation` public; until then `analysis.upstream` reads them through the signed-in GitHub CLI.
-- **MAS Survey of Professional Forecasters workbook:** the owner saves it by hand. Its CPI medians are then added to `docs/cma.md` as a cross-check.
+- **Prior repos:** public since 2026-10-28; `analysis.upstream` reads their raw files directly.
+- **MAS Survey of Professional Forecasters workbook:** saved by the owner (September 2026); optional for a fresh clone.
 - **Linking to MAS pages:** decided: cite by title, "available from mas.gov.sg", no hyperlinks.
 - **SingStat and Philadelphia Fed licence terms:** not confirmed; only derived or cited figures are shown.
 - **Evidence still pending:** the Shiller 3-month publication lag; Rogoff (1996); Grinold & Kroner (2002) primary source; the linear cash glide path.
-- **Multi-Asset-Allocation's Shiller bond-return timing** probably has the same one-month offset corrected here (`docs/decisions.md`, 2026-10-28); to raise in that repo.
+- **Multi-Asset-Allocation's Shiller bond-return timing:** fixed there (PR #1, merged 2026-10-28); no vendored figure changed.
+- **Statutory retirement age 63 (from 1 July 2022):** to verify against the statute; the app offers it as an input without stating the date.
+- **Issuer documents:** brief amended 2026-10-28 to allow citing the held fund's own documents for that fund's figures (`docs/decisions.md`, Phase 4).
 - **Hedging:** the equity sleeve is unhedged in SGD. A hedged variant is out of scope unless requested.
-- **App host** (Streamlit Community Cloud vs a static GitHub Pages site): Phase 3. The headline is the probability under each assumption set side by side (central with low–high, P2, historical equity + yield-based bonds, historical global as reference), with the sentence that assumption choice moves the result far more than the engine or market randomness; no single headline probability (`docs/decisions.md`, 2026-10-28).
+- **App:** a static GitHub Pages site (decided, Phase 3); published only after the Phase 4 fixes. The headline is the probability under each assumption set side by side (central with low–high, P2, historical equity + yield-based bonds, historical global as reference), with the sentence that assumption choice moves the result far more than the engine or market randomness; no single headline probability (`docs/decisions.md`, 2026-10-28).

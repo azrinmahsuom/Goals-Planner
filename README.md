@@ -1,6 +1,6 @@
 # Goals Planner (SGD)
 
-> **One line:** an educational tool that estimates how likely a Singapore-dollar investor is to reach a savings goal, using forward-looking return assumptions that are tested against history before they are used.
+> **One line:** an educational calculator for the chance of reaching a savings goal in Singapore dollars. It shows several reasonable return assumptions side by side, because that choice moves the answer far more than anything else.
 
 ![CI](https://github.com/azrinmahsuom/Goals-Planner/actions/workflows/ci.yml/badge.svg)
 
@@ -8,73 +8,89 @@
 
 | | |
 |---|---|
-| **Question** | If I invest S$X now and S$Y a month in a given mix of global shares and Singapore government bonds, how likely am I to reach S$G (in today's money) by year T? How much would I need to save each month for a given likelihood? |
-| **What it does** | Builds return assumptions from their parts (yields, growth, valuation), checks how well each method would have forecast the past, then simulates thousands of possible futures in real SGD |
+| **Question** | If I invest S$X now and S$Y a month in a mix of global shares and Singapore government bonds, how likely am I to reach S$G (in today's money) by year T? How much would I need to save each month for a chosen likelihood? |
+| **What it does** | Builds return assumptions from their parts (yields, growth, valuation), tests how well each method would have forecast the past, then simulates 10,000 possible futures in real SGD after fund and trading costs |
 | **Assets** | Global equities held in SGD (unhedged), Singapore Government Securities, SGD cash; inflation as Singapore CPI |
-| **Status** | In progress: return assumptions, simulation engine and app built ([docs/cma.md](docs/cma.md), [docs/simulation.md](docs/simulation.md), [docs/app_guide.md](docs/app_guide.md)); not yet published |
+| **App** | A static page in [`app/`](app/): open `app/index.html` in a browser. The public link will be added here once it is published |
+| **Status** | Built and independently reviewed; review fixes in progress ([docs/decisions.md](docs/decisions.md)) |
 
 ## Key findings
 
-From the return-assumption work ([docs/cma.md](docs/cma.md), as of 30 September 2026; real, annualised over 10 years, before fund costs):
+As of 30 September 2026; real (after inflation), annualised over 10 years.
 
-1. **Starting bond yields predicted the next 10 years' bond returns closely** (out-of-sample R² 0.91 in the US, 0.78 across 16 countries). This is mostly arithmetic rather than skill: a bond held for about its duration earns close to its starting yield.
-2. **The equity methods did little better than the long-run average.** Across 16 countries, dividend yield plus dividend growth had an out-of-sample R² of 0.004. The best US method (1/CAPE) can't be applied going forward with free data.
-3. **Central assumptions: global equities 2.4% (range 1.4–3.4%), Singapore government bonds 0.7%, SGD cash −0.1%, inflation 1.7%.** The equity figure is well below the 6.3% historical average because today's dividend yield (1.57%) is far below its long-run median (4.10%). It leaves out buybacks, so it is probably too low.
+1. **Starting bond yields predicted the next 10 years' bond returns closely** (out-of-sample R² 0.91 in the US, 0.78 across 16 countries). This is mostly arithmetic rather than skill: a bond held for about its duration earns close to its starting yield. ([docs/cma.md](docs/cma.md))
+2. **The equity methods did little better than the long-run average** (R² 0.004 across 16 countries). The best US method, 1/CAPE, can't be applied going forward with free data. ([docs/cma.md](docs/cma.md))
+3. **So the answer depends mostly on the equity assumption.** The four example investors' chances of reaching their goals, under each assumption set:
 
-These ranges describe uncertainty about the expected return, not the range of outcomes; the simulation (next phase) will show that.
+   | Example | Central (2.4% equities) | Bias-corrected equity | Historical equity + yield-based bonds* | Historical global (reference) |
+   |---|---|---|---|---|
+   | A: age 30, S$800/month, 25 years | 16% | 24% | 60% | 63% |
+   | B: age 45, S$150,000 + S$1,500/month, 15 years | 23% | 31% | 61% | 76% |
+   | C: age 55, S$400,000, 10 years | 41% | 47% | 69% | 85% |
+   | D: age 40, S$1,275/month, 24 years (without SRS) | 40% | 49% | 80% | 88% |
+
+   Across the three plausible sets, the chance moves by 28–44 percentage points. Different simulation engines move it by 3–9 points. ([docs/simulation.md](docs/simulation.md))
+
+\*Added after the Phase 2 results were seen; labelled post-hoc. The central equity figure leaves out buybacks and is probably too low.
 
 ## Limitations
 
-See [docs/limitations.md](docs/limitations.md). The main ones so far:
+The main ones, in full in [docs/limitations.md](docs/limitations.md):
 
-- The equity methods show little forecasting power, and the equity estimate leaves out buybacks.
-- The equity methods are tested mainly on US history but applied to global inputs.
-
-## Before you start
-
-- [uv](https://docs.astral.sh/uv/), which installs Python for you: `curl -LsSf https://astral.sh/uv/install.sh | sh`
-- git, and the GitHub CLI [`gh`](https://cli.github.com/) if you want to re-vendor the figures from the earlier projects (`make upstream`)
+- The equity methods show little forecasting power.
+- The historical figures come from developed markets that came through their crises.
+- The simulation's ups and downs come from 1998–2026 history.
+- SRS and fees are simplified.
+- Behaviour and taxes outside SRS aren't modelled.
 
 ## Reproduce it
+
+You need [uv](https://docs.astral.sh/uv/) (it installs Python) and git.
 
 ```bash
 git clone https://github.com/azrinmahsuom/Goals-Planner.git
 cd Goals-Planner
-uv sync          # create the environment from the pinned lockfile
-make all         # download sources, verify them, rebuild every output, run the tests
+uv sync --locked   # the pinned environment
+make all           # download, verify, rebuild every output and the app's parameters, run the tests (about 8 minutes)
 ```
 
-Sources that have been updated since the recorded snapshot are listed in `data/processed/drift_report.md`; the run continues. Only a missing file stops it.
-
-On macOS, keep the project outside iCloud-synced folders (e.g. `~/Developer`). If it must live in `~/Documents`, put the environment in a folder iCloud skips: `uv venv .venv.nosync && ln -s .venv.nosync .venv && uv sync`.
+- **Changed sources:** a source that changed since the recorded snapshot is listed in `data/processed/drift_report.md` and the run continues. The run stops if a file is missing, or if a headline assumption or chance moves beyond its tolerance.
+- **Optional manual step:** MAS's Survey of Professional Forecasters workbook can't be downloaded by script. To include the inflation cross-check, save it from mas.gov.sg as `data/raw/documents/Sep26Q3.xlsx`.
+- **Browser tests** run if Playwright's browser is installed (`uv run playwright install chromium`).
+- **iCloud:** on macOS, keep the project outside iCloud-synced folders, or put the environment in a folder iCloud skips: `uv venv .venv.nosync && ln -s .venv.nosync .venv && uv sync --locked`.
 
 ## Repository layout
 
 ```
-├── app/               The planner: a static page (open app/index.html); ships parameters only
+├── app/               The planner: a static page that ships parameters only, no data series
 ├── data/              MANIFEST.yaml (committed): URL, date, licence and hash of every source; the data itself is git-ignored
-├── docs/              Brief, decision log, limitations; return assumptions and simulation method as they are built
-├── reference/         Hand-researched inputs; upstream/ holds figures reused from the earlier projects, with commit
-├── reports/           Generated figures and the numbers behind every document
-├── src/analysis/      Code: sources, manifest, return assumptions, simulation, pipeline
-└── tests/             Tests for the code in src/
+├── docs/              Brief, decision log, return assumptions, simulation, app guide, limitations
+├── reference/         Hand-researched inputs with sources; upstream/ holds figures reused from the earlier projects, with commit
+├── reports/           The numbers behind every document, and the figures
+├── src/analysis/      Code: sources, manifest, return assumptions, simulation, app parameters
+└── tests/             Tests, including the browser engine checked against the Python engine
 ```
 
 ## Earlier projects reused
 
-Fund costs, withholding-tax drag, the risk-menu mixes and historical per-mix returns come from two earlier projects, read at fixed commits and stored in `reference/upstream/` with their source on every row:
+Fund costs, withholding-tax drag, the trading fee schedule, the risk-menu mixes and historical per-mix returns come from two earlier projects, read at fixed commits and stored in `reference/upstream/` with their source on every row:
 
-- `ETF-vehicle-selection` @ `4103576`
-- `Multi-Asset-Allocation` @ `a92a325`
+- [`ETF-vehicle-selection`](https://github.com/azrinmahsuom/ETF-vehicle-selection) @ `4103576`
+- [`Multi-Asset-Allocation`](https://github.com/azrinmahsuom/Multi-Asset-Allocation) @ `a92a325` (checked unchanged at `5fbf585`)
 
-## Data sources
+## Sources and licences
 
-Every source is checked against its primary page before use, and recorded in `data/MANIFEST.yaml`. The planned list and the licence of each is in [docs/brief.md](docs/brief.md) §8.
+Every source is checked against its primary page and recorded in `data/MANIFEST.yaml`, with notes in `reference/source_checks.csv`.
+
+- **Code:** MIT.
+- **JST data:** figures derived from the Jordà-Schularick-Taylor Macrohistory Database are licensed CC BY-NC-SA 4.0. See [LICENSE](LICENSE) for the data terms.
+- **No raw data is redistributed.**
+- **MAS:** contains information from MAS statistics and the MAS Survey of Professional Forecasters (available from mas.gov.sg), made available under the terms of the Monetary Authority of Singapore's Terms of Use of Datasets.
 
 ## Built with Claude Code
 
-This project was built with Claude Code, an AI coding assistant, working under the rules in [docs/decisions.md](docs/decisions.md): every method fixed before its results, every number generated by code or cited. The research questions, judgements and final decisions are the author's.
+This project was built with Claude Code, an AI coding assistant, working under the rules in [docs/decisions.md](docs/decisions.md): every method written down before its results, every number generated by code or cited, and an independent review before publishing. The research questions, judgements and final decisions are the author's.
 
 ## Disclaimer
 
-This is an educational research project built on publicly available data. It is not investment advice, not a recommendation to buy or sell any security or to follow any savings plan, and does not represent the views of any employer. Projections are uncertain and the past is an imperfect guide to the future.
+A personal educational project; not affiliated with any financial institution; not financial advice. It is built on publicly available data and doesn't represent the views of any employer. Projections are uncertain, past returns are an imperfect guide, and fee schedules are used as cost data, not as broker recommendations.

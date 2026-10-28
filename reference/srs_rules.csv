@@ -6,4 +6,6 @@ statutory_retirement_age,64,years,"IRAS, Tax on SRS withdrawals (last updated 3 
 taxable_share_penalty_free,0.5,share of withdrawal,"IRAS, Tax on SRS withdrawals: 50% of withdrawals on or after the statutory retirement age are taxable",2026-10-28,verified
 withdrawal_period,10,years,"IRAS, Tax on SRS withdrawals: penalty-free withdrawals may be spread over 10 years from the first; any balance is deemed withdrawn at the end (50% taxable)",2026-10-28,verified
 taxable_share_premature,1.0,share of withdrawal,"IRAS, Tax on SRS withdrawals: premature withdrawals are taxable in full",2026-10-28,verified
-premature_penalty,0.05,share of withdrawal,"IRAS, Tax on SRS withdrawals: "early withdrawals are fully subject to tax and attract a 5% penalty"",2026-10-28,verified
+premature_penalty,0.05,share of withdrawal,"IRAS, Tax on SRS withdrawals: ""early withdrawals are fully subject to tax and attract a 5% penalty""",2026-10-28,verified
+statutory_retirement_age_earlier,62,years,"IRAS, Tax on SRS withdrawals: worked examples of members whose statutory retirement age at first contribution was 62; ""any subsequent change in the statutory retirement age ... will not affect you""",2026-10-28,verified
+statutory_retirement_age_earlier,63,years,"Retirement and Re-employment (Prescribed Minimum Retirement Age) Notification 2022 (S 546/2022): 63 from 1 July 2022 (search-result excerpt only; the statute site refuses scripted access)",2026-10-28,to_verify

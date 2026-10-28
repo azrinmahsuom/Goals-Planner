@@ -11,7 +11,7 @@ from pathlib import Path
 import pandas as pd
 import pypdf
 
-from analysis.config import REFERENCE
+from analysis.config import DATA_RAW, REFERENCE
 from analysis.sources.base import RawFile, fixed
 
 SSGA = "https://www.ssga.com/library-content/products/"
@@ -74,6 +74,7 @@ FILES = [
         resolve_url=fixed(MAS_SPF_FILE),
         describe=describe_xlsx,
         manual=True,  # MAS returns a web page, not the file, to scripted requests
+        optional=True,  # near-term cross-check only; the run continues without it
     ),
 ]
 IRAS = "https://www.iras.gov.sg/taxes/individual-income-tax/basics-of-individual-income-tax/"
@@ -106,7 +107,22 @@ FILES += [
     )
     for filename, (title, path) in IRAS_PAGES.items()
 ]
+FILES.append(
+    RawFile(
+        source="documents",
+        filename="MOM_retirement.html",
+        name="MOM: Retirement",
+        landing_page="https://www.mom.gov.sg/employment-practices/retirement",
+        series="Web page (HTML), saved for citation (minimum retirement age)",
+        licence="MOM website content; cited by title. Not redistributed.",
+        redistributable=False,
+        units="HTML; quoted rule checked by verify_reference().",
+        resolve_url=fixed("https://www.mom.gov.sg/employment-practices/retirement"),
+        describe=lambda path: (len(path.read_bytes()), "n/a", "n/a"),
+    )
+)
 FACTSHEET, ANNUAL_REPORT = FILES[0].path, FILES[1].path
+MOM_PAGE = FILES[6].path
 CONTRIBUTIONS_PAGE, WITHDRAWALS_PAGE, RATES_PAGE = (FILES[i].path for i in (3, 4, 5))
 
 # (document, PDF page (1-based), text that must appear on it, reference fields it supports).
@@ -152,6 +168,12 @@ CHECKS = [
     ),
     (WITHDRAWALS_PAGE, None, "over 10 years", ["withdrawal_period"]),
     (RATES_PAGE, None, "In excess of $1,000,000", ["resident tax bands"]),
+    (
+        MOM_PAGE,
+        None,
+        "from 1 July 2026, the minimum retirement age is 64 years",
+        ["statutory_retirement_age"],
+    ),
 ]
 
 
@@ -172,13 +194,28 @@ def fund_documents(path: Path = REFERENCE / "fund_documents.csv") -> pd.DataFram
     return pd.read_csv(path)
 
 
-def verify_reference() -> int:
-    """Check every quoted figure is on its cited page; return the number of checks passed."""
+def verify_reference() -> dict[str, list]:
+    """Check each quoted figure on its cited page, for documents that match their snapshot hash.
+
+    A document whose hash differs (e.g. a newer monthly factsheet at the same URL) is reported
+    as drift and its quotes are not checked: the pinned figures in reference/ stay in use
+    (docs/decisions.md, 2026-10-28, Phase 4). A quote missing from an unchanged document is an
+    error."""
+    from analysis import manifest
+
+    entries = manifest.load()
+    result: dict[str, list] = {"checked": [], "drifted": []}
     for doc, page, needle, _fields in CHECKS:
+        key = doc.relative_to(DATA_RAW).as_posix()
+        if key in entries and manifest.sha256(doc) != entries[key]["sha256"]:
+            if key not in result["drifted"]:
+                result["drifted"].append(key)
+            continue
         if _normalise(needle) not in page_text(doc, page):
             where = doc.name if page is None else f"{doc.name} page {page}"
             raise ValueError(f"{where} no longer contains {needle!r}")
-    return len(CHECKS)
+        result["checked"].append(needle)
+    return result
 
 
 def withholding_rate(fund: str = "ACWD", year: str = "fy2026") -> float:
