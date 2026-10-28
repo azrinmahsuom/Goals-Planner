@@ -11,8 +11,8 @@
 | **Question** | If I invest S$X now and S$Y a month in a mix of global shares and Singapore government bonds, how likely am I to reach S$G (in today's money) by year T? How much would I need to save each month for a chosen likelihood? |
 | **What it does** | Builds return assumptions from their parts (yields, growth, valuation), tests how well each method would have forecast the past, then simulates 10,000 possible futures in real SGD after fund and trading costs |
 | **Assets** | Global equities held in SGD (unhedged), Singapore Government Securities, SGD cash; inflation as Singapore CPI |
-| **App** | A static page in [`app/`](app/): open `app/index.html` in a browser. The public link will be added here once it is published |
-| **Status** | Built and independently reviewed; review fixes in progress ([docs/decisions.md](docs/decisions.md)) |
+| **App** | **[azrinmahsuom.github.io/Goals-Planner](https://azrinmahsuom.github.io/Goals-Planner/)**: a static page from [`app/`](app/); it also opens locally from `app/index.html` |
+| **Status** | Complete: built, independently reviewed, review findings addressed ([docs/decisions.md](docs/decisions.md)), published |
 
 ## Key findings
 

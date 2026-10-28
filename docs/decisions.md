@@ -635,3 +635,9 @@ JST-derived figures carry "CC BY-NC-SA 4.0" and the citation. No monthly series,
 | Static presets-only page | Results only; no free inputs |
 
 **Licences (#6):** a data-licence section in LICENSE and README. JST-derived figures are CC BY-NC-SA 4.0; other derived figures follow their sources' terms; the code stays MIT. MAS's *Terms of Use of Datasets* were read on 2026-10-28 (Singapore Open Data Licence v1.0, attribution notice), so the MAS rows are marked verified.
+
+### 2026-10-28 — Published
+- The owner merged the Phase 4 fixes (PR #1, `3daee33`) and approved going public.
+- GitHub Pages was switched on with the Actions workflow as its source, and `.github/workflows/pages.yml` was run by hand on `main`, publishing `app/` to https://azrinmahsuom.github.io/Goals-Planner/.
+- The live page was checked in a headless browser (desktop, 390px phone, dark mode): no script errors or failed requests, no horizontal scrolling, the four-set headline, and the disclaimer present.
+- Future deploys stay manual: run the workflow after `make all` and review.
