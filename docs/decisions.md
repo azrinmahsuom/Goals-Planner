@@ -358,3 +358,124 @@ The owner approved the draft on 2026-10-28 with these changes, all made before a
 **Phase 3 requirement (owner, 2026-10-28):**
 - **Default view:** the app's assumption switcher shows three sets side by side: the central CMAs, the bias-corrected equity estimate (P2) and the historical averages. One line says why they differ.
 - **Headline:** the headline output (probability of reaching the goal) must not rest on the central assumptions alone.
+
+### 2026-10-28 — Phase 2 pre-registration: simulation engine (FINAL; nothing simulated)
+The owner approved the draft on 2026-10-28 with these edits, all made before any simulation:
+- the stationary bootstrap with a 24-month mean block as the main case
+- contribution costs from the vendored fee schedule at actual trade sizes, with a quarterly-batching option
+- SRS assets stay invested during the withdrawal period
+- the example mixes are labelled as `Multi-Asset-Allocation`'s risk-menu mixes
+- the label for the historical set, and its gap against the SGS CMA
+
+
+**Context:** Owner choices on 2026-10-28:
+- the SGD-era history as primary, with the US long run as a sensitivity
+- Student-t with fitted degrees of freedom as the fat-tailed alternative
+- the SRS module in Phase 2
+
+Carried in: geometric re-centring (bias-check #10); the Phase 3 rule that the headline must not rest on the central assumptions alone.
+
+**Sources verified:** see `reference/source_checks.csv`. Added in this phase: French data library (developed markets), FRED DEXSIUS, and the IRAS pages on SRS contributions, SRS withdrawals and resident tax rates. Figures are in `reference/srs_rules.csv` and `reference/iras_resident_tax_rates.csv`.
+
+**1. Histories.** These give only the *shape* of returns: volatility, tails, crashes, and the equity–bond relationship. The level comes from the CMAs.
+- **H-SGD (primary)** runs monthly from February 1998 to the last month that every input covers.
+  - Equities: the French developed-markets return (Mkt-RF + RF, USD), converted to SGD with month-end FRED DEXSIUS (the last daily observation in each month).
+  - SGS: a constant-duration par bond at 8.18 years with semi-annual coupons. The yield is linearly interpolated between the MAS 5- and 10-year benchmarks at each month-end, and each month's return is the coupon plus the price change on repricing at the next month-end yield.
+  - Both are converted to real terms with SingStat CPI.
+- **H-US (sensitivity)** runs monthly from 1871 to the last month with a Shiller dividend.
+  - Equities: Shiller's total return.
+  - Bonds: the same 8.18-year par bond, priced from Shiller GS10 with a flat curve.
+  - Both are in real USD terms using US CPI; there is no currency effect.
+
+**2. Re-centring (geometric).** For each asset and CMA scenario, the history's monthly log real returns are shifted by a constant, so their mean equals ln(1 + CMA) / 12. Equity and bond months are drawn together, which keeps their relationship.
+
+**3. Bootstrap.**
+- **Main case:** the stationary bootstrap (Politis & Romano 1994, *JASA* 89(428), 1303–1313, doi:10.1080/01621459.1994.10476870, verified in Crossref). Blocks have random geometric lengths with a **mean of 24 months**, and the series wraps around at its end.
+  - Why 24 months: it keeps crash-and-recovery sequences and volatility clustering intact, which matters for sequence risk.
+- **Sensitivities:** a mean block of ceil(n^(1/3)) months (about 7 for H-SGD, 13 for H-US) and of 60 months.
+- The n^(1/3) rule stays the rule for standard errors of means (Phase 1) only.
+- 10,000 paths, seed 20261028.
+- The same random draws are reused across scenarios, mixes and the contribution solver (common random numbers), so differences between results reflect the inputs, not new random draws.
+
+**4. Student-t alternative.**
+- A bivariate Student-t is fitted to the same monthly log real returns. Degrees of freedom are chosen by maximum likelihood: an EM estimate of the scale for each df on a grid from 2.5 to 30 in steps of 0.1, keeping the best df.
+- The location is replaced by the re-centred means.
+- Draws are independent month to month, so unlike the bootstrap there is no volatility clustering. This is disclosed. Same seed.
+
+**5. Portfolio and costs.**
+- The portfolio is rebalanced monthly to w in equities and 1 − w in SGS.
+- All-in annual cost c(w) = w × (ACWD TER 0.12% + ACWD index dividend yield 1.57% × ACWD fund-level withholding 12.62%) + (1 − w) × A35 TER 0.24% + trading bps of the nearest committed `Multi-Asset-Allocation` mix (ties go to the lower equity share).
+- Monthly net return = (1 + gross) × (1 − c)^(1/12) − 1.
+- **Trading cost of each contribution.** Each contribution (and the initial amount) is split by the target weights into two buy orders, each charged at its actual size:
+  - **ACWD on LSE, in USD:** the IBKR fixed commission of 0.05% (minimum USD 4) plus 9% GST, as in `Multi-Asset-Allocation`; the LSE levy of GBP 1.50 on orders of GBP 10,000 or more; the IBKR SGD→USD conversion of 0.002% (minimum USD 2; `ETF-vehicle-selection`); and half the ACWD spread (`ETF-vehicle-selection`'s default of 0.10%, not measured, disclosed).
+  - **A35 on SGX, in SGD:** the moomoo SG commission of 0.03% (minimum S$0.99) and platform fee of 0.03% (minimum S$1.50); SGX clearing (0.0325%) and access (0.0075%) fees; 9% GST on these; and half the A35 spread from `Multi-Asset-Allocation`'s SGX quote snapshot.
+- The fee rows are vendored with their commits into `reference/upstream/`. Fixed minimums are held constant in real terms (disclosed).
+- **Quarterly-batching option:** monthly contributions build up in cash, earning the cash CMA, and are invested every third month as one pair of orders.
+- There is no flat one-off rate. The annual rebalancing cost stays the nearest committed mix's `trading_bps`, as above.
+- Cash isn't part of the mix. It is shown as a deterministic reference path at the cash CMA ("held in cash").
+
+**6. Contributions and goal.**
+- The initial amount is invested at month 0; monthly contributions go in at each month-end, after that month's return.
+- Contributions rise by a real growth rate g every 12 months.
+- The goal is in today's SGD; everything is simulated in real SGD.
+
+**7. Outputs.**
+- **P(goal):** the share of paths whose terminal real wealth reaches the goal.
+- **Required monthly contribution** for probabilities of 50%, 75% and 90%: the smallest amount, to S$10, found by bisection on common random numbers. Above S$100,000 a month it is reported as "not reachable".
+- **Fan chart:** the 5th, 10th, 25th, 50th, 75th, 90th and 95th percentiles of wealth by month.
+- **Worst-decile paths:** paths with terminal wealth at or below the 10th percentile; their median path is shown.
+- **Maximum drawdown:** measured on the portfolio's unit-value index, excluding contributions. The 5th, 25th, 50th, 75th and 95th percentiles across paths are shown.
+- Also: total contributed and the cash reference path.
+
+**8. SRS module (optional, labelled simplified).**
+- **Contributions:** the annual SRS contribution is min(entered amount, cap). The cap is S$15,300 for citizens/PRs and S$35,700 for foreigners.
+- **Relief:** contribution × the user's marginal rate. It is reinvested as an extra contribution 12 months later. The module assumes the S$80,000 overall relief cap isn't binding, and says so.
+- **Withdrawal at or after the statutory retirement age** (64 for a first contribution from 1 July 2026):
+  - **The balance stays invested in the chosen mix during the 10-year withdrawal period.** Each year the balance ÷ the years remaining is withdrawn, so the 10th tranche empties the account. The paths are simulated for those 10 extra years on the same draws.
+  - Tax on each tranche = IRAS resident progressive tax on 50% of the tranche plus any other taxable income the user enters.
+  - Brackets are held constant in real terms (disclosed).
+- **Premature withdrawal:** the full balance is taxed at the user's marginal rate, plus a 5% penalty.
+- **Comparison:** the same contributions invested outside SRS, with no relief and no withdrawal tax.
+- **App (Phase 3):** a warning appears when the goal date falls before the statutory retirement age.
+
+**9. Example investors.** These are illustrative, fixed now, before any result:
+
+| | Age | Initial | Monthly | Real growth | Years | Goal (today's S$) | Equity share |
+|---|---|---|---|---|---|---|---|
+| A | 30 | 10,000 | 800 | 2% | 25 | 600,000 | 88% |
+| B | 45 | 150,000 | 1,500 | 0% | 15 | 600,000 | 59% |
+| C | 55 | 400,000 | 0 | 0% | 10 | 500,000 | 49% |
+| D (SRS) | 40 | 0 | 1,275 (15,300 a year) | 0% | 24 (to 64) | 500,000 | 67% |
+
+D is a citizen, with a marginal rate at contribution of 11.5% (IRAS band S$80,000–120,000) and no other income in retirement.
+
+The equity shares are `Multi-Asset-Allocation`'s risk-menu mixes: 59% is the binding menu mix, and 49%, 67% and 88% are its SGD-era sensitivity mixes. They are **not** age-based advice; each example's mix is a fixed illustration.
+
+**10. Sensitivity grid** for each example:
+- CMA sets:
+  - low, central and high
+  - P2, the bias-corrected equity estimate
+  - **"historical global (JST, real USD, 1871–2020)":** equities 6.3% and bonds 3.4% from `Multi-Asset-Allocation`'s 100% and 0% equity rows, with cash at 0.25% (the long-run real SGD 3-month rate).
+    - The 3.4% is the global JST bond return, **not** a historical SGS return. Every output states its gap to the SGS forward CMA (0.7%).
+    - The cause of the gap: today's SGS starting yield (2.39% nominal) and inflation assumption versus the much higher average real bond return of developed-market bonds over 1871–2020, a period that includes the 1981–2020 fall in yields.
+- Engines: bootstrap H-SGD (primary), bootstrap H-US, and Student-t on H-SGD.
+- The checkpoint table shows central, P2 and historical side by side for every example.
+
+**11. Tests.**
+- With zero volatility, the result matches the annuity formula exactly.
+- The same seed reproduces results exactly.
+- Costs reduce a constant return by exactly c a year.
+- **Geometric re-centring:** the re-centred history has exactly the target mean log return. And with no costs, a single-asset simulation's median annualised return over a long horizon is within Monte Carlo error of the CMA.
+- The SRS tax function reproduces IRAS's worked examples (e.g. a S$40,000 tranche with no other income: S$20,000 taxable, tax nil).
+- The required contribution increases with the target probability.
+
+- Each contribution's trading cost matches a hand calculation from the fee schedule, including minimums and GST.
+
+**Evidence:**
+- Politis & Romano (1994) for the stationary bootstrap; Hall, Horowitz & Jing (1995) for the n^(1/3) sensitivity.
+- IRAS pages for SRS; the vendored fee schedules.
+- Evidence: pending, as stated choices:
+  - the 24- and 60-month mean blocks
+  - the timing of relief reinvestment
+  - constant real tax brackets and fee minimums
+  - the default ACWD spread

@@ -1,0 +1,9 @@
+rule,value,unit,source,checked_on,status
+contribution_cap_citizen_spr,15300,SGD a year,"IRAS, SRS contributions and tax relief (last updated 14 August 2026): cap for Singapore Citizens/SPRs",2026-10-28,verified
+contribution_cap_foreigner,35700,SGD a year,"IRAS, SRS contributions and tax relief (last updated 14 August 2026): cap for foreigners",2026-10-28,verified
+personal_relief_cap,80000,SGD a year,"IRAS, SRS contributions and tax relief: overall personal income tax relief cap applies to all reliefs including SRS (YA 2026)",2026-10-28,verified
+statutory_retirement_age,64,years,"IRAS, Tax on SRS withdrawals (last updated 3 September 2026): statutory retirement age 64 effective from 1 Jul 2026, fixed at the age prevailing at first contribution",2026-10-28,verified
+taxable_share_penalty_free,0.5,share of withdrawal,"IRAS, Tax on SRS withdrawals: 50% of withdrawals on or after the statutory retirement age are taxable",2026-10-28,verified
+withdrawal_period,10,years,"IRAS, Tax on SRS withdrawals: penalty-free withdrawals may be spread over 10 years from the first; any balance is deemed withdrawn at the end (50% taxable)",2026-10-28,verified
+taxable_share_premature,1.0,share of withdrawal,"IRAS, Tax on SRS withdrawals: premature withdrawals are taxable in full",2026-10-28,verified
+premature_penalty,0.05,share of withdrawal,"IRAS, Tax on SRS withdrawals: 5% penalty on premature withdrawals",2026-10-28,verified
