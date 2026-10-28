@@ -15,7 +15,7 @@ CREDIT = (
     "Source: Jordà-Schularick-Taylor Macrohistory Database (R6); Jordà et al. (2019), QJE. "
     "Licensed CC BY-NC-SA 4.0."
 )
-COLUMNS = ["eq_tr", "eq_capgain", "eq_dp", "bond_tr", "ltrate", "cpi"]
+COLUMNS = ["eq_tr", "eq_capgain", "eq_dp", "bond_tr", "ltrate", "cpi", "rgdpmad"]
 
 
 def describe(path: Path) -> tuple[int, str, str]:

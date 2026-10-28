@@ -8,7 +8,10 @@ from analysis.sources.base import RawFile, link_on_page
 
 LANDING = "https://shillerdata.com/"
 NO_LICENCE = "No licence stated by the source; free download. Treated as not redistributable."
-BOND_TR_COLUMN = 17  # "Monthly Total Bond Returns" (gross, 1 + r), checked 2026-10-28
+# "Monthly Total Bond Returns" (gross, 1 + r). Row t holds the return from month t to t + 1 on a
+# 10-year par bond (semi-annual coupons) repriced at the next month's GS10: reverse-engineered on
+# 2026-10-28 (correlation 0.99999, mean gap 0.57 bp a month). monthly() shifts it to row t + 1.
+BOND_TR_COLUMN = 17
 
 
 def _month(value: float) -> pd.Period:
@@ -58,5 +61,5 @@ def monthly(path: Path = FILES[0].path) -> pd.DataFrame:
     out["cpi"] = pd.to_numeric(raw["CPI"], errors="coerce").to_numpy()
     out["gs10"] = pd.to_numeric(raw["Rate GS10"], errors="coerce").to_numpy() / 100
     bond_gross = pd.to_numeric(raw.iloc[:, BOND_TR_COLUMN], errors="coerce").to_numpy()
-    out["bond_tr"] = bond_gross - 1
+    out["bond_tr"] = pd.Series(bond_gross - 1, index=out.index).shift(1)  # return into month t
     return out

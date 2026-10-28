@@ -46,3 +46,15 @@ def implied_erp(path: Path = FILES[0].path) -> pd.DataFrame:
     out.columns = ["implied_erp", "tbond_rate"]
     out.index = out.index.astype(int)
     return out.dropna()
+
+
+def payout_yields(path: Path = FILES[0].path) -> dict[str, float]:
+    """Latest year's S&P 500 dividend yield and total payout (dividends + buybacks) yield."""
+    table = _table(path)
+    cols = ["S&P 500", "Dividends*", "Dividends + Buybacks"]
+    row = table[cols].apply(pd.to_numeric, errors="coerce").dropna().iloc[-1]
+    return {
+        "payout_year": int(row.name),
+        "us_dividend_yield": float(row["Dividends*"] / row["S&P 500"]),
+        "us_total_payout_yield": float(row["Dividends + Buybacks"] / row["S&P 500"]),
+    }

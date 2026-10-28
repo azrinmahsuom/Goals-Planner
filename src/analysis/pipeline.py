@@ -12,6 +12,7 @@ and the run continues. Only a missing file stops the run.
 import argparse
 
 from analysis import manifest, sources, upstream
+from analysis.cma import report as cma_report
 from analysis.cma import run as cma_run
 from analysis.config import FIGURES, ROOT
 from analysis.sources import documents
@@ -70,7 +71,8 @@ def main() -> None:
         summary = cma_run.run()
         print(f"Wrote {cma_run.SUMMARY.relative_to(ROOT)} ({len(summary)} rows).")
     if stage in ("report", "all"):
-        print("The forward CMAs and docs/cma.md are built next in Phase 1.")
+        cma_report.run()
+        print(f"Wrote {cma_report.FIGURES_JSON.relative_to(ROOT)} and docs/cma.md.")
 
 
 if __name__ == "__main__":

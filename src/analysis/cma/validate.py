@@ -89,3 +89,52 @@ def evaluate_pooled(frames: dict[str, pd.DataFrame], lags: int = HAC_LAGS) -> di
         }
     )
     return stats
+
+
+SEED = 20261028
+REPLICATIONS = 2000
+R2_BLOCK = HORIZON  # docs/decisions.md (2026-10-28): blocks of 10 origins keep the overlap
+
+
+def block_indices(n: int, block: int, rng: np.random.Generator) -> np.ndarray:
+    """Moving-block bootstrap: n positions built from random contiguous blocks (Künsch 1989)."""
+    block = min(block, n)
+    starts = rng.integers(0, n - block + 1, size=-(-n // block))
+    return np.concatenate([np.arange(s, s + block) for s in starts])[:n]
+
+
+def _r2(forecast: np.ndarray, realised: np.ndarray, benchmark: np.ndarray) -> float:
+    denominator = ((realised - benchmark) ** 2).sum()
+    return 1 - ((realised - forecast) ** 2).sum() / denominator if denominator > 0 else np.nan
+
+
+def r2_interval(
+    frame: pd.DataFrame, block: int = R2_BLOCK, reps: int = REPLICATIONS, seed: int = SEED
+) -> tuple[float, float]:
+    """95% moving-block bootstrap interval for the out-of-sample R² of one method."""
+    df = frame[["forecast", "realised", "historical_mean"]].dropna().to_numpy()
+    rng = np.random.default_rng(seed)
+    draws = [_r2(*df[block_indices(len(df), block, rng)].T) for _ in range(reps)]
+    low, high = np.nanpercentile(draws, [2.5, 97.5])
+    return float(low), float(high)
+
+
+def r2_interval_pooled(
+    frames: dict[str, pd.DataFrame],
+    block: int = R2_BLOCK,
+    reps: int = REPLICATIONS,
+    seed: int = SEED,
+) -> tuple[float, float]:
+    """As r2_interval, resampling blocks of origin years; each drawn year keeps every
+    country's observation for that year."""
+    stacked = pd.concat(frames, names=["country", "origin"])
+    df = stacked[["forecast", "realised", "historical_mean"]].dropna()
+    by_year = {year: rows.to_numpy() for year, rows in df.groupby(level="origin")}
+    years = sorted(by_year)
+    rng = np.random.default_rng(seed)
+    draws = []
+    for _ in range(reps):
+        sample = np.vstack([by_year[years[i]] for i in block_indices(len(years), block, rng)])
+        draws.append(_r2(*sample.T))
+    low, high = np.nanpercentile(draws, [2.5, 97.5])
+    return float(low), float(high)

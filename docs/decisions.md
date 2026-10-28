@@ -311,3 +311,41 @@ The owner approved the draft on 2026-10-28 with these changes, all made before a
 **MAS citations:**
 - MAS datasets (rates, SGS yields, the survey workbook) carry MAS's prescribed notice: "Contains information from {dataset} accessed on {date}, which is made available under the terms of the Monetary Authority of Singapore's Terms of Use of Datasets."
 - MAS's terms page (updated 27 August 2026) asks for permission before linking to internal pages. Documents cite MAS sources by title and file name; whether to hyperlink is an owner decision.
+
+### 2026-10-28 — Bias review: amendment, correction and post-hoc sensitivities (logged before re-running)
+**Context:** `/bias-check` on the first full Phase 1 build. The owner chose the fixes below on 2026-10-28. The first build's figures are superseded by the re-run; they were not committed.
+
+**Amendment 4 (registered rule changed before re-running): the equity bootstrap resamples calendar years jointly.**
+- **Rule:** the bootstrap standard error of g_div resamples the same moving blocks of calendar years for every country, so common shocks (wars, 1970s inflation) move all countries together.
+  - Block length: ceil(n^(1/3)), where n is the number of distinct years across the countries' runs.
+  - A drawn year that lies outside a country's run contributes nothing for that country.
+  - Each country's annualised growth is recomputed from its drawn years, then the cross-country median is taken.
+- **Why:** the first build resampled countries independently. That treats correlated countries as independent and understates the standard error.
+
+**Correction (a bug, not a method change): Shiller bond-return timing.**
+- Shiller's "Monthly Total Bond Returns" in row *t* is the return from month *t* to *t*+1. This was reverse-engineered on 2026-10-28: it matches a 10-year par bond with semi-annual coupons repriced at the next month's GS10, with correlation 0.99999 and a mean absolute gap of 0.57 bp a month.
+- The first build treated row *t* as the return into month *t*, so each bond window ran January to January instead of December to December. No future data entered any forecast.
+- **Fix:** shift the column one month so row *t* is the return into *t*.
+- **Same finding, for the record:** the US realised bond returns are *computed from the GS10 yield series* itself. The US bond validation is therefore partly circular, and `docs/cma.md` says so.
+
+**Brief §14 aligned with the approved scenario rule.** Failed validation tests are reported as found. They don't widen the scenarios: the ranges cover uncertainty in the expected return only, and the spread of realised outcomes comes from the simulation.
+
+**Post-hoc sensitivities (labelled post-hoc wherever shown; the central estimates don't change):**
+- **P1, g_div from each country's longest run.** Each country's longest contiguous run of at least 30 years ending by 2015 replaces the run ending in 2015. This brings back countries whose latest run is short (bias-check #2).
+- **P2, bias-corrected D1.** Forward D1 minus D1's pooled JST out-of-sample bias (bias = forecast − realised, so a negative bias raises the figure).
+- **Context only:** S&P 500 gross buyback yield from Damodaran's dividends-plus-buybacks series. It is gross, not net of share issuance; no free, citable net series was found.
+
+**Disclosures added to `docs/cma.md` and `docs/limitations.md`:**
+- D1's forward input is the dividend yield only, excluding buybacks. This probably biases the forward equity CMA downward. That is consistent with the negative validation bias of D1, E1 and E2 (E3's bias was positive).
+- Country selection for g_div (survivors; developed markets only).
+- Revised Shiller data, with the 3-month lag Evidence: pending.
+- The ranges describe the expected return, not outcomes.
+- The real SGD/USD change in three windows, as evidence for zero real FX change.
+- `Multi-Asset-Allocation`'s historical figures use JST data to 2020.
+
+**Carried to Phase 2:** the SGS real return uses the Fisher approximation (nominal yield − inflation). The bootstrap must be re-centred so the *geometric* mean matches each CMA.
+
+**Correction (a coding error against the registered rule): zero-dividend years.** The first build dropped any country whose run ending in 2015 contained a zero-dividend year. That excluded Germany (unbroken run 1870–2015, 2 zero years) and Spain (1900–2015, 3 zero years). The registered rule needs annualised growth between the run's endpoints, which needs positive values only at the start and end.
+- **Fix:** a run is used when its first and last values are positive.
+- **Bootstrap:** year-on-year changes into or out of a zero dividend are undefined and are dropped from the resampled rates.
+- **Record:** an earlier message said Germany, Spain and Portugal were excluded for gaps. Only Portugal (runs 1871–1987 and 2005–2015) is excluded for that reason.
