@@ -110,3 +110,38 @@ def test_page_ships_no_monthly_series():
         return 0
 
     assert longest_list(params) < 50  # a monthly series would have hundreds of entries
+
+
+def test_srs_split_matches_python(js):
+    from analysis.sim import engine
+    from analysis.sim import srs as srs_py
+
+    member = srs_py.SRS(age=40, citizen_or_pr=True, marginal_rate=0.10)
+    plan = engine.Plan(0.0, 1_000.0, 0.20, 36, 0.6)
+    flows = srs_py.split(plan, member)
+    got = call(
+        js,
+        "GoalsEngine.yearlyAmounts({years: 3, monthly: 1000, growth: 0.20},"
+        " {citizenOrPr: true, marginalRate: 0.10}, GOALS_PARAMS.srs)",
+    )
+    assert got["intoSrs"] == pytest.approx([flows.into_srs[12 * y] for y in range(3)])
+    assert got["outside"] == pytest.approx([flows.outside[12 * y] for y in range(3)])
+    assert got["finalRelief"] == pytest.approx(flows.final_relief)
+
+
+def test_premature_net_matches_python(js):
+    import numpy as np
+
+    from analysis.sim import srs as srs_py
+
+    member = srs_py.SRS(
+        age=40, citizen_or_pr=True, marginal_rate=0.115, other_income_in_retirement=30_000
+    )
+    balances = [50_000.0, 250_000.0, 1_500_000.0]
+    want = srs_py.premature_net(np.array(balances), member).tolist()
+    got = call(
+        js,
+        f"Array.from(GoalsEngine.prematureNet(Float64Array.from({balances}),"
+        " {otherIncome: 30000}, GOALS_PARAMS.srs))",
+    )
+    assert got == pytest.approx(want, rel=1e-12)

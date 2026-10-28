@@ -19,3 +19,25 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+Data and derived figures
+
+The MIT licence above covers the code. It does not cover data. No raw data is
+redistributed in this repository; figures derived from data follow the terms of
+their sources, recorded in data/MANIFEST.yaml and reference/source_checks.csv:
+
+- Figures derived from the Jordà-Schularick-Taylor Macrohistory Database
+  (Jordà et al. 2019, Quarterly Journal of Economics) are licensed CC BY-NC-SA 4.0
+  (https://creativecommons.org/licenses/by-nc-sa/4.0/): the historical return
+  assumptions, the dividend-growth input and the validation statistics computed
+  from it, wherever they appear (docs/, reports/, reference/upstream/, app/).
+- Figures from MAS statistics and the MAS Survey of Professional Forecasters are
+  used under the Monetary Authority of Singapore's Terms of Use of Datasets and
+  carry its notice.
+- Figures derived from sources with no stated licence (Robert Shiller's data, the
+  Kenneth French data library, SingStat, Aswath Damodaran, the Philadelphia Fed
+  Survey of Professional Forecasters) are summary statistics or cited figures only.
+- Issuer, broker, IRAS and MOM documents are cited by figure and page and are not
+  redistributed.

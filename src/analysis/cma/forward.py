@@ -75,6 +75,7 @@ def dividend_growth_longest_run(panel: pd.DataFrame, end_year: int = JST_END_YEA
 
 def eps_growth(monthly: pd.DataFrame) -> tuple[float, str, str]:
     """Annualised real EPS growth from the first to the last month with reported earnings."""
+    monthly = monthly.loc[: pd.Period(AS_OF, freq="M")]  # cut at the as-of month (Phase 4)
     real = (monthly["earnings"] / monthly["cpi"]).dropna()
     months = (real.index[-1] - real.index[0]).n
     return (

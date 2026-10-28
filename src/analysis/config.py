@@ -22,10 +22,10 @@ load_dotenv(ROOT / ".env")
 # Fresh-clone rebuild tolerance (docs/decisions.md, 2026-10-28): a re-download may move a
 # headline annual CMA (central, low or high) by at most this much before `verify` fails.
 DRIFT_TOLERANCE_BPS = 10
+# Same for the main engine's headline chances (docs/decisions.md, 2026-10-28, Phase 4).
+SIM_DRIFT_TOLERANCE_PP = 1.0
 
 TRADING_DAYS = 252
-# Per side. Fallback only when measured costs are missing; record the source in docs/decisions.md.
-TRANSACTION_COST_BPS = 10
 
 
 def get_secret(name: str) -> str:

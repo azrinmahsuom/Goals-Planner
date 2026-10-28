@@ -25,7 +25,7 @@
    "cash": -0.001117
   },
   "hist_eq_yield": {
-   "label": "Historical equity + yield-based bonds",
+   "label": "Historical equity + yield-based bonds (added after Phase 2 results)",
    "note": "The long-run historical share return, with bonds and cash from today's yields.",
    "plausible": true,
    "equity": 0.063,
@@ -93,8 +93,7 @@
     "currency": "SGD",
     "min_trade_value": null,
     "gst": "yes",
-    "status": "verified",
-    "provider": "moomoo SG (SGX)"
+    "provider": null
    },
    {
     "component": "platform_fee",
@@ -105,8 +104,7 @@
     "currency": "SGD",
     "min_trade_value": null,
     "gst": "yes",
-    "status": "verified",
-    "provider": "moomoo SG (SGX)"
+    "provider": null
    },
    {
     "component": "clearing_fee",
@@ -117,8 +115,7 @@
     "currency": "SGD",
     "min_trade_value": null,
     "gst": "yes",
-    "status": "verified",
-    "provider": "SGX exchange fees"
+    "provider": null
    },
    {
     "component": "trading_access_fee",
@@ -129,8 +126,7 @@
     "currency": "SGD",
     "min_trade_value": null,
     "gst": "yes",
-    "status": "verified",
-    "provider": "SGX exchange fees"
+    "provider": null
    },
    {
     "component": "commission",
@@ -141,8 +137,7 @@
     "currency": "USD",
     "min_trade_value": null,
     "gst": "yes",
-    "status": "verified",
-    "provider": "IBKR (LSE, USD-denominated, Fixed)"
+    "provider": null
    },
    {
     "component": "ptm_levy",
@@ -153,8 +148,7 @@
     "currency": "GBP",
     "min_trade_value": 10000.0,
     "gst": "no",
-    "status": "verified",
-    "provider": "LSE levies"
+    "provider": null
    },
    {
     "component": "gst",
@@ -165,8 +159,7 @@
     "currency": "SGD",
     "min_trade_value": null,
     "gst": "no",
-    "status": "verified",
-    "provider": "Singapore GST"
+    "provider": null
    },
    {
     "component": "fx_conversion",
@@ -177,8 +170,7 @@
     "currency": "USD",
     "min_trade_value": null,
     "gst": "no",
-    "status": "verified",
-    "provider": "IBKR (SGD to USD)"
+    "provider": null
    },
    {
     "component": "spread",
@@ -189,7 +181,6 @@
     "currency": "SGD",
     "min_trade_value": null,
     "gst": null,
-    "status": "verified",
     "provider": "A35 (SGX)"
    },
    {
@@ -201,7 +192,6 @@
     "currency": "USD",
     "min_trade_value": null,
     "gst": null,
-    "status": "default, not measured",
     "provider": "ACWD (LSE)"
    },
    {
@@ -213,7 +203,6 @@
     "currency": "USD",
     "min_trade_value": null,
     "gst": null,
-    "status": "verified",
     "provider": "GBP"
    },
    {
@@ -225,7 +214,6 @@
     "currency": "USD",
     "min_trade_value": null,
     "gst": null,
-    "status": "verified",
     "provider": "SGD"
    }
   ]
@@ -242,9 +230,9 @@
   "relief_cap": 80000.0,
   "statutory_retirement_age_default": 64.0,
   "statutory_retirement_age_options": [
-   62,
-   63,
-   64
+   62.0,
+   63.0,
+   64.0
   ],
   "taxable_share": 0.5,
   "taxable_share_premature": 1.0,
@@ -343,7 +331,8 @@
     "P2": -0.0126,
     "hist_eq_yield": -0.024699999999999944,
     "historical": -0.018000000000000016
-   }
+   },
+   "full_engine_srs": null
   },
   "B": {
    "age": 45,
@@ -369,7 +358,8 @@
     "P2": -0.01200000000000001,
     "hist_eq_yield": -0.02210000000000001,
     "historical": -0.005700000000000038
-   }
+   },
+   "full_engine_srs": null
   },
   "C": {
    "age": 55,
@@ -395,7 +385,8 @@
     "P2": -0.03510000000000002,
     "hist_eq_yield": -0.009099999999999997,
     "historical": 0.00649999999999995
-   }
+   },
+   "full_engine_srs": null
   },
   "D": {
    "age": 40,
@@ -421,6 +412,12 @@
     "P2": -0.025499999999999967,
     "hist_eq_yield": -0.0034999999999999476,
     "historical": 0.007899999999999907
+   },
+   "full_engine_srs": {
+    "central": 0.537,
+    "P2": 0.6244,
+    "hist_eq_yield": 0.87,
+    "historical": 0.9277
    }
   }
  },

@@ -9,6 +9,8 @@ levels, realised returns) is carried across a gap.
 import numpy as np
 import pandas as pd
 
+from analysis.cma import AS_OF
+
 LAG_MONTH = 9  # September values are the latest known at a December origin
 CAPE_MONTHS = 120
 
@@ -18,7 +20,8 @@ def shiller_annual(monthly: pd.DataFrame) -> pd.DataFrame:
     December total-return and bond indices (nominal and real) for realised returns.
 
     The data end at the last month with a reported dividend; later months are estimates."""
-    m = monthly.loc[: monthly["dividend"].last_valid_index()].copy()
+    m = monthly.loc[: pd.Period(AS_OF, freq="M")]  # cut at the as-of month (Phase 4)
+    m = m.loc[: m["dividend"].last_valid_index()].copy()
     m["tr_index"] = ((m["price"] + m["dividend"] / 12) / m["price"].shift(1)).fillna(1).cumprod()
     m["bond_index"] = (1 + m["bond_tr"].fillna(0)).cumprod()
     m["real_eps"] = m["earnings"] / m["cpi"]

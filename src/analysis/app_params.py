@@ -10,6 +10,7 @@ import math
 
 import pandas as pd
 
+from analysis import upstream
 from analysis.cma.report import FIGURES_JSON as CMA_JSON
 from analysis.config import REFERENCE, ROOT
 from analysis.sim import PATHS, SEED, SGS_DURATION, costs, engine, srs
@@ -73,6 +74,8 @@ def build() -> dict:
     fit = engine.fit_student_t(h_sgd())
     fees = costs.load_fees()
     rules = srs.rules()
+    table = pd.read_csv(REFERENCE / "srs_rules.csv")
+    srs_earlier = table.loc[table["rule"] == "statutory_retirement_age_earlier", "value"].tolist()
     bands = pd.read_csv(REFERENCE / "iras_resident_tax_rates.csv")
     gaps = {
         k: {
@@ -83,9 +86,12 @@ def build() -> dict:
     }
     all_gaps = [g for k in gaps for g in gaps[k].values()]
     validation = {(v["method"], v["sample"]): v for v in cma["validation"]}
-    fee_rows = fees.schedule.drop(columns=["repo", "commit", "path", "locator"]).where(
-        fees.schedule.notna(), None
-    )
+    fee_rows = fees.schedule.drop(columns=["repo", "commit", "path", "locator", "status"])
+    # Provider names aren't shipped (Phase 4, #5): the engine finds broker and exchange rows by
+    # component and market, and only the spread and FX rows by their instrument or currency.
+    keep = fee_rows["component"].isin(["spread", "usd_per_unit"])
+    fee_rows["provider"] = fee_rows["provider"].where(keep, None)
+    fee_rows = fee_rows.where(fee_rows.notna(), None)
     return {
         "generated_from": ["reports/cma_figures.json", "reports/simulation_figures.json"],
         "as_of": cma["as_of"],
@@ -111,13 +117,15 @@ def build() -> dict:
             "mix_trading_bps": {str(k): v for k, v in fees.mix_trading_bps.items()},
             "fee_schedule": fee_rows.to_dict(orient="records"),
         },
-        "risk_menu_mixes": [0.49, 0.59, 0.67, 0.88],
+        "risk_menu_mixes": sorted(upstream.load("mix_costs")["equity_share"].tolist()),
         "srs": {
             "contribution_cap_citizen_pr": rules["contribution_cap_citizen_spr"],
             "contribution_cap_foreigner": rules["contribution_cap_foreigner"],
             "relief_cap": rules["personal_relief_cap"],
             "statutory_retirement_age_default": rules["statutory_retirement_age"],
-            "statutory_retirement_age_options": [62, 63, 64],
+            "statutory_retirement_age_options": sorted(
+                {*srs_earlier, rules["statutory_retirement_age"]}
+            ),
             "taxable_share": rules["taxable_share_penalty_free"],
             "taxable_share_premature": rules["taxable_share_premature"],
             "premature_penalty": rules["premature_penalty"],
@@ -138,6 +146,9 @@ def build() -> dict:
                     s: sim["grid"][k][MAIN][s]["p_goal"] for s in ("low", "high")
                 },
                 "gap": gaps[k],
+                "full_engine_srs": (
+                    {s: sim["srs"][s]["p_goal_srs"] for s in SHOWN_SETS} if ex.get("srs") else None
+                ),
             }
             for k, ex in EXAMPLES.items()
         },

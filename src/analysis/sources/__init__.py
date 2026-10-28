@@ -78,6 +78,7 @@ def fetch(raw: RawFile, refresh: bool = False) -> str:
             "start": start,
             "end": end,
             "units": raw.units,
+            **({"optional": True} if raw.optional else {}),
         },
     )
     return "recorded"
@@ -91,5 +92,8 @@ def fetch_all(refresh: bool = False) -> dict[str, str]:
         try:
             results[key] = fetch(raw, refresh)
         except FileNotFoundError as err:  # a manual download not yet saved
-            results[key] = f"manual step needed: {err}"
+            if raw.optional:
+                results[key] = "optional manual download not saved; cross-check skipped"
+            else:
+                results[key] = f"manual step needed: {err}"
     return results

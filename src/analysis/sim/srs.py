@@ -39,8 +39,12 @@ def resident_tax(income: float | np.ndarray) -> np.ndarray:
 class SRS:
     age: int
     citizen_or_pr: bool
-    marginal_rate: float  # at contribution, entered by the user
+    marginal_rate: float  # at contribution, entered by the user (used for relief)
     other_income_in_retirement: float = 0.0
+    statutory_age: float | None = None  # fixed at the first contribution; default from IRAS
+
+    def retirement_age(self) -> float:
+        return self.statutory_age or rules()["statutory_retirement_age"]
 
 
 def annual_cap(srs: SRS) -> float:
@@ -48,32 +52,32 @@ def annual_cap(srs: SRS) -> float:
     return r["contribution_cap_citizen_spr" if srs.citizen_or_pr else "contribution_cap_foreigner"]
 
 
-def capped_plan(plan: Plan, srs: SRS) -> Plan:
-    """The plan with each year's contributions limited to the SRS cap (monthly = cap / 12)."""
-    monthly_cap = annual_cap(srs) / 12
-    return Plan(
-        plan.initial,
-        min(plan.monthly, monthly_cap),
-        plan.growth
-        if plan.monthly * (1 + plan.growth) ** (plan.months // 12) <= monthly_cap
-        else 0.0,
-        plan.months,
-        plan.equity_share,
-        plan.batching,
-    )
+@dataclass(frozen=True)
+class Split:
+    """Monthly flows of an SRS plan (docs/decisions.md, 2026-10-28, Phase 4)."""
+
+    into_srs: np.ndarray  # each month's planned saving up to the cap / 12
+    outside: np.ndarray  # saving above the cap, plus relief reinvested a year later
+    final_relief: float  # relief on the last 12 months' contributions, counted at the goal date
+    relief_total: float
 
 
-def relief_schedule(plan: Plan, srs: SRS) -> np.ndarray:
-    """Tax relief on each month's contribution, reinvested 12 months later (length = months)."""
-    relief = np.zeros(plan.months)
-    paid = np.minimum(contributions(plan), annual_cap(srs) / 12) * srs.marginal_rate
-    relief[12:] = paid[: plan.months - 12]
-    return relief
+def split(plan: Plan, srs: SRS) -> Split:
+    """Cap applied month by month (so year by year): up to cap / 12 goes into SRS, the excess
+    is invested outside SRS. Relief, a tax saving rather than an SRS contribution, is invested
+    outside SRS 12 months after the contribution; the final year's relief counts at the goal."""
+    planned = contributions(plan)
+    into_srs = np.minimum(planned, annual_cap(srs) / 12)
+    relief = into_srs * srs.marginal_rate
+    outside = planned - into_srs
+    outside[12:] += relief[: plan.months - 12]
+    final_relief = float(relief[max(0, plan.months - 12) :].sum())
+    return Split(into_srs, outside, final_relief, float(relief.sum()))
 
 
 def premature(srs: SRS, months: int) -> bool:
-    """True if the goal date falls before the statutory retirement age."""
-    return srs.age + months / 12 < rules()["statutory_retirement_age"]
+    """True if the goal date falls before the statutory retirement age for the account."""
+    return srs.age + months / 12 < srs.retirement_age()
 
 
 def withdraw(balance_paths: np.ndarray, annual_returns: np.ndarray, srs: SRS, taxed: bool) -> dict:
@@ -101,7 +105,9 @@ def withdraw(balance_paths: np.ndarray, annual_returns: np.ndarray, srs: SRS, ta
 
 
 def premature_net(balance: np.ndarray, srs: SRS) -> np.ndarray:
-    """Full withdrawal before the statutory retirement age: taxed in full at the marginal rate
-    plus the 5% penalty."""
+    """Full withdrawal before the statutory retirement age: the whole balance is taxable income,
+    taxed progressively at IRAS resident rates on top of other income, plus the 5% penalty."""
     r = rules()
-    return balance * (1 - r["taxable_share_premature"] * srs.marginal_rate - r["premature_penalty"])
+    other = srs.other_income_in_retirement
+    tax = resident_tax(r["taxable_share_premature"] * balance + other) - resident_tax(other)
+    return balance - tax - r["premature_penalty"] * balance

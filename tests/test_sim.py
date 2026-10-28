@@ -165,10 +165,26 @@ def test_srs_withdrawal_iras_example_tranche_is_tax_free():
     assert out["after_tax_withdrawals"][0] == pytest.approx(400_000.0)
 
 
-def test_premature_withdrawal_tax_and_penalty():
+def test_premature_withdrawal_is_taxed_progressively_plus_penalty():
     member = srs.SRS(age=40, citizen_or_pr=True, marginal_rate=0.115)
-    assert srs.premature(member, months=12 * 20)  # 60 < 64
+    assert srs.premature(member, months=12 * 20)  # 60 < 64 (default statutory age)
     assert not srs.premature(member, months=12 * 24)  # 64
-    assert srs.premature_net(np.array([100.0]), member)[0] == pytest.approx(
-        100 * (1 - 0.115 - 0.05)
-    )
+    earlier = srs.SRS(age=40, citizen_or_pr=True, marginal_rate=0.115, statutory_age=62)
+    assert not srs.premature(earlier, months=12 * 22)  # 62, an older account
+    balance = np.array([100_000.0])
+    expected = 100_000 - float(srs.resident_tax(100_000)) - 0.05 * 100_000
+    assert srs.premature_net(balance, member)[0] == pytest.approx(expected)
+
+
+def test_srs_split_sends_excess_and_relief_outside_and_caps_year_by_year():
+    member = srs.SRS(age=40, citizen_or_pr=True, marginal_rate=0.10)
+    cap_monthly = 15_300 / 12
+    plan = engine.Plan(0.0, 1_000.0, 0.20, 36, 0.6)  # 1,000, 1,200, then 1,440 > cap a month
+    flows = srs.split(plan, member)
+    planned = engine.contributions(plan)
+    assert flows.into_srs[:24] == pytest.approx(planned[:24])  # below the cap: growth kept
+    assert flows.into_srs[24:] == pytest.approx(cap_monthly)  # year 3 capped
+    assert flows.outside[24:] == pytest.approx(planned[24:] - cap_monthly + planned[12:24] * 0.10)
+    assert flows.outside[:12] == pytest.approx(0.0)  # no relief before a year has passed
+    assert flows.final_relief == pytest.approx(cap_monthly * 12 * 0.10)
+    assert flows.relief_total == pytest.approx(flows.into_srs.sum() * 0.10)

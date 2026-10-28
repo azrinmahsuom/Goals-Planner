@@ -104,3 +104,18 @@ def test_bond_b1_forecast_is_the_starting_yield():
 
 def test_acwd_withholding_rate_from_reference():
     assert documents.withholding_rate("ACWD", "fy2026") == pytest.approx(17_687_265 / 140_163_819)
+
+
+def test_changed_document_is_drift_not_failure(monkeypatch):
+    """A newer factsheet at the same URL is reported, and its quotes are not checked."""
+    from analysis import manifest
+
+    real = manifest.load()
+    if "documents/ACWD_factsheet.pdf" not in real:
+        pytest.skip("documents not fetched")
+    altered = {k: dict(v) for k, v in real.items()}
+    altered["documents/ACWD_factsheet.pdf"]["sha256"] = "0" * 64
+    monkeypatch.setattr(manifest, "load", lambda *a, **k: altered)
+    result = documents.verify_reference()
+    assert result["drifted"] == ["documents/ACWD_factsheet.pdf"]
+    assert "TER 0.12%" not in result["checked"]
