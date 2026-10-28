@@ -25,6 +25,8 @@ When the inputs match one of the four example investors, each card also shows th
 
 ## Updating
 
-Run `make all`. It rebuilds the assumptions, the simulation and `app/params.js`. Deployment to GitHub Pages is a manual workflow (`.github/workflows/pages.yml`), used only once the owner approves going public.
+1. Run `make all`. It re-downloads changed sources, rebuilds the assumptions and the simulation, regenerates `app/params.js` and runs the tests. If a headline assumption or chance moves beyond its tolerance, the run stops and lists the change in `data/processed/drift_report.md`: review it, and delete the committed figures file named in the message only if the change is accepted.
+2. Review the regenerated docs and `app/params.js`, then commit and push to `main`.
+3. Deployment is automatic. A push that changes `app/` runs `.github/workflows/pages.yml`, which runs lint and the tests and then publishes `app/` to GitHub Pages. It can also be started by hand from the Actions tab.
 
 *Education, not advice. A personal educational project; not affiliated with any financial institution; not financial advice.*

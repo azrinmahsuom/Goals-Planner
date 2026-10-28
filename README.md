@@ -57,6 +57,7 @@ make all           # download, verify, rebuild every output and the app's parame
 - **Changed sources:** a source that changed since the recorded snapshot is listed in `data/processed/drift_report.md` and the run continues. The run stops if a file is missing, or if a headline assumption or chance moves beyond its tolerance.
 - **Optional manual step:** MAS's Survey of Professional Forecasters workbook can't be downloaded by script. To include the inflation cross-check, save it from mas.gov.sg as `data/raw/documents/Sep26Q3.xlsx`.
 - **Browser tests** run if Playwright's browser is installed (`uv run playwright install chromium`).
+- **Updating the live app:** after `make all`, review and push to `main`. A push that changes `app/` runs the tests and redeploys the page automatically.
 - **iCloud:** on macOS, keep the project outside iCloud-synced folders, or put the environment in a folder iCloud skips: `uv venv .venv.nosync && ln -s .venv.nosync .venv && uv sync --locked`.
 
 ## Repository layout

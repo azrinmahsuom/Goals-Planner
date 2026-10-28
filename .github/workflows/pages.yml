@@ -1,9 +1,14 @@
 name: Deploy app to GitHub Pages
 
-# Not enabled: runs only when started by hand from the Actions tab, after the owner approves
-# going public (docs/decisions.md, Phase 3 pre-registration, section 8). GitHub Pages must
-# also be switched on in the repository settings.
+# Runs when the app changes on main (after `make all` regenerates app/params.js and the change
+# is pushed), and can still be started by hand. Lint and tests must pass first
+# (docs/decisions.md, 2026-10-28, "Deploy on push").
 on:
+  push:
+    branches: [main]
+    paths:
+      - "app/**"
+      - ".github/workflows/pages.yml"
   workflow_dispatch:
 
 permissions:
@@ -16,7 +21,20 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync --locked
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run pytest
+
   deploy:
+    needs: test
     runs-on: ubuntu-latest
     environment:
       name: github-pages

@@ -110,7 +110,7 @@ For each CMA method: out-of-sample R² at or below zero against the historical m
 - **SingStat and Philadelphia Fed licence terms:** not confirmed; only derived or cited figures are shown.
 - **Evidence still pending:** the Shiller 3-month publication lag; Rogoff (1996); Grinold & Kroner (2002) primary source; the linear cash glide path.
 - **Multi-Asset-Allocation's Shiller bond-return timing:** fixed there (PR #1, merged 2026-10-28); no vendored figure changed.
-- **Statutory retirement age 63 (from 1 July 2022):** to verify against the statute; the app offers it as an input without stating the date.
+- **Statutory retirement age 63 (from 1 July 2022):** confirmed by the owner on 2026-10-28.
 - **Issuer documents:** brief amended 2026-10-28 to allow citing the held fund's own documents for that fund's figures (`docs/decisions.md`, Phase 4).
 - **Hedging:** the equity sleeve is unhedged in SGD. A hedged variant is out of scope unless requested.
 - **App:** a static GitHub Pages site (decided, Phase 3); published only after the Phase 4 fixes. The headline is the probability under each assumption set side by side (central with low–high, P2, historical equity + yield-based bonds, historical global as reference), with the sentence that assumption choice moves the result far more than the engine or market randomness; no single headline probability (`docs/decisions.md`, 2026-10-28).

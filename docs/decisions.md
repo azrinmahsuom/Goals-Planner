@@ -641,3 +641,8 @@ JST-derived figures carry "CC BY-NC-SA 4.0" and the citation. No monthly series,
 - GitHub Pages was switched on with the Actions workflow as its source, and `.github/workflows/pages.yml` was run by hand on `main`, publishing `app/` to https://azrinmahsuom.github.io/Goals-Planner/.
 - The live page was checked in a headless browser (desktop, 390px phone, dark mode): no script errors or failed requests, no horizontal scrolling, the four-set headline, and the disclaimer present.
 - Future deploys stay manual: run the workflow after `make all` and review.
+
+### 2026-10-28 — Deploy on push; statutory age 63 confirmed (owner)
+- **Deploy on push:** `.github/workflows/pages.yml` now runs on every push to `main` that changes `app/` (or the workflow itself), and still on demand. A lint-and-test job must pass before the deploy job runs.
+- **Update flow:** `make all`, review the outputs and the drift report, then commit and push. The page redeploys itself (`docs/app_guide.md`).
+- **Statutory retirement age 63** (from 1 July 2022, S 546/2022): confirmed by the owner. The statute text couldn't be retrieved by script, and the reference row records this.
