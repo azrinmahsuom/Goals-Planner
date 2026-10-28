@@ -11,7 +11,7 @@ and the run continues. Only a missing file stops the run.
 
 import argparse
 
-from analysis import manifest, sources, upstream
+from analysis import app_params, manifest, sources, upstream
 from analysis.cma import report as cma_report
 from analysis.cma import run as cma_run
 from analysis.config import FIGURES, ROOT
@@ -55,7 +55,7 @@ def verify() -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    stages = ["fetch", "refresh", "verify", "upstream", "cma", "report", "sim", "all"]
+    stages = ["fetch", "refresh", "verify", "upstream", "cma", "report", "sim", "app", "all"]
     parser.add_argument("stage", nargs="?", default="all", choices=stages)
     stage = parser.parse_args().stage
 
@@ -77,6 +77,9 @@ def main() -> None:
     if stage in ("sim", "all"):
         sim_report.run()
         print(f"Wrote {sim_report.SIM_JSON.relative_to(ROOT)} and docs/simulation.md.")
+    if stage in ("app", "all"):
+        app_params.run()
+        print(f"Wrote {app_params.PARAMS.relative_to(ROOT)}.")
 
 
 if __name__ == "__main__":

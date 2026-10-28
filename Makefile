@@ -1,4 +1,4 @@
-.PHONY: all fetch refresh verify upstream test lint
+.PHONY: all fetch refresh verify upstream app test lint
 
 all:          ## Rebuild everything from raw data, then test
 	uv run python -m analysis.pipeline all
@@ -15,6 +15,9 @@ verify:       ## Check raw files against data/MANIFEST.yaml and write the drift 
 
 upstream:     ## Re-vendor the earlier projects' derived figures at their pinned commits
 	uv run python -m analysis.pipeline upstream
+
+app:          ## Regenerate app/params.js from the committed outputs
+	uv run python -m analysis.pipeline app
 
 test:
 	uv run pytest

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Goals Planner (SGD)</title>
+  <meta name="description" content="An educational calculator: the chance of reaching a savings goal in Singapore dollars under several return assumptions, side by side.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#results">Skip to results</a>
+  <header class="site">
+    <div class="wrap">
+      <h1>Goals Planner <span class="muted">(SGD)</span></h1>
+      <p class="lede">How likely is a savings plan to reach a goal, in today's Singapore dollars? The answer depends heavily on what you assume about future returns, so this page shows several reasonable assumptions side by side instead of one number.</p>
+      <p class="disclaimer" role="note"><strong>Education, not advice.</strong> A personal educational project; not affiliated with any financial institution; not financial advice.</p>
+    </div>
+  </header>
+
+  <main class="wrap layout">
+    <form id="inputs" class="panel" aria-labelledby="inputs-title" novalidate>
+      <h2 id="inputs-title">Your plan</h2>
+
+      <fieldset class="presets">
+        <legend>Start from an example</legend>
+        <div class="chips" id="preset-buttons"></div>
+        <p class="hint">Examples A–D are the hypothetical investors from the project's write-up. Their share mixes come from the earlier project's risk menu and are not age-based advice.</p>
+      </fieldset>
+
+      <div class="field"><label for="initial">Amount invested today (S$)</label><input id="initial" type="number" min="0" step="1000" inputmode="numeric"></div>
+      <div class="field"><label for="monthly">Monthly saving (S$)</label><input id="monthly" type="number" min="0" step="50" inputmode="numeric"></div>
+      <div class="field"><label for="growth">Yearly increase in saving, after inflation (%)</label><input id="growth" type="number" min="0" max="10" step="0.5" inputmode="decimal"></div>
+      <div class="field"><label for="years">Years to the goal</label><input id="years" type="number" min="1" max="40" step="1" inputmode="numeric"></div>
+      <div class="field"><label for="goal">Goal, in today's money (S$)</label><input id="goal" type="number" min="1000" step="10000" inputmode="numeric"></div>
+
+      <fieldset>
+        <legend>Share of shares (equities)</legend>
+        <div class="chips" id="mix-buttons"></div>
+        <div class="field inline"><label for="equity">Equity share: <output id="equity-out" for="equity"></output></label><input id="equity" type="range" min="0" max="100" step="1"></div>
+        <p class="hint">The rest is in Singapore Government Securities. Presets 49%, 59%, 67% and 88% are the earlier project's risk-menu mixes.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>How you buy</legend>
+        <label class="radio"><input type="radio" name="batching" value="monthly" checked> Every month</label>
+        <label class="radio"><input type="radio" name="batching" value="quarterly"> Every three months (fewer minimum fees)</label>
+      </fieldset>
+
+      <div class="field inline"><label for="target">Chance to aim for: <output id="target-out" for="target"></output></label><input id="target" type="range" min="50" max="95" step="5"></div>
+
+      <fieldset>
+        <legend>SRS (optional, simplified)</legend>
+        <label class="radio"><input type="checkbox" id="srs-on"> Save through the Supplementary Retirement Scheme</label>
+        <div id="srs-fields" hidden>
+          <div class="field"><label for="age">Your age today</label><input id="age" type="number" min="18" max="80" step="1" inputmode="numeric"></div>
+          <div class="field"><label for="residency">Residency</label><select id="residency"><option value="citizen">Singapore Citizen or PR</option><option value="foreigner">Foreigner</option></select></div>
+          <div class="field"><label for="rate">Your marginal income tax rate now (%)</label><input id="rate" type="number" min="0" max="24" step="0.5" inputmode="decimal"></div>
+          <div class="field"><label for="other-income">Other taxable income in retirement (S$ a year)</label><input id="other-income" type="number" min="0" step="1000" inputmode="numeric"></div>
+          <div class="field"><label for="sra">Statutory retirement age for your account</label><select id="sra"></select></div>
+          <p class="hint" id="sra-note"></p>
+        </div>
+      </fieldset>
+    </form>
+
+    <section id="results" class="results" aria-live="polite" aria-busy="false">
+      <h2>Chance of reaching the goal</h2>
+      <p class="status" id="status">Calculating…</p>
+      <div class="cards" id="headline"></div>
+      <p class="spread" id="spread"></p>
+      <p class="engine-note" id="engine-note"></p>
+
+      <h3>Monthly saving needed for <span id="target-label"></span> chance</h3>
+      <div class="cards small" id="required"></div>
+      <p class="hint">Holding today's amount, the yearly increase and the horizon fixed; ignores the SRS cap.</p>
+
+      <div class="switch" role="radiogroup" aria-labelledby="switch-label">
+        <span id="switch-label">Charts use:</span>
+        <div class="chips" id="set-switch"></div>
+      </div>
+      <p class="hint" id="set-note"></p>
+
+      <figure class="chart">
+        <figcaption><strong>The range of outcomes widens with time.</strong> Each band holds the middle share of the <span data-param="paths"></span> simulated futures.</figcaption>
+        <div id="fan" class="svg-host"></div>
+        <p class="explain">Returns vary from month to month and good or bad stretches compound, so the longer the horizon, the wider the gap between good and bad outcomes. The dashed line follows the middle of the worst 10% of futures; the dotted line shows the same savings held in cash.</p>
+        <details><summary>Show the numbers</summary><div id="fan-table"></div></details>
+      </figure>
+
+      <figure class="chart">
+        <figcaption><strong>Largest fall along the way.</strong> The biggest drop from a peak in the portfolio's value (ignoring new savings), after inflation.</figcaption>
+        <div id="drawdown" class="svg-host"></div>
+        <p class="explain">This is how deep a slump you would have had to sit through. In half of the simulated futures the largest fall is at least the "typical" value; in 1 in 20 it is worse than the left end.</p>
+        <details><summary>Show the numbers</summary><div id="drawdown-table"></div></details>
+      </figure>
+
+      <section id="srs-results" hidden>
+        <h3>SRS compared with investing the same money outside SRS</h3>
+        <div id="srs-warning" class="warning" role="alert" hidden></div>
+        <div id="srs-table"></div>
+        <p class="hint">The comparison doesn't value the loss of access: money in SRS can't be withdrawn before the statutory retirement age without full tax and a <span data-param="penalty"></span> penalty, while money outside SRS can be used at any time. Simplified: the <span data-param="relief-cap"></span> overall relief cap is assumed not to bind; tax brackets are held at today's values.</p>
+      </section>
+    </section>
+
+    <section class="panel sources" aria-labelledby="sources-title">
+      <h2 id="sources-title">Assumptions and sources</h2>
+      <div id="assumptions"></div>
+      <h3>What this page uses, and on what terms</h3>
+      <div id="licences"></div>
+      <div id="notices"></div>
+      <p class="hint">Method, validation and every rule: the project's <code>docs/cma.md</code>, <code>docs/simulation.md</code> and <code>docs/decisions.md</code>.</p>
+    </section>
+  </main>
+
+  <footer class="site">
+    <div class="wrap">
+      <p><strong>Education, not advice.</strong> A personal educational project; not affiliated with any financial institution; not financial advice. Projections are uncertain; past returns are an imperfect guide. Fee schedules are used as cost data, not as broker recommendations.</p>
+    </div>
+  </footer>
+
+  <div id="tooltip" class="tooltip" role="status" hidden></div>
+  <script src="params.js"></script>
+  <script src="engine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -11,7 +11,7 @@
 | **Question** | If I invest S$X now and S$Y a month in a given mix of global shares and Singapore government bonds, how likely am I to reach S$G (in today's money) by year T? How much would I need to save each month for a given likelihood? |
 | **What it does** | Builds return assumptions from their parts (yields, growth, valuation), checks how well each method would have forecast the past, then simulates thousands of possible futures in real SGD |
 | **Assets** | Global equities held in SGD (unhedged), Singapore Government Securities, SGD cash; inflation as Singapore CPI |
-| **Status** | In progress: return assumptions and simulation engine built ([docs/cma.md](docs/cma.md), [docs/simulation.md](docs/simulation.md)); app next |
+| **Status** | In progress: return assumptions, simulation engine and app built ([docs/cma.md](docs/cma.md), [docs/simulation.md](docs/simulation.md), [docs/app_guide.md](docs/app_guide.md)); not yet published |
 
 ## Key findings
 
@@ -51,7 +51,7 @@ On macOS, keep the project outside iCloud-synced folders (e.g. `~/Developer`). I
 ## Repository layout
 
 ```
-├── app/               Interactive planner (Phase 3)
+├── app/               The planner: a static page (open app/index.html); ships parameters only
 ├── data/              MANIFEST.yaml (committed): URL, date, licence and hash of every source; the data itself is git-ignored
 ├── docs/              Brief, decision log, limitations; return assumptions and simulation method as they are built
 ├── reference/         Hand-researched inputs; upstream/ holds figures reused from the earlier projects, with commit
