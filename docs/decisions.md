@@ -215,7 +215,7 @@ The owner approved the draft on 2026-10-28 with these changes, all made before a
 **Inflation (Singapore CPI)**
 - The annualised SingStat CPI (All Items) inflation over the 30 full calendar years before the as-of date (1996–2025).
 - Alternative not chosen: no primary Singapore source publishes a 10-year inflation forecast that could be found. The Philadelphia Fed SPF's CPI10 is US-only and is reported for context only.
-- **Near-term cross-check, not the assumption:** the median CPI-All Items forecasts for the current and next calendar year from the latest MAS Survey of Professional Forecasters. MAS publishes them quarterly as an `.xlsx` (the September 2026 file is `sep26q3.xlsx`, linked from https://www.mas.gov.sg/monetary-policy/mas-survey-of-professional-forecasters).
+- **Near-term cross-check, not the assumption:** the median CPI-All Items forecasts for the current and next calendar year from the latest MAS Survey of Professional Forecasters. MAS publishes them quarterly as an `.xlsx` (the September 2026 file is `sep26q3.xlsx`, available from mas.gov.sg).
   - MAS returns a web page instead of the file to scripted requests, so it is a **manual download**: the owner saves it from a browser, and `make fetch` records it in the manifest with its hash.
   - The figures are shown next to the inflation CMA with the survey date, and set nothing.
 
@@ -349,3 +349,12 @@ The owner approved the draft on 2026-10-28 with these changes, all made before a
 - **Fix:** a run is used when its first and last values are positive.
 - **Bootstrap:** year-on-year changes into or out of a zero dividend are undefined and are dropped from the resampled rates.
 - **Record:** an earlier message said Germany, Spain and Portugal were excluded for gaps. Only Portugal (runs 1871–1987 and 2005–2015) is excluded for that reason.
+
+### 2026-10-28 — Phase 1 approved; MAS citations; Phase 3 requirement
+**MAS citations:** MAS sources are cited by title with "available from mas.gov.sg", without hyperlinks, per MAS's terms (updated 27 August 2026), which ask for permission before linking to internal pages.
+- Datasets also carry MAS's prescribed Terms of Use notice.
+- Download URLs stay in the code and in `data/MANIFEST.yaml` / `reference/source_checks.csv` as provenance records. These are rendered as plain text, not links.
+
+**Phase 3 requirement (owner, 2026-10-28):**
+- **Default view:** the app's assumption switcher shows three sets side by side: the central CMAs, the bias-corrected equity estimate (P2) and the historical averages. One line says why they differ.
+- **Headline:** the headline output (probability of reaching the goal) must not rest on the central assumptions alone.

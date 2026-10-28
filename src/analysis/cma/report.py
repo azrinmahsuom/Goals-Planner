@@ -438,13 +438,13 @@ Equity rows are real returns; bond rows are nominal (amendment 3). JST data ends
 
 **Why the forward equity figure is below the historical one:** most of the gap is the starting yield. The index dividend yield today is {pct(eq["dividend_yield"], 2)}; the median JST dividend yield over 1870–{fig["jst_end_year"]} was {pct(cmp_["jst_median_dividend_yield"], 2)}. A building-block estimate passes today's low yield straight through; a historical average assumes the past's higher yields recur. The US survey and implied-premium figures are for US assets in USD and are shown for context only.
 
-**Near-term inflation cross-check (MAS Survey of Professional Forecasters):** {mas_spf} Source: MAS, *Survey of Professional Forecasters*, September 2026 results workbook (`sep26q3.xlsx`). Contains information from the MAS Survey of Professional Forecasters, which is made available under the terms of the Monetary Authority of Singapore's Terms of Use of Datasets.
+**Near-term inflation cross-check (MAS Survey of Professional Forecasters):** {mas_spf} Source: MAS, *Survey of Professional Forecasters*, September 2026 results workbook (`sep26q3.xlsx`), available from mas.gov.sg. Contains information from the MAS Survey of Professional Forecasters, which is made available under the terms of the Monetary Authority of Singapore's Terms of Use of Datasets.
 
 ## Sources and licences
 
 - Robert Shiller, online data (`ie_data.xls`): no licence stated; only derived figures are shown.
 - Jordà-Schularick-Taylor Macrohistory Database R6; Jordà et al. (2019), *QJE* 134(3). JST-derived figures are licensed CC BY-NC-SA 4.0.
-- MAS domestic interest rates and SGS benchmark yields: contains information from MAS statistics, made available under the terms of the Monetary Authority of Singapore's Terms of Use of Datasets.
+- MAS, *Domestic Interest Rates* and *SGS Benchmark Prices and Yields* statistics, available from mas.gov.sg: contains information from MAS statistics, made available under the terms of the Monetary Authority of Singapore's Terms of Use of Datasets.
 - SingStat table M213751 (CPI): terms not confirmed; only derived figures are shown.
 - Philadelphia Fed Survey of Professional Forecasters (STOCK10, BOND10, BILL10, CPI10 medians); Damodaran, `histimpl.xls`: cited figures only.
 - FRED GS5, GS10: public domain.

@@ -104,9 +104,9 @@ For each CMA method: out-of-sample R² at or below zero against the historical m
 ## 15. Open questions
 - **Prior repos are private.** The owner will make `ETF-vehicle-selection` and `Multi-Asset-Allocation` public; until then `analysis.upstream` reads them through the signed-in GitHub CLI.
 - **MAS Survey of Professional Forecasters workbook:** the owner saves it by hand. Its CPI medians are then added to `docs/cma.md` as a cross-check.
-- **Linking to MAS pages:** MAS's terms (updated 27 August 2026) ask for permission before hyperlinking to internal pages. Documents cite MAS sources by title for now.
+- **Linking to MAS pages:** decided: cite by title, "available from mas.gov.sg", no hyperlinks.
 - **SingStat and Philadelphia Fed licence terms:** not confirmed; only derived or cited figures are shown.
 - **Evidence still pending:** the Shiller 3-month publication lag; Rogoff (1996); Grinold & Kroner (2002) primary source; the linear cash glide path.
 - **Multi-Asset-Allocation's Shiller bond-return timing** probably has the same one-month offset corrected here (`docs/decisions.md`, 2026-10-28); to raise in that repo.
 - **Hedging:** the equity sleeve is unhedged in SGD. A hedged variant is out of scope unless requested.
-- **App host** (Streamlit Community Cloud vs a static GitHub Pages site): Phase 3.
+- **App host** (Streamlit Community Cloud vs a static GitHub Pages site): Phase 3. The assumption switcher must show central, bias-corrected (P2) and historical side by side by default (`docs/decisions.md`, 2026-10-28).
