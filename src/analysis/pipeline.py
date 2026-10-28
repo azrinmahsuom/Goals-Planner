@@ -15,6 +15,7 @@ from analysis import manifest, sources, upstream
 from analysis.cma import report as cma_report
 from analysis.cma import run as cma_run
 from analysis.config import FIGURES, ROOT
+from analysis.sim import report as sim_report
 from analysis.sources import documents
 
 
@@ -54,7 +55,7 @@ def verify() -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    stages = ["fetch", "refresh", "verify", "upstream", "cma", "report", "all"]
+    stages = ["fetch", "refresh", "verify", "upstream", "cma", "report", "sim", "all"]
     parser.add_argument("stage", nargs="?", default="all", choices=stages)
     stage = parser.parse_args().stage
 
@@ -73,6 +74,9 @@ def main() -> None:
     if stage in ("report", "all"):
         cma_report.run()
         print(f"Wrote {cma_report.FIGURES_JSON.relative_to(ROOT)} and docs/cma.md.")
+    if stage in ("sim", "all"):
+        sim_report.run()
+        print(f"Wrote {sim_report.SIM_JSON.relative_to(ROOT)} and docs/simulation.md.")
 
 
 if __name__ == "__main__":

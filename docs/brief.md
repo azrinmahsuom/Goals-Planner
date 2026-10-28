@@ -109,4 +109,4 @@ For each CMA method: out-of-sample R² at or below zero against the historical m
 - **Evidence still pending:** the Shiller 3-month publication lag; Rogoff (1996); Grinold & Kroner (2002) primary source; the linear cash glide path.
 - **Multi-Asset-Allocation's Shiller bond-return timing** probably has the same one-month offset corrected here (`docs/decisions.md`, 2026-10-28); to raise in that repo.
 - **Hedging:** the equity sleeve is unhedged in SGD. A hedged variant is out of scope unless requested.
-- **App host** (Streamlit Community Cloud vs a static GitHub Pages site): Phase 3. The assumption switcher must show central, bias-corrected (P2) and historical side by side by default (`docs/decisions.md`, 2026-10-28).
+- **App host** (Streamlit Community Cloud vs a static GitHub Pages site): Phase 3. The headline is the probability under each assumption set side by side (central with low–high, P2, historical equity + yield-based bonds, historical global as reference), with the sentence that assumption choice moves the result far more than the engine or market randomness; no single headline probability (`docs/decisions.md`, 2026-10-28).

@@ -14,7 +14,7 @@ import pandas as pd
 
 from analysis import manifest
 from analysis.config import DATA_RAW
-from analysis.sources import damodaran, documents, fred, jst, mas, shiller, singstat, spf
+from analysis.sources import damodaran, documents, fred, french, jst, mas, shiller, singstat, spf
 from analysis.sources.base import RawFile
 
 REGISTRY: list[RawFile] = [
@@ -26,6 +26,7 @@ REGISTRY: list[RawFile] = [
     *spf.FILES,
     *damodaran.FILES,
     *documents.FILES,
+    *french.FILES,
 ]
 
 

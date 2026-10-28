@@ -1,0 +1,13 @@
+component,market,rate,per,minimum,currency,min_trade_value,gst,status,provider,repo,commit,path,locator
+commission,SGX,0.0003,trade_value,0.99,SGD,,yes,verified,moomoo SG (SGX),Multi-Asset-Allocation,a92a325,reference/trading_costs.csv,commission: moomoo SG (SGX)
+platform_fee,SGX,0.0003,trade_value,1.5,SGD,,yes,verified,moomoo SG (SGX),Multi-Asset-Allocation,a92a325,reference/trading_costs.csv,platform_fee: moomoo SG (SGX)
+clearing_fee,SGX,0.000325,trade_value,0.0,SGD,,yes,verified,SGX exchange fees,Multi-Asset-Allocation,a92a325,reference/trading_costs.csv,clearing_fee: SGX exchange fees
+trading_access_fee,SGX,7.5e-05,trade_value,0.0,SGD,,yes,verified,SGX exchange fees,Multi-Asset-Allocation,a92a325,reference/trading_costs.csv,trading_access_fee: SGX exchange fees
+commission,LSE,0.0005,trade_value,4.0,USD,,yes,verified,"IBKR (LSE, USD-denominated, Fixed)",Multi-Asset-Allocation,a92a325,reference/trading_costs.csv,"commission: IBKR (LSE, USD-denominated, Fixed)"
+ptm_levy,LSE,1.5,order,0.0,GBP,10000.0,no,verified,LSE levies,Multi-Asset-Allocation,a92a325,reference/trading_costs.csv,ptm_levy: LSE levies
+gst,SG,0.09,fee,0.0,SGD,,no,verified,Singapore GST,Multi-Asset-Allocation,a92a325,reference/trading_costs.csv,gst: Singapore GST
+fx_conversion,FX,2e-05,trade_value,2.0,USD,,no,verified,IBKR (SGD to USD),ETF-vehicle-selection,4103576,reference/broker_fees.csv,IBKR Pro Tiered FX
+spread,SGX,0.0017905103,trade_value,,SGD,,,verified,A35 (SGX),Multi-Asset-Allocation,a92a325,reference/spread_snapshot.csv,A35.SI bid 1.116 ask 1.118 at 2026-10-27 09:16 SGT
+spread,LSE,0.001,trade_value,,USD,,,"default, not measured",ACWD (LSE),ETF-vehicle-selection,4103576,reports/2026-Q4/ranking.csv,ACWD spread (spread_source = default)
+usd_per_unit,,1.3375,,,USD,,,verified,GBP,Multi-Asset-Allocation,a92a325,reference/fx_rates.csv,GBP as of 2026-10-23
+usd_per_unit,,0.78235,,,USD,,,verified,SGD,Multi-Asset-Allocation,a92a325,reference/fx_rates.csv,SGD as of 2026-10-23

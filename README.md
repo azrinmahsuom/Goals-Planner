@@ -11,7 +11,7 @@
 | **Question** | If I invest S$X now and S$Y a month in a given mix of global shares and Singapore government bonds, how likely am I to reach S$G (in today's money) by year T? How much would I need to save each month for a given likelihood? |
 | **What it does** | Builds return assumptions from their parts (yields, growth, valuation), checks how well each method would have forecast the past, then simulates thousands of possible futures in real SGD |
 | **Assets** | Global equities held in SGD (unhedged), Singapore Government Securities, SGD cash; inflation as Singapore CPI |
-| **Status** | In progress: return assumptions built and under review; simulation and app next |
+| **Status** | In progress: return assumptions and simulation engine built ([docs/cma.md](docs/cma.md), [docs/simulation.md](docs/simulation.md)); app next |
 
 ## Key findings
 

@@ -133,3 +133,26 @@ def test_joint_bootstrap_resamples_years_shared_across_countries():
     # Identical countries draw identical years, so the median equals each country's growth.
     single = scenarios.dividend_growth_draws({"A": common}, reps=200, seed=1)
     assert draws == pytest.approx(single)
+
+
+def _unexplained(doc: str, figures_json: str) -> set[str]:
+    """Numbers in a generated doc that are not in its figures JSON, a reference CSV (as written
+    or as a percentage), a year, or a small integer."""
+    allowed = _numbers(json.loads((REPORTS / figures_json).read_text()))
+    for csv in REFERENCE.rglob("*.csv"):
+        raw = re.findall(r"\d+(?:\.\d+)?", csv.read_text())
+        allowed |= set(raw) | _numbers([float(x) for x in raw])
+    text = re.sub(r"\(\.\./reports/[^)]*\)", "", (DOCS / doc).read_text())  # image paths
+    text = re.sub(r"(?<=\d),(?=\d{3})", "", text)  # 1,234 -> 1234
+    found = set(re.findall(r"(?<![\w.])\d+(?:\.\d+)?", text))
+    return {
+        n
+        for n in found
+        if n not in allowed and not (n.isdigit() and (int(n) <= 30 or 1800 <= int(n) <= 2100))
+    }
+
+
+@pytest.mark.skipif(not (REPORTS / "simulation_figures.json").exists(), reason="not built")
+def test_every_number_in_simulation_doc_is_generated_or_cited():
+    # Method constants stated in decisions.md: paths are in the JSON; seed and replications.
+    assert _unexplained("simulation.md", "simulation_figures.json") <= {"20261028"}

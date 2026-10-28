@@ -4,6 +4,8 @@ Figures from these documents live in reference/fund_documents.csv with page refe
 verify_reference() re-reads each cited page and fails if the quoted text isn't there.
 """
 
+import html
+import re
 from pathlib import Path
 
 import pandas as pd
@@ -74,7 +76,38 @@ FILES = [
         manual=True,  # MAS returns a web page, not the file, to scripted requests
     ),
 ]
+IRAS = "https://www.iras.gov.sg/taxes/individual-income-tax/basics-of-individual-income-tax/"
+IRAS_PAGES = {
+    "IRAS_srs_contributions.html": (
+        "SRS contributions and tax relief",
+        "special-tax-schemes/srs-contributions",
+    ),
+    "IRAS_srs_withdrawals.html": (
+        "Tax on SRS withdrawals",
+        "special-tax-schemes/tax-on-srs-withdrawals",
+    ),
+    "IRAS_tax_rates.html": (
+        "Individual income tax rates",
+        "tax-residency-and-tax-rates/individual-income-tax-rates",
+    ),
+}
+FILES += [
+    RawFile(
+        source="documents",
+        filename=filename,
+        name=f"IRAS: {title}",
+        landing_page=IRAS + path,
+        series="Web page (HTML), saved for citation; rules in reference/srs_rules.csv",
+        licence="IRAS website content; cited by title. Not redistributed.",
+        redistributable=False,
+        units="HTML; quoted rules checked by verify_reference().",
+        resolve_url=fixed(IRAS + path),
+        describe=lambda path: (len(path.read_bytes()), "n/a", "n/a"),
+    )
+    for filename, (title, path) in IRAS_PAGES.items()
+]
 FACTSHEET, ANNUAL_REPORT = FILES[0].path, FILES[1].path
+CONTRIBUTIONS_PAGE, WITHDRAWALS_PAGE, RATES_PAGE = (FILES[i].path for i in (3, 4, 5))
 
 # (document, PDF page (1-based), text that must appear on it, reference fields it supports).
 # The annual report's PDF page 802 is printed page 799; PDF page 1136 is printed page 1133.
@@ -95,6 +128,30 @@ CHECKS = [
         ["withholding_tax_fy2026", "withholding_tax_fy2025"],
     ),
     (ANNUAL_REPORT, 1136, "Dividend income is shown gross of any", []),
+    (CONTRIBUTIONS_PAGE, None, "$15,300", ["contribution_cap_citizen_spr"]),
+    (CONTRIBUTIONS_PAGE, None, "$35,700", ["contribution_cap_foreigner"]),
+    (
+        CONTRIBUTIONS_PAGE,
+        None,
+        "personal income tax relief cap of $80,000",
+        ["personal_relief_cap"],
+    ),
+    (
+        WITHDRAWALS_PAGE,
+        None,
+        "statutory retirement age (64 effective from 1 Jul 2026)",
+        ["statutory_retirement_age"],
+    ),
+    (WITHDRAWALS_PAGE, None, "50% of withdrawal sum", ["taxable_share_penalty_free"]),
+    (WITHDRAWALS_PAGE, None, "100% of withdrawal sum", ["taxable_share_premature"]),
+    (
+        WITHDRAWALS_PAGE,
+        None,
+        "early withdrawals are fully subject to tax and attract a 5% penalty",
+        ["premature_penalty"],
+    ),
+    (WITHDRAWALS_PAGE, None, "over 10 years", ["withdrawal_period"]),
+    (RATES_PAGE, None, "In excess of $1,000,000", ["resident tax bands"]),
 ]
 
 
@@ -102,8 +159,12 @@ def _normalise(text: str) -> str:
     return " ".join(text.split())
 
 
-def page_text(path: Path, page: int) -> str:
-    """Whitespace-normalised text of one PDF page (1-based)."""
+def page_text(path: Path, page: int | None) -> str:
+    """Whitespace-normalised text of one PDF page (1-based), or of a whole HTML page."""
+    if page is None:
+        raw = path.read_text(encoding="utf-8", errors="ignore")
+        raw = re.sub(r"<script.*?</script>|<style.*?</style>", " ", raw, flags=re.S)
+        return _normalise(html.unescape(re.sub(r"<[^>]+>", " ", raw)))
     return _normalise(pypdf.PdfReader(path).pages[page - 1].extract_text() or "")
 
 
@@ -115,7 +176,8 @@ def verify_reference() -> int:
     """Check every quoted figure is on its cited page; return the number of checks passed."""
     for doc, page, needle, _fields in CHECKS:
         if _normalise(needle) not in page_text(doc, page):
-            raise ValueError(f"{doc.name} page {page} no longer contains {needle!r}")
+            where = doc.name if page is None else f"{doc.name} page {page}"
+            raise ValueError(f"{where} no longer contains {needle!r}")
     return len(CHECKS)
 
 

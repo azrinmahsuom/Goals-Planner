@@ -32,6 +32,48 @@ files:
     end: n/a
     units: PDF; figures checked against reference/fund_documents.csv.
     sha256: 12e13c9b516bdfebe5c358dce4e03c04c28d0505ddd2bd25bc38809ca959c2c3
+  documents/IRAS_srs_contributions.html:
+    source: 'IRAS: SRS contributions and tax relief'
+    url: https://www.iras.gov.sg/taxes/individual-income-tax/basics-of-individual-income-tax/special-tax-schemes/srs-contributions
+    landing_page: https://www.iras.gov.sg/taxes/individual-income-tax/basics-of-individual-income-tax/special-tax-schemes/srs-contributions
+    series: Web page (HTML), saved for citation; rules in reference/srs_rules.csv
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: IRAS website content; cited by title. Not redistributed.
+    redistributable: false
+    rows: 275562
+    start: n/a
+    end: n/a
+    units: HTML; quoted rules checked by verify_reference().
+    sha256: 13c8db789fad042d1efd712195cf3a79808c5feac7a2ba354634db0de5a2bfa3
+  documents/IRAS_srs_withdrawals.html:
+    source: 'IRAS: Tax on SRS withdrawals'
+    url: https://www.iras.gov.sg/taxes/individual-income-tax/basics-of-individual-income-tax/special-tax-schemes/tax-on-srs-withdrawals
+    landing_page: https://www.iras.gov.sg/taxes/individual-income-tax/basics-of-individual-income-tax/special-tax-schemes/tax-on-srs-withdrawals
+    series: Web page (HTML), saved for citation; rules in reference/srs_rules.csv
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: IRAS website content; cited by title. Not redistributed.
+    redistributable: false
+    rows: 302924
+    start: n/a
+    end: n/a
+    units: HTML; quoted rules checked by verify_reference().
+    sha256: c3ab3844fed92e0fe4b73f4b81430cea17debda58f1d89afb105fa326110d50e
+  documents/IRAS_tax_rates.html:
+    source: 'IRAS: Individual income tax rates'
+    url: https://www.iras.gov.sg/taxes/individual-income-tax/basics-of-individual-income-tax/tax-residency-and-tax-rates/individual-income-tax-rates
+    landing_page: https://www.iras.gov.sg/taxes/individual-income-tax/basics-of-individual-income-tax/tax-residency-and-tax-rates/individual-income-tax-rates
+    series: Web page (HTML), saved for citation; rules in reference/srs_rules.csv
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: IRAS website content; cited by title. Not redistributed.
+    redistributable: false
+    rows: 269959
+    start: n/a
+    end: n/a
+    units: HTML; quoted rules checked by verify_reference().
+    sha256: 95dbfebb4fd626a40cb46eaadf258c455d4d7077f08ad6d39eba42dcab056e1a
   documents/SPDR_I_annual_report.pdf:
     source: SSGA SPDR ETFs Europe I plc, annual report and audited financial statements
     url: https://www.ssga.com/library-content/products/fund-docs/etfs/emea/1-GENERIC-EN-AR-IRISH-SPDR-I.pdf
@@ -46,6 +88,20 @@ files:
     end: n/a
     units: PDF; figures checked against reference/fund_documents.csv.
     sha256: f08894e920ac9f919d4e69e376fa400b10c470a91fe728acf5772ff582687291
+  fred/DEXSIUS.csv:
+    source: 'FRED: Singapore dollars to one US dollar, noon buying rate'
+    url: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXSIUS
+    landing_page: https://fred.stlouisfed.org/series/DEXSIUS
+    series: DEXSIUS
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: Public domain, citation requested (FRED series page).
+    redistributable: true
+    rows: 11951
+    start: 1981-01
+    end: 2026-10
+    units: Daily, SGD per USD
+    sha256: 99d25cfa5ff7b30f51bcb3128e2f4768f812e40303710781479d10a0dc98ad94
   fred/EXSIUS.csv:
     source: 'FRED: Singapore dollars to one US dollar'
     url: https://fred.stlouisfed.org/graph/fredgraph.csv?id=EXSIUS
@@ -88,6 +144,21 @@ files:
     end: 2026-09
     units: Monthly average, % p.a.
     sha256: f768d61bbd7e297d5c11c52e2a50e5338bf6fe704e3f2c5f135dbbca160ae5d9
+  french/Developed_3_Factors_CSV.zip:
+    source: 'Kenneth French data library: Developed markets 3 factors (monthly)'
+    url: https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Developed_3_Factors_CSV.zip
+    landing_page: https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html
+    series: Developed_3_Factors (Mkt-RF, RF)
+    retrieved: '2026-10-28'
+    manual_download: false
+    licence: No licence stated by the source; free download. Treated as not redistributable.
+    redistributable: false
+    rows: 435
+    start: 1990-07
+    end: 2026-09
+    units: Monthly, % per month, USD. Market = Mkt-RF + RF (value-weighted developed
+      markets).
+    sha256: 3f99cfdeddd1914e3d8f84ce51d775aeed3e98ed0c290957e88f4df9912f8a23
   jst/JSTdatasetR6.xlsx:
     source: Jordà-Schularick-Taylor Macrohistory Database
     url: https://www.macrohistory.net/app/download/9834512569/JSTdatasetR6.xlsx?t=1763503850

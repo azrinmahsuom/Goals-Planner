@@ -479,3 +479,20 @@ The equity shares are `Multi-Asset-Allocation`'s risk-menu mixes: 59% is the bin
   - the timing of relief reinvestment
   - constant real tax brackets and fee minimums
   - the default ACWD spread
+
+### 2026-10-28 — Phase 2 implementation notes (facts found while building, not choices)
+- **H-SGD starts in July 1998, not February.** MAS's 10-year SGS benchmark yield begins on 29 June 1998, so the first month-end yield at 8.18 years is June 1998 and the first monthly return is July 1998. The pre-registration's "February 1998" assumed the 5-year series' start.
+- **No trading cost on a zero amount:** when an order amount is zero (no initial lump sum, or a month with nothing to invest), no fee is charged.
+- **Nearest-mix ties:** the distances are rounded to 10 decimal places before the tie rule applies, so that floating-point error (0.59 − 0.54 vs 0.54 − 0.49) can't decide a tie.
+- **SRS premature-penalty citation:** the IRAS quote checked is "early withdrawals are fully subject to tax and attract a 5% penalty" (Tax on SRS withdrawals). The wording first recorded came from the contributions page.
+
+### 2026-10-28 — Added at the Phase 2 checkpoint: fourth assumption set and headline rule (owner)
+**Fourth set, "historical equity + yield-based bonds":** historical global equities (6.3%, `Multi-Asset-Allocation`'s 100% equity row), with SGS and cash from the forward CMAs.
+- **Motivation:** Phase 1 found that the starting yield forecasts 10-year bond returns well (out-of-sample R² 0.91 US, 0.78 JST pooled). Equity methods, by contrast, add little over the long-run mean. So the bond leg is best taken from today's yields, while a historical equity figure is a defensible alternative to the dividend-based estimate.
+- It was added after the Phase 2 results had been seen, which is why it is labelled as added at the checkpoint. Pure historical (global JST bonds) stays as a reference.
+
+**Headline rule (Phase 2 docs, carried to Phase 3):**
+- There is no single headline probability. The headline is the chance of reaching the goal under each assumption set, side by side: central (with low–high), bias-corrected equity (P2), historical equity + yield-based bonds, and historical global as a reference.
+- A sentence states that assumption choice moves the result far more than the engine or market randomness. It is generated from the measured spreads: across assumption sets, across engines, and the Monte Carlo standard error.
+
+**SRS:** the comparison states that it doesn't value the loss of access to SRS money before the statutory retirement age.

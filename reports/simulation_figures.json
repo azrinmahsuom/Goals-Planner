@@ -1,0 +1,1584 @@
+{
+  "paths": 10000,
+  "seed": 20261028,
+  "histories": {
+    "H-SGD": {
+      "start": "1998-07",
+      "end": "2026-09",
+      "months": 339
+    },
+    "H-US": {
+      "start": "1871-02",
+      "end": "2026-06",
+      "months": 1865
+    }
+  },
+  "cma_sets": {
+    "low": {
+      "equity": 0.01366,
+      "sgs": 0.001791,
+      "cash": -0.004857
+    },
+    "central": {
+      "equity": 0.024013,
+      "sgs": 0.00675,
+      "cash": -0.001117
+    },
+    "high": {
+      "equity": 0.034365,
+      "sgs": 0.011708,
+      "cash": 0.002624
+    },
+    "P2": {
+      "equity": 0.032132,
+      "sgs": 0.00675,
+      "cash": -0.001117
+    },
+    "historical": {
+      "equity": 0.063,
+      "sgs": 0.034,
+      "cash": 0.002544
+    },
+    "hist_eq_yield": {
+      "equity": 0.063,
+      "sgs": 0.00675,
+      "cash": -0.001117
+    }
+  },
+  "annual_cost": {
+    "A": 0.003175,
+    "B": 0.002989,
+    "C": 0.002913,
+    "D": 0.003045
+  },
+  "examples": {
+    "A": {
+      "age": 30,
+      "initial": 10000,
+      "monthly": 800,
+      "growth": 0.02,
+      "years": 25,
+      "goal": 600000,
+      "equity": 0.88
+    },
+    "B": {
+      "age": 45,
+      "initial": 150000,
+      "monthly": 1500,
+      "growth": 0.0,
+      "years": 15,
+      "goal": 600000,
+      "equity": 0.59
+    },
+    "C": {
+      "age": 55,
+      "initial": 400000,
+      "monthly": 0,
+      "growth": 0.0,
+      "years": 10,
+      "goal": 500000,
+      "equity": 0.49
+    },
+    "D": {
+      "age": 40,
+      "initial": 0,
+      "monthly": 1275,
+      "growth": 0.0,
+      "years": 24,
+      "goal": 500000,
+      "equity": 0.67,
+      "srs": true
+    }
+  },
+  "grid": {
+    "A": {
+      "Bootstrap, SGD era, 24-month blocks (main)": {
+        "low": {
+          "p_goal": 0.0821,
+          "terminal_p10": 227805.06299,
+          "terminal_p50": 373225.582269,
+          "terminal_p90": 581047.846521,
+          "drawdown_median": -0.526159,
+          "drawdown_p5": -0.760441,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "central": {
+          "p_goal": 0.1596,
+          "terminal_p10": 252911.764405,
+          "terminal_p50": 421193.086152,
+          "terminal_p90": 665362.486381,
+          "drawdown_median": -0.516607,
+          "drawdown_p5": -0.728122,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "high": {
+          "p_goal": 0.2696,
+          "terminal_p10": 282319.169845,
+          "terminal_p50": 477083.878249,
+          "terminal_p90": 764045.124915,
+          "drawdown_median": -0.496313,
+          "drawdown_p5": -0.696775,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "P2": {
+          "p_goal": 0.2387,
+          "terminal_p10": 274050.163549,
+          "terminal_p50": 461205.831004,
+          "terminal_p90": 736390.963126,
+          "drawdown_median": -0.500923,
+          "drawdown_p5": -0.70542,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "historical": {
+          "p_goal": 0.6328,
+          "terminal_p10": 396007.328184,
+          "terminal_p50": 696484.263468,
+          "terminal_p90": 1161304.048382,
+          "drawdown_median": -0.451969,
+          "drawdown_p5": -0.623374,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.595,
+          "terminal_p10": 379365.249742,
+          "terminal_p50": 664278.649364,
+          "terminal_p90": 1101866.865672,
+          "drawdown_median": -0.457493,
+          "drawdown_p5": -0.631537,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        }
+      },
+      "Bootstrap, US 1871-, 24-month blocks": {
+        "low": {
+          "p_goal": 0.1219,
+          "terminal_p10": 217168.72169,
+          "terminal_p50": 368942.886428,
+          "terminal_p90": 631995.735816,
+          "drawdown_median": -0.528464,
+          "drawdown_p5": -0.791974,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "central": {
+          "p_goal": 0.1971,
+          "terminal_p10": 240842.442323,
+          "terminal_p50": 416367.833739,
+          "terminal_p90": 724703.97673,
+          "drawdown_median": -0.498558,
+          "drawdown_p5": -0.765306,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "high": {
+          "p_goal": 0.2968,
+          "terminal_p10": 268612.393663,
+          "terminal_p50": 471897.272983,
+          "terminal_p90": 835002.980075,
+          "drawdown_median": -0.470779,
+          "drawdown_p5": -0.740888,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "P2": {
+          "p_goal": 0.2707,
+          "terminal_p10": 260655.198914,
+          "terminal_p50": 456460.790429,
+          "terminal_p90": 803442.688509,
+          "drawdown_median": -0.477634,
+          "drawdown_p5": -0.746702,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "historical": {
+          "p_goal": 0.613,
+          "terminal_p10": 374389.847225,
+          "terminal_p50": 689383.439732,
+          "terminal_p90": 1272542.273604,
+          "drawdown_median": -0.415386,
+          "drawdown_p5": -0.713072,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.5784,
+          "terminal_p10": 358591.118524,
+          "terminal_p50": 657262.482962,
+          "terminal_p90": 1207553.641864,
+          "drawdown_median": -0.421754,
+          "drawdown_p5": -0.71572,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        }
+      },
+      "Student-t, SGD era": {
+        "low": {
+          "p_goal": 0.0875,
+          "terminal_p10": 233401.12692,
+          "terminal_p50": 363060.412515,
+          "terminal_p90": 579024.370948,
+          "drawdown_median": -0.436585,
+          "drawdown_p5": -0.694383,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "central": {
+          "p_goal": 0.1547,
+          "terminal_p10": 259598.86848,
+          "terminal_p50": 409546.5848,
+          "terminal_p90": 664025.045925,
+          "drawdown_median": -0.398148,
+          "drawdown_p5": -0.647045,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "high": {
+          "p_goal": 0.2532,
+          "terminal_p10": 289533.91807,
+          "terminal_p50": 463671.757052,
+          "terminal_p90": 764175.679076,
+          "drawdown_median": -0.365137,
+          "drawdown_p5": -0.596997,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "P2": {
+          "p_goal": 0.2261,
+          "terminal_p10": 281364.025009,
+          "terminal_p50": 448519.005787,
+          "terminal_p90": 736379.35904,
+          "drawdown_median": -0.372745,
+          "drawdown_p5": -0.610633,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "historical": {
+          "p_goal": 0.6148,
+          "terminal_p10": 407650.485797,
+          "terminal_p50": 674980.390869,
+          "terminal_p90": 1164067.164791,
+          "drawdown_median": -0.298607,
+          "drawdown_p5": -0.483547,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.5703,
+          "terminal_p10": 390523.662408,
+          "terminal_p50": 644049.786929,
+          "terminal_p90": 1105044.099032,
+          "drawdown_median": -0.304976,
+          "drawdown_p5": -0.496063,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        }
+      },
+      "Bootstrap, SGD era, n^(1/3) blocks": {
+        "low": {
+          "p_goal": 0.1115,
+          "terminal_p10": 221466.742125,
+          "terminal_p50": 368067.505258,
+          "terminal_p90": 613923.124796,
+          "drawdown_median": -0.495751,
+          "drawdown_p5": -0.768297,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "central": {
+          "p_goal": 0.1897,
+          "terminal_p10": 245662.962434,
+          "terminal_p50": 415589.272828,
+          "terminal_p90": 703762.913016,
+          "drawdown_median": -0.466405,
+          "drawdown_p5": -0.73615,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "high": {
+          "p_goal": 0.2896,
+          "terminal_p10": 272913.407883,
+          "terminal_p50": 471219.424339,
+          "terminal_p90": 811995.253596,
+          "drawdown_median": -0.440941,
+          "drawdown_p5": -0.705677,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "P2": {
+          "p_goal": 0.2611,
+          "terminal_p10": 265578.066238,
+          "terminal_p50": 455429.494559,
+          "terminal_p90": 782361.461392,
+          "drawdown_median": -0.446858,
+          "drawdown_p5": -0.714539,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "historical": {
+          "p_goal": 0.617,
+          "terminal_p10": 380609.189553,
+          "terminal_p50": 689252.981687,
+          "terminal_p90": 1238662.316418,
+          "drawdown_median": -0.388028,
+          "drawdown_p5": -0.62544,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.5776,
+          "terminal_p10": 364816.781618,
+          "terminal_p50": 657234.352318,
+          "terminal_p90": 1176040.249961,
+          "drawdown_median": -0.393589,
+          "drawdown_p5": -0.633263,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        }
+      },
+      "Bootstrap, SGD era, 60-month blocks": {
+        "low": {
+          "p_goal": 0.0484,
+          "terminal_p10": 241716.675255,
+          "terminal_p50": 371327.83176,
+          "terminal_p90": 543931.073709,
+          "drawdown_median": -0.526159,
+          "drawdown_p5": -0.722197,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "central": {
+          "p_goal": 0.1239,
+          "terminal_p10": 269579.828558,
+          "terminal_p50": 419068.259317,
+          "terminal_p90": 622059.826857,
+          "drawdown_median": -0.518206,
+          "drawdown_p5": -0.68811,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "high": {
+          "p_goal": 0.2347,
+          "terminal_p10": 302282.789056,
+          "terminal_p50": 474031.678979,
+          "terminal_p90": 713696.985754,
+          "drawdown_median": -0.5102,
+          "drawdown_p5": -0.659127,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "P2": {
+          "p_goal": 0.1988,
+          "terminal_p10": 293219.524282,
+          "terminal_p50": 458735.634423,
+          "terminal_p90": 688058.95059,
+          "drawdown_median": -0.512342,
+          "drawdown_p5": -0.66658,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "historical": {
+          "p_goal": 0.6466,
+          "terminal_p10": 427538.810012,
+          "terminal_p50": 692733.072064,
+          "terminal_p90": 1078260.760907,
+          "drawdown_median": -0.486842,
+          "drawdown_p5": -0.584885,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.6012,
+          "terminal_p10": 408898.121121,
+          "terminal_p50": 660534.087679,
+          "terminal_p90": 1024256.371766,
+          "drawdown_median": -0.489817,
+          "drawdown_p5": -0.592544,
+          "contributed": 317490.877343,
+          "trading_costs_median": 3454.294965
+        }
+      }
+    },
+    "B": {
+      "Bootstrap, SGD era, 24-month blocks (main)": {
+        "low": {
+          "p_goal": 0.1265,
+          "terminal_p10": 334420.596933,
+          "terminal_p50": 466919.37826,
+          "terminal_p90": 618280.006103,
+          "drawdown_median": -0.302375,
+          "drawdown_p5": -0.531202,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "central": {
+          "p_goal": 0.2345,
+          "terminal_p10": 361938.400666,
+          "terminal_p50": 507811.101801,
+          "terminal_p90": 675463.303678,
+          "drawdown_median": -0.281554,
+          "drawdown_p5": -0.501342,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "high": {
+          "p_goal": 0.3641,
+          "terminal_p10": 391887.21392,
+          "terminal_p50": 552792.82908,
+          "terminal_p90": 738682.794435,
+          "drawdown_median": -0.266772,
+          "drawdown_p5": -0.473903,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "P2": {
+          "p_goal": 0.3058,
+          "terminal_p10": 378967.972059,
+          "terminal_p50": 533670.667603,
+          "terminal_p90": 711669.183022,
+          "drawdown_median": -0.272911,
+          "drawdown_p5": -0.48526,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "historical": {
+          "p_goal": 0.7618,
+          "terminal_p10": 508395.155636,
+          "terminal_p50": 728441.574571,
+          "terminal_p90": 986482.494781,
+          "drawdown_median": -0.223632,
+          "drawdown_p5": -0.401292,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.6059,
+          "terminal_p10": 452895.198511,
+          "terminal_p50": 644955.481712,
+          "terminal_p90": 868010.095693,
+          "drawdown_median": -0.240174,
+          "drawdown_p5": -0.431576,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        }
+      },
+      "Bootstrap, US 1871-, 24-month blocks": {
+        "low": {
+          "p_goal": 0.1958,
+          "terminal_p10": 311166.166752,
+          "terminal_p50": 462941.29427,
+          "terminal_p90": 681141.576618,
+          "drawdown_median": -0.342068,
+          "drawdown_p5": -0.592369,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "central": {
+          "p_goal": 0.285,
+          "terminal_p10": 336079.890239,
+          "terminal_p50": 503623.817317,
+          "terminal_p90": 744848.533234,
+          "drawdown_median": -0.319365,
+          "drawdown_p5": -0.561064,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "high": {
+          "p_goal": 0.3953,
+          "terminal_p10": 364378.667227,
+          "terminal_p50": 548276.841909,
+          "terminal_p90": 815677.003533,
+          "drawdown_median": -0.301066,
+          "drawdown_p5": -0.532114,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "P2": {
+          "p_goal": 0.3486,
+          "terminal_p10": 352414.532155,
+          "terminal_p50": 529020.323856,
+          "terminal_p90": 785180.44085,
+          "drawdown_median": -0.310346,
+          "drawdown_p5": -0.543656,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "historical": {
+          "p_goal": 0.7091,
+          "terminal_p10": 470955.374916,
+          "terminal_p50": 722558.535971,
+          "terminal_p90": 1092809.148186,
+          "drawdown_median": -0.254151,
+          "drawdown_p5": -0.476057,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.578,
+          "terminal_p10": 420154.373819,
+          "terminal_p50": 639363.359757,
+          "terminal_p90": 960157.726522,
+          "drawdown_median": -0.269369,
+          "drawdown_p5": -0.509205,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        }
+      },
+      "Student-t, SGD era": {
+        "low": {
+          "p_goal": 0.1359,
+          "terminal_p10": 338173.134242,
+          "terminal_p50": 458989.821186,
+          "terminal_p90": 628875.815617,
+          "drawdown_median": -0.262612,
+          "drawdown_p5": -0.464579,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "central": {
+          "p_goal": 0.2264,
+          "terminal_p10": 365851.38864,
+          "terminal_p50": 499279.106091,
+          "terminal_p90": 687326.570784,
+          "drawdown_median": -0.237877,
+          "drawdown_p5": -0.424705,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "high": {
+          "p_goal": 0.3432,
+          "terminal_p10": 395887.364564,
+          "terminal_p50": 543716.509299,
+          "terminal_p90": 751713.257826,
+          "drawdown_median": -0.217139,
+          "drawdown_p5": -0.387243,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "P2": {
+          "p_goal": 0.2938,
+          "terminal_p10": 383096.865457,
+          "terminal_p50": 524924.059982,
+          "terminal_p90": 724170.074908,
+          "drawdown_median": -0.225498,
+          "drawdown_p5": -0.401925,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "historical": {
+          "p_goal": 0.7561,
+          "terminal_p10": 514840.429968,
+          "terminal_p50": 716174.913767,
+          "terminal_p90": 1004489.360976,
+          "drawdown_median": -0.169595,
+          "drawdown_p5": -0.297494,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.5838,
+          "terminal_p10": 458137.862279,
+          "terminal_p50": 633779.410575,
+          "terminal_p90": 884299.678521,
+          "drawdown_median": -0.187655,
+          "drawdown_p5": -0.331274,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        }
+      },
+      "Bootstrap, SGD era, n^(1/3) blocks": {
+        "low": {
+          "p_goal": 0.1515,
+          "terminal_p10": 331528.08697,
+          "terminal_p50": 463376.929188,
+          "terminal_p90": 638941.594996,
+          "drawdown_median": -0.287492,
+          "drawdown_p5": -0.533869,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "central": {
+          "p_goal": 0.2514,
+          "terminal_p10": 358662.203405,
+          "terminal_p50": 504166.306455,
+          "terminal_p90": 698624.627311,
+          "drawdown_median": -0.268669,
+          "drawdown_p5": -0.505146,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "high": {
+          "p_goal": 0.3719,
+          "terminal_p10": 387976.517683,
+          "terminal_p50": 549023.001468,
+          "terminal_p90": 764395.204435,
+          "drawdown_median": -0.252355,
+          "drawdown_p5": -0.477064,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "P2": {
+          "p_goal": 0.3202,
+          "terminal_p10": 375571.303936,
+          "terminal_p50": 529933.814985,
+          "terminal_p90": 736427.932305,
+          "drawdown_median": -0.259043,
+          "drawdown_p5": -0.489584,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "historical": {
+          "p_goal": 0.7485,
+          "terminal_p10": 502926.498456,
+          "terminal_p50": 723783.189362,
+          "terminal_p90": 1022459.553927,
+          "drawdown_median": -0.216297,
+          "drawdown_p5": -0.400554,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.5967,
+          "terminal_p10": 448218.244276,
+          "terminal_p50": 640484.172737,
+          "terminal_p90": 899711.984114,
+          "drawdown_median": -0.22819,
+          "drawdown_p5": -0.431289,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        }
+      },
+      "Bootstrap, SGD era, 60-month blocks": {
+        "low": {
+          "p_goal": 0.083,
+          "terminal_p10": 348987.453163,
+          "terminal_p50": 465673.082032,
+          "terminal_p90": 590977.518069,
+          "drawdown_median": -0.299328,
+          "drawdown_p5": -0.497619,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "central": {
+          "p_goal": 0.1954,
+          "terminal_p10": 378095.459328,
+          "terminal_p50": 506630.238486,
+          "terminal_p90": 645379.666551,
+          "drawdown_median": -0.278832,
+          "drawdown_p5": -0.468113,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "high": {
+          "p_goal": 0.3433,
+          "terminal_p10": 409910.94101,
+          "terminal_p50": 551327.191954,
+          "terminal_p90": 704578.02525,
+          "drawdown_median": -0.265693,
+          "drawdown_p5": -0.442694,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "P2": {
+          "p_goal": 0.2774,
+          "terminal_p10": 396282.690245,
+          "terminal_p50": 532224.955023,
+          "terminal_p90": 679411.266509,
+          "drawdown_median": -0.269514,
+          "drawdown_p5": -0.452847,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "historical": {
+          "p_goal": 0.7897,
+          "terminal_p10": 534296.871535,
+          "terminal_p50": 725733.373149,
+          "terminal_p90": 939616.280891,
+          "drawdown_median": -0.220269,
+          "drawdown_p5": -0.372681,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.6189,
+          "terminal_p10": 474579.182018,
+          "terminal_p50": 642470.207648,
+          "terminal_p90": 827263.237328,
+          "drawdown_median": -0.238733,
+          "drawdown_p5": -0.40124,
+          "contributed": 420000.0,
+          "trading_costs_median": 2398.538123
+        }
+      }
+    },
+    "C": {
+      "Bootstrap, SGD era, 24-month blocks (main)": {
+        "low": {
+          "p_goal": 0.2828,
+          "terminal_p10": 312466.408308,
+          "terminal_p50": 438731.607417,
+          "terminal_p90": 577866.28578,
+          "drawdown_median": -0.234691,
+          "drawdown_p5": -0.420864,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "central": {
+          "p_goal": 0.4059,
+          "terminal_p10": 336773.869883,
+          "terminal_p50": 472902.539301,
+          "terminal_p90": 622905.21006,
+          "drawdown_median": -0.221329,
+          "drawdown_p5": -0.397129,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "high": {
+          "p_goal": 0.5284,
+          "terminal_p10": 362744.407476,
+          "terminal_p50": 509411.933057,
+          "terminal_p90": 671027.769622,
+          "drawdown_median": -0.213117,
+          "drawdown_p5": -0.374594,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "P2": {
+          "p_goal": 0.4722,
+          "terminal_p10": 350032.982824,
+          "terminal_p50": 491582.192645,
+          "terminal_p90": 647558.164554,
+          "drawdown_median": -0.216236,
+          "drawdown_p5": -0.384445,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "historical": {
+          "p_goal": 0.8468,
+          "terminal_p10": 463407.067309,
+          "terminal_p50": 650831.668194,
+          "terminal_p90": 857358.817769,
+          "drawdown_median": -0.176785,
+          "drawdown_p5": -0.308842,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.6894,
+          "terminal_p10": 404327.562715,
+          "terminal_p50": 568065.132317,
+          "terminal_p90": 748558.353808,
+          "drawdown_median": -0.19401,
+          "drawdown_p5": -0.343923,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        }
+      },
+      "Bootstrap, US 1871-, 24-month blocks": {
+        "low": {
+          "p_goal": 0.325,
+          "terminal_p10": 281537.622097,
+          "terminal_p50": 434203.987091,
+          "terminal_p90": 644968.254609,
+          "drawdown_median": -0.257546,
+          "drawdown_p5": -0.488063,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "central": {
+          "p_goal": 0.4163,
+          "terminal_p10": 303467.833882,
+          "terminal_p50": 468012.016004,
+          "terminal_p90": 695253.716752,
+          "drawdown_median": -0.242352,
+          "drawdown_p5": -0.462478,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "high": {
+          "p_goal": 0.5106,
+          "terminal_p10": 326900.485211,
+          "terminal_p50": 504141.665859,
+          "terminal_p90": 748932.13388,
+          "drawdown_median": -0.233149,
+          "drawdown_p5": -0.437393,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "P2": {
+          "p_goal": 0.4618,
+          "terminal_p10": 315460.871342,
+          "terminal_p50": 486495.26236,
+          "terminal_p90": 722750.445397,
+          "drawdown_median": -0.238999,
+          "drawdown_p5": -0.450414,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "historical": {
+          "p_goal": 0.7804,
+          "terminal_p10": 417658.266152,
+          "terminal_p50": 644095.31651,
+          "terminal_p90": 956930.812984,
+          "drawdown_median": -0.193089,
+          "drawdown_p5": -0.379298,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.6441,
+          "terminal_p10": 364632.932245,
+          "terminal_p50": 562273.599299,
+          "terminal_p90": 835624.551804,
+          "drawdown_median": -0.21584,
+          "drawdown_p5": -0.419584,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        }
+      },
+      "Student-t, SGD era": {
+        "low": {
+          "p_goal": 0.2594,
+          "terminal_p10": 320438.690677,
+          "terminal_p50": 430189.995416,
+          "terminal_p90": 583912.536104,
+          "drawdown_median": -0.193783,
+          "drawdown_p5": -0.359284,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "central": {
+          "p_goal": 0.3754,
+          "terminal_p10": 345391.094665,
+          "terminal_p50": 463699.161851,
+          "terminal_p90": 629411.272258,
+          "drawdown_median": -0.175615,
+          "drawdown_p5": -0.327979,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "high": {
+          "p_goal": 0.4982,
+          "terminal_p10": 372054.226952,
+          "terminal_p50": 499504.024168,
+          "terminal_p90": 678028.18831,
+          "drawdown_median": -0.160749,
+          "drawdown_p5": -0.299589,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "P2": {
+          "p_goal": 0.4371,
+          "terminal_p10": 359024.993325,
+          "terminal_p50": 482024.160078,
+          "terminal_p90": 654296.838732,
+          "drawdown_median": -0.167276,
+          "drawdown_p5": -0.31255,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "historical": {
+          "p_goal": 0.8533,
+          "terminal_p10": 475316.999829,
+          "terminal_p50": 638181.392678,
+          "terminal_p90": 866249.630706,
+          "drawdown_median": -0.125368,
+          "drawdown_p5": -0.230428,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.6803,
+          "terminal_p10": 414768.880587,
+          "terminal_p50": 557172.245252,
+          "terminal_p90": 756144.367093,
+          "drawdown_median": -0.142703,
+          "drawdown_p5": -0.264026,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        }
+      },
+      "Bootstrap, SGD era, n^(1/3) blocks": {
+        "low": {
+          "p_goal": 0.2903,
+          "terminal_p10": 307103.123409,
+          "terminal_p50": 437640.984088,
+          "terminal_p90": 586495.558608,
+          "drawdown_median": -0.207051,
+          "drawdown_p5": -0.419525,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "central": {
+          "p_goal": 0.4044,
+          "terminal_p10": 330987.577338,
+          "terminal_p50": 471706.670068,
+          "terminal_p90": 632208.806535,
+          "drawdown_median": -0.193556,
+          "drawdown_p5": -0.394108,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "high": {
+          "p_goal": 0.5253,
+          "terminal_p10": 356529.871117,
+          "terminal_p50": 508115.21011,
+          "terminal_p90": 681055.861996,
+          "drawdown_median": -0.180354,
+          "drawdown_p5": -0.372821,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "P2": {
+          "p_goal": 0.4668,
+          "terminal_p10": 344046.502582,
+          "terminal_p50": 490329.296563,
+          "terminal_p90": 657238.483459,
+          "drawdown_median": -0.186809,
+          "drawdown_p5": -0.383002,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "historical": {
+          "p_goal": 0.8327,
+          "terminal_p10": 455495.256349,
+          "terminal_p50": 649169.479586,
+          "terminal_p90": 870179.377044,
+          "drawdown_median": -0.15185,
+          "drawdown_p5": -0.31287,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.6842,
+          "terminal_p10": 397492.330367,
+          "terminal_p50": 566684.357299,
+          "terminal_p90": 759974.301576,
+          "drawdown_median": -0.165646,
+          "drawdown_p5": -0.344228,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        }
+      },
+      "Bootstrap, SGD era, 60-month blocks": {
+        "low": {
+          "p_goal": 0.2536,
+          "terminal_p10": 330148.3299,
+          "terminal_p50": 441646.676674,
+          "terminal_p90": 551540.150823,
+          "drawdown_median": -0.245994,
+          "drawdown_p5": -0.386642,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "central": {
+          "p_goal": 0.4003,
+          "terminal_p10": 355819.379249,
+          "terminal_p50": 476057.584917,
+          "terminal_p90": 594499.683386,
+          "drawdown_median": -0.239375,
+          "drawdown_p5": -0.362264,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "high": {
+          "p_goal": 0.539,
+          "terminal_p10": 383246.329354,
+          "terminal_p50": 512826.619577,
+          "terminal_p90": 640409.248017,
+          "drawdown_median": -0.232754,
+          "drawdown_p5": -0.342737,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "P2": {
+          "p_goal": 0.4815,
+          "terminal_p10": 369811.222121,
+          "terminal_p50": 494885.651357,
+          "terminal_p90": 617997.659042,
+          "drawdown_median": -0.235941,
+          "drawdown_p5": -0.351931,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "historical": {
+          "p_goal": 0.8783,
+          "terminal_p10": 489584.418063,
+          "terminal_p50": 655216.303604,
+          "terminal_p90": 818203.963454,
+          "drawdown_median": -0.211743,
+          "drawdown_p5": -0.282033,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.6905,
+          "terminal_p10": 427200.547305,
+          "terminal_p50": 571927.42724,
+          "terminal_p90": 714398.378551,
+          "drawdown_median": -0.223314,
+          "drawdown_p5": -0.313215,
+          "contributed": 400000.0,
+          "trading_costs_median": 616.29644
+        }
+      }
+    },
+    "D": {
+      "Bootstrap, SGD era, 24-month blocks (main)": {
+        "low": {
+          "p_goal": 0.2595,
+          "terminal_p10": 285879.840516,
+          "terminal_p50": 418062.573252,
+          "terminal_p90": 589087.213789,
+          "drawdown_median": -0.426213,
+          "drawdown_p5": -0.644144,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "central": {
+          "p_goal": 0.4034,
+          "terminal_p10": 314927.267176,
+          "terminal_p50": 465020.981264,
+          "terminal_p90": 660436.109638,
+          "drawdown_median": -0.405674,
+          "drawdown_p5": -0.606967,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "high": {
+          "p_goal": 0.5459,
+          "terminal_p10": 347788.7359,
+          "terminal_p50": 517976.12455,
+          "terminal_p90": 742439.062632,
+          "drawdown_median": -0.388012,
+          "drawdown_p5": -0.572996,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "P2": {
+          "p_goal": 0.4936,
+          "terminal_p10": 335278.131715,
+          "terminal_p50": 497620.335896,
+          "terminal_p90": 711051.262915,
+          "drawdown_median": -0.396158,
+          "drawdown_p5": -0.585174,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "historical": {
+          "p_goal": 0.8797,
+          "terminal_p10": 480854.572168,
+          "terminal_p50": 735922.003631,
+          "terminal_p90": 1080409.018998,
+          "drawdown_median": -0.343058,
+          "drawdown_p5": -0.487307,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.7968,
+          "terminal_p10": 428061.306438,
+          "terminal_p50": 650161.968381,
+          "terminal_p90": 946472.358658,
+          "drawdown_median": -0.354432,
+          "drawdown_p5": -0.512455,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        }
+      },
+      "Bootstrap, US 1871-, 24-month blocks": {
+        "low": {
+          "p_goal": 0.2943,
+          "terminal_p10": 267761.453958,
+          "terminal_p50": 415280.481991,
+          "terminal_p90": 649303.859845,
+          "drawdown_median": -0.444375,
+          "drawdown_p5": -0.70177,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "central": {
+          "p_goal": 0.4074,
+          "terminal_p10": 294500.570032,
+          "terminal_p50": 461913.927762,
+          "terminal_p90": 729415.399141,
+          "drawdown_median": -0.412707,
+          "drawdown_p5": -0.665885,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "high": {
+          "p_goal": 0.5324,
+          "terminal_p10": 324818.600725,
+          "terminal_p50": 515314.681931,
+          "terminal_p90": 821871.862317,
+          "drawdown_median": -0.38496,
+          "drawdown_p5": -0.632303,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "P2": {
+          "p_goal": 0.4872,
+          "terminal_p10": 313302.284425,
+          "terminal_p50": 494893.087867,
+          "terminal_p90": 786433.474249,
+          "drawdown_median": -0.394882,
+          "drawdown_p5": -0.644,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "historical": {
+          "p_goal": 0.8356,
+          "terminal_p10": 446983.39303,
+          "terminal_p50": 731885.486596,
+          "terminal_p90": 1201786.923821,
+          "drawdown_median": -0.333312,
+          "drawdown_p5": -0.568551,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.7503,
+          "terminal_p10": 398627.400067,
+          "terminal_p50": 646071.798011,
+          "terminal_p90": 1051153.680625,
+          "drawdown_median": -0.343975,
+          "drawdown_p5": -0.579267,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        }
+      },
+      "Student-t, SGD era": {
+        "low": {
+          "p_goal": 0.2454,
+          "terminal_p10": 289817.991694,
+          "terminal_p50": 410413.874847,
+          "terminal_p90": 594411.118061,
+          "drawdown_median": -0.348008,
+          "drawdown_p5": -0.586029,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "central": {
+          "p_goal": 0.3768,
+          "terminal_p10": 318944.678463,
+          "terminal_p50": 456377.622062,
+          "terminal_p90": 666048.874247,
+          "drawdown_median": -0.311598,
+          "drawdown_p5": -0.531963,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "high": {
+          "p_goal": 0.5247,
+          "terminal_p10": 352750.010059,
+          "terminal_p50": 508507.608277,
+          "terminal_p90": 748426.073479,
+          "drawdown_median": -0.282371,
+          "drawdown_p5": -0.480364,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "P2": {
+          "p_goal": 0.4681,
+          "terminal_p10": 339895.651389,
+          "terminal_p50": 488566.004958,
+          "terminal_p90": 716689.868158,
+          "drawdown_median": -0.292563,
+          "drawdown_p5": -0.498814,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "historical": {
+          "p_goal": 0.8876,
+          "terminal_p10": 488557.39997,
+          "terminal_p50": 722454.138871,
+          "terminal_p90": 1091201.068513,
+          "drawdown_median": -0.221571,
+          "drawdown_p5": -0.366876,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.7933,
+          "terminal_p10": 435238.435608,
+          "terminal_p50": 637920.193303,
+          "terminal_p90": 956459.605819,
+          "drawdown_median": -0.239329,
+          "drawdown_p5": -0.398996,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        }
+      },
+      "Bootstrap, SGD era, n^(1/3) blocks": {
+        "low": {
+          "p_goal": 0.2814,
+          "terminal_p10": 279074.664492,
+          "terminal_p50": 416372.428544,
+          "terminal_p90": 611581.250341,
+          "drawdown_median": -0.393776,
+          "drawdown_p5": -0.657472,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "central": {
+          "p_goal": 0.4046,
+          "terminal_p10": 307330.601561,
+          "terminal_p50": 463323.799374,
+          "terminal_p90": 686841.398098,
+          "drawdown_median": -0.364161,
+          "drawdown_p5": -0.618256,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "high": {
+          "p_goal": 0.5409,
+          "terminal_p10": 339066.775917,
+          "terminal_p50": 516002.993584,
+          "terminal_p90": 773746.071019,
+          "drawdown_median": -0.340496,
+          "drawdown_p5": -0.580529,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "P2": {
+          "p_goal": 0.4902,
+          "terminal_p10": 327060.895065,
+          "terminal_p50": 495932.699328,
+          "terminal_p90": 740521.161412,
+          "drawdown_median": -0.348849,
+          "drawdown_p5": -0.594461,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "historical": {
+          "p_goal": 0.8633,
+          "terminal_p10": 467221.419905,
+          "terminal_p50": 733123.405985,
+          "terminal_p90": 1129876.35112,
+          "drawdown_median": -0.287534,
+          "drawdown_p5": -0.491136,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.7757,
+          "terminal_p10": 416289.531396,
+          "terminal_p50": 647782.312071,
+          "terminal_p90": 989399.955854,
+          "drawdown_median": -0.302853,
+          "drawdown_p5": -0.519903,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        }
+      },
+      "Bootstrap, SGD era, 60-month blocks": {
+        "low": {
+          "p_goal": 0.2245,
+          "terminal_p10": 300624.600629,
+          "terminal_p50": 418554.722315,
+          "terminal_p90": 556853.17413,
+          "drawdown_median": -0.426213,
+          "drawdown_p5": -0.59837,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "central": {
+          "p_goal": 0.3807,
+          "terminal_p10": 332176.968928,
+          "terminal_p50": 465623.405665,
+          "terminal_p90": 623304.179513,
+          "drawdown_median": -0.417727,
+          "drawdown_p5": -0.563044,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "high": {
+          "p_goal": 0.5539,
+          "terminal_p10": 367711.156455,
+          "terminal_p50": 518579.558203,
+          "terminal_p90": 700156.153018,
+          "drawdown_median": -0.409195,
+          "drawdown_p5": -0.530928,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "P2": {
+          "p_goal": 0.4944,
+          "terminal_p10": 354102.416966,
+          "terminal_p50": 498327.113689,
+          "terminal_p90": 670575.753145,
+          "drawdown_median": -0.412386,
+          "drawdown_p5": -0.542731,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "historical": {
+          "p_goal": 0.913,
+          "terminal_p10": 512387.269652,
+          "terminal_p50": 735408.709817,
+          "terminal_p90": 1012936.796041,
+          "drawdown_median": -0.383566,
+          "drawdown_p5": -0.455276,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        },
+        "hist_eq_yield": {
+          "p_goal": 0.8312,
+          "terminal_p10": 455919.078883,
+          "terminal_p50": 649667.32983,
+          "terminal_p90": 889495.514544,
+          "drawdown_median": -0.392804,
+          "drawdown_p5": -0.478071,
+          "contributed": 367200.0,
+          "trading_costs_median": 3407.242889
+        }
+      }
+    }
+  },
+  "required_monthly": {
+    "A": {
+      "central": {
+        "0.5": 1150.0,
+        "0.75": 1510.0,
+        "0.9": 1930.0
+      },
+      "P2": {
+        "0.5": 1050.0,
+        "0.75": 1390.0,
+        "0.9": 1780.0
+      },
+      "historical": {
+        "0.5": 690.0,
+        "0.75": 940.0,
+        "0.9": 1230.0
+      },
+      "hist_eq_yield": {
+        "0.5": 720.0,
+        "0.75": 980.0,
+        "0.9": 1290.0
+      }
+    },
+    "B": {
+      "central": {
+        "0.5": 1940.0,
+        "0.75": 2460.0,
+        "0.9": 3000.0
+      },
+      "P2": {
+        "0.5": 1810.0,
+        "0.75": 2310.0,
+        "0.9": 2850.0
+      },
+      "historical": {
+        "0.5": 1040.0,
+        "0.75": 1480.0,
+        "0.9": 1960.0
+      },
+      "hist_eq_yield": {
+        "0.5": 1330.0,
+        "0.75": 1790.0,
+        "0.9": 2290.0
+      }
+    },
+    "C": {
+      "central": {
+        "0.5": 220.0,
+        "0.75": 880.0,
+        "0.9": 1490.0
+      },
+      "P2": {
+        "0.5": 80.0,
+        "0.75": 730.0,
+        "0.9": 1340.0
+      },
+      "historical": {
+        "0.5": 0.0,
+        "0.75": 0.0,
+        "0.9": 300.0
+      },
+      "hist_eq_yield": {
+        "0.5": 0.0,
+        "0.75": 190.0,
+        "0.9": 800.0
+      }
+    },
+    "D": {
+      "central": {
+        "0.5": 1380.0,
+        "0.75": 1680.0,
+        "0.9": 2020.0
+      },
+      "P2": {
+        "0.5": 1290.0,
+        "0.75": 1570.0,
+        "0.9": 1900.0
+      },
+      "historical": {
+        "0.5": 870.0,
+        "0.75": 1080.0,
+        "0.9": 1330.0
+      },
+      "hist_eq_yield": {
+        "0.5": 990.0,
+        "0.75": 1220.0,
+        "0.9": 1490.0
+      }
+    }
+  },
+  "batching": {
+    "A": {
+      "monthly": {
+        "p_goal": 0.1596,
+        "terminal_p10": 252911.764405,
+        "terminal_p50": 421193.086152,
+        "terminal_p90": 665362.486381,
+        "drawdown_median": -0.516607,
+        "drawdown_p5": -0.728122,
+        "contributed": 317490.877343,
+        "trading_costs_median": 3454.294965
+      },
+      "quarterly": {
+        "p_goal": 0.1618,
+        "terminal_p10": 254727.803019,
+        "terminal_p50": 423462.6982,
+        "terminal_p90": 666877.445622,
+        "drawdown_median": -0.516607,
+        "drawdown_p5": -0.728122,
+        "contributed": 317490.877343,
+        "trading_costs_median": 1285.587016
+      }
+    },
+    "B": {
+      "monthly": {
+        "p_goal": 0.2345,
+        "terminal_p10": 361938.400666,
+        "terminal_p50": 507811.101801,
+        "terminal_p90": 675463.303678,
+        "drawdown_median": -0.281554,
+        "drawdown_p5": -0.501342,
+        "contributed": 420000.0,
+        "trading_costs_median": 2398.538123
+      },
+      "quarterly": {
+        "p_goal": 0.2363,
+        "terminal_p10": 363298.053566,
+        "terminal_p50": 508960.038559,
+        "terminal_p90": 675854.950745,
+        "drawdown_median": -0.281554,
+        "drawdown_p5": -0.501342,
+        "contributed": 420000.0,
+        "trading_costs_median": 1097.302517
+      }
+    },
+    "D": {
+      "monthly": {
+        "p_goal": 0.4034,
+        "terminal_p10": 314927.267176,
+        "terminal_p50": 465020.981264,
+        "terminal_p90": 660436.109638,
+        "drawdown_median": -0.405674,
+        "drawdown_p5": -0.606967,
+        "contributed": 367200.0,
+        "trading_costs_median": 3407.242889
+      },
+      "quarterly": {
+        "p_goal": 0.4075,
+        "terminal_p10": 316844.575625,
+        "terminal_p50": 466883.029197,
+        "terminal_p90": 662392.935392,
+        "drawdown_median": -0.405674,
+        "drawdown_p5": -0.606967,
+        "contributed": 367200.0,
+        "trading_costs_median": 1325.273267
+      }
+    }
+  },
+  "srs": {
+    "central": {
+      "premature": false,
+      "relief_total": 40468.5,
+      "balance_at_goal_median_srs": 516105.128547,
+      "balance_at_goal_median_plain": 465020.981264,
+      "p_goal_srs": 0.542,
+      "after_tax_withdrawals_median_srs": 562959.127047,
+      "withdrawals_median_plain": 508680.647124,
+      "tax_median": 1771.608777,
+      "srs_better_share": 1.0
+    },
+    "P2": {
+      "premature": false,
+      "relief_total": 40468.5,
+      "balance_at_goal_median_srs": 552507.447824,
+      "balance_at_goal_median_plain": 497620.335896,
+      "p_goal_srs": 0.6294,
+      "after_tax_withdrawals_median_srs": 617297.605313,
+      "withdrawals_median_plain": 558490.250806,
+      "tax_median": 2544.530282,
+      "srs_better_share": 1.0
+    },
+    "historical": {
+      "premature": false,
+      "relief_total": 40468.5,
+      "balance_at_goal_median_srs": 815141.899285,
+      "balance_at_goal_median_plain": 735922.003631,
+      "p_goal_srs": 0.9294,
+      "after_tax_withdrawals_median_srs": 1033642.093647,
+      "withdrawals_median_plain": 945974.339254,
+      "tax_median": 14288.449541,
+      "srs_better_share": 1.0
+    },
+    "hist_eq_yield": {
+      "premature": false,
+      "relief_total": 40468.5,
+      "balance_at_goal_median_srs": 720767.330508,
+      "balance_at_goal_median_plain": 650161.968381,
+      "p_goal_srs": 0.8732,
+      "after_tax_withdrawals_median_srs": 878747.122622,
+      "withdrawals_median_plain": 800644.812643,
+      "tax_median": 9016.798975,
+      "srs_better_share": 1.0
+    }
+  },
+  "engines": {
+    "Bootstrap, SGD era, 24-month blocks (main)": {
+      "history": "H-SGD",
+      "mean_block": 24
+    },
+    "Bootstrap, US 1871-, 24-month blocks": {
+      "history": "H-US",
+      "mean_block": 24
+    },
+    "Student-t, SGD era": {
+      "history": "H-SGD",
+      "student_t_df": 5.5
+    },
+    "Bootstrap, SGD era, n^(1/3) blocks": {
+      "history": "H-SGD",
+      "mean_block": 7
+    },
+    "Bootstrap, SGD era, 60-month blocks": {
+      "history": "H-SGD",
+      "mean_block": 60
+    }
+  },
+  "srs_assumptions": {
+    "marginal_rate": 0.115,
+    "statutory_retirement_age": 64.0,
+    "contribution_cap": 15300.0,
+    "relief_cap": 80000.0
+  },
+  "sgs_duration": 8.18,
+  "historical_sgs_gap": 0.02725,
+  "headline_spread": {
+    "set_min": 44.09,
+    "set_max": 52.73,
+    "engine_min": 3.06,
+    "engine_max": 8.96,
+    "noise_max": 0.499959
+  }
+}

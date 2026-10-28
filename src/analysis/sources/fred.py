@@ -11,6 +11,7 @@ SERIES = {
     "GS5": ("5-year Treasury constant maturity yield", "Monthly average, % p.a."),
     "GS10": ("10-year Treasury constant maturity yield", "Monthly average, % p.a."),
     "EXSIUS": ("Singapore dollars to one US dollar", "Monthly average, SGD per USD"),
+    "DEXSIUS": ("Singapore dollars to one US dollar, noon buying rate", "Daily, SGD per USD"),
 }
 
 
@@ -36,10 +37,22 @@ FILES = [
 ]
 
 
+def month_end(series_id: str = "DEXSIUS") -> pd.Series:
+    """Last daily observation in each month of a daily FRED series."""
+    df = pd.read_csv(FILES[list(SERIES).index(series_id)].path)
+    df.columns = ["date", "value"]
+    daily = pd.Series(
+        pd.to_numeric(df["value"], errors="coerce").to_numpy(), index=pd.to_datetime(df["date"])
+    ).dropna()
+    out = daily.groupby(daily.index.to_period("M")).last()
+    out.index.name = "month"
+    return out.rename(series_id)
+
+
 def monthly(series: list[str] | None = None) -> pd.DataFrame:
     """Monthly FRED series side by side; yields stay in % p.a. as published."""
     frames = []
-    for series_id in series or list(SERIES):
+    for series_id in series or [s for s in SERIES if not s.startswith("D")]:
         df = pd.read_csv(FILES[list(SERIES).index(series_id)].path)
         df.columns = ["date", series_id]
         df[series_id] = pd.to_numeric(df[series_id], errors="coerce")
